@@ -1,16 +1,27 @@
 package com.project.superfarm.model;
 
 import com.project.superfarm.entity.Customer;
+import com.project.superfarm.entity.CustomerContact;
 
 import java.io.Serializable;
 
 public class Signup implements Serializable {
 
     private String id;
+
     private String password;
+
     private String name;
+
     private int birthday;
+
     private String gender;
+
+    private SignupContact signupContact;
+
+
+
+
 
     public String getId() {
         return id;
@@ -45,6 +56,15 @@ public class Signup implements Serializable {
         this.gender = gender;
     }
 
+
+    public SignupContact getSignupContact() {
+        return signupContact;
+    }
+
+    public void setSignupContact(SignupContact signupContact) {
+        this.signupContact = signupContact;
+    }
+
     public Customer getcustomer(){
 
         Customer customer = new Customer();
@@ -54,5 +74,6 @@ public class Signup implements Serializable {
         customer.setC_gender(gender);
         return customer;
     }
+
 
 }

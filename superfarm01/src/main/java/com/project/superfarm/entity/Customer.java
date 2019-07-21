@@ -26,7 +26,7 @@ public class Customer implements UserDetails , Serializable {
     @Id
     @Column(name = "c_num",nullable = false,updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 생성을 Database에 위임한다.
-    private Long c_num;
+    private Long cnum;
 
     @Column(name="c_id",nullable = false,updatable = false)
     private String cid;
@@ -53,6 +53,9 @@ public class Customer implements UserDetails , Serializable {
     private int c_point;
 
 
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(table ="customer_contact",referencedColumnName = "c_num"
+//    )
     @Transient
     private CustomerContact contact;
 
@@ -122,12 +125,12 @@ public class Customer implements UserDetails , Serializable {
     }
 
 
-    public Long getC_num() {
-        return c_num;
+    public Long getCnum() {
+        return cnum;
     }
 
-    public void setC_num(Long c_num) {
-        this.c_num = c_num;
+    public void setCnum(Long c_num) {
+        this.cnum = c_num;
     }
 
     public String getCid() {
