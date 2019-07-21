@@ -11,6 +11,10 @@ package com.project.superfarm;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/*
+2019.07.21 CustomerContact 저장 추가  users/me로 리턴 받을때 contact 추가 
+ */
+
 @SpringBootApplication
 public class SuperFarmApplication {
 
