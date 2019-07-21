@@ -1,5 +1,3 @@
-# FinalProject
-
 # Project SuperFarm
 
 
