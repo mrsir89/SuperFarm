@@ -3,11 +3,14 @@ package com.project.superfarm.service;
 
 import com.project.superfarm.entity.Customer;
 import com.project.superfarm.entity.CustomerContact;
+import com.project.superfarm.entity.MarketAdmin;
 import com.project.superfarm.entity.Roles;
 import com.project.superfarm.model.Signup;
+import com.project.superfarm.model.SignupAdmin;
 import com.project.superfarm.model.SignupContact;
 import com.project.superfarm.repository.CustomerContactRepository;
 import com.project.superfarm.repository.CustomerRepository;
+import com.project.superfarm.repository.MarketAdminRepository;
 import com.project.superfarm.repository.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,9 @@ public class SignupService  {
 
     @Autowired
     private CustomerContactRepository customerContactRepository;
+
+    @Autowired
+    private MarketAdminRepository marketAdminRepository;
 
     @Autowired
     private RolesRepository rolesRepository;
@@ -52,4 +58,12 @@ public class SignupService  {
     }
 
 
+    public MarketAdmin createAdmin(SignupAdmin signupAdmin) {
+        MarketAdmin marketAdmin = signupAdmin.getAdmin();
+        Roles roles = rolesRepository.findByName("ROLE_MANAGER");
+        marketAdmin.setRoles(Stream.of(roles).collect(Collectors.toSet()));
+        marketAdminRepository.save(marketAdmin);
+
+        return marketAdmin;
+    }
 }

@@ -1,5 +1,8 @@
 package com.project.superfarm.model;
 
+import com.project.superfarm.entity.MarketAdmin;
+import sun.nio.cs.ext.MacArabic;
+
 import java.io.Serializable;
 
 public class SignupAdmin implements Serializable {
@@ -7,9 +10,8 @@ public class SignupAdmin implements Serializable {
     private String id;
     private String pwd;
     private String name;
-    private String authority;
-    private int phone;
-    private int businessnum;
+    private String phone;
+    private String businessnum;
 
     public String getId() {
         return id;
@@ -35,40 +37,32 @@ public class SignupAdmin implements Serializable {
         this.name = name;
     }
 
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public int getBusinessnum() {
+    public String getBusinessnum() {
         return businessnum;
     }
 
-    public void setBusinessnum(int businessnum) {
+    public void setBusinessnum(String businessnum) {
         this.businessnum = businessnum;
     }
 
 
-    public SignupAdmin getAdmin(){
-        SignupAdmin signupAdmin = new SignupAdmin();
-        signupAdmin.setId(id);
-        signupAdmin.setName(name);
-        signupAdmin.setPwd(pwd);
-        signupAdmin.setAuthority(authority);
-        signupAdmin.setBusinessnum(businessnum);
-        signupAdmin.setPhone(phone);
+    public MarketAdmin getAdmin(){
+        MarketAdmin marketAdmin = new MarketAdmin();
 
-        return signupAdmin;
+        marketAdmin.setAdminid(id);
+        marketAdmin.setAdminpwd(pwd);
+        marketAdmin.setAdmin_name(name);
+        marketAdmin.setAdmin_phone(Integer.parseInt(phone));
+        marketAdmin.setAdmin_business_num(Integer.parseInt(businessnum));
+
+        return marketAdmin;
     }
 }

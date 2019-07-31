@@ -31,19 +31,6 @@ public class CustomerService {
     @Autowired
     private CustomerLogedRepository customerLogedRepository;
 
-
-    //회원 최초 회원가입 저장
-    public void createCustomer(Customer customer){
-
-        if(customer !=null) {
-            CustomerContact customerContact = customer.getContact();
-            customerRepository.save(customer);
-            customerContactRepository.save(customerContact);
-        }
-        else
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND," 회원가입 중에 오류가 발생 하였습니다. 다시 시도해 주세요");
-
-    }
     // 유저 ID를 가지고 검색
     public Optional<Customer> findCustomer(Long c_num){
 

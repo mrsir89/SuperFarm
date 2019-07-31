@@ -2,6 +2,7 @@ package com.project.superfarm.repository;
 
 
 import com.project.superfarm.entity.Customer;
+import com.project.superfarm.entity.MarketAdmin;
 import com.project.superfarm.repository.CustomerRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,5 +42,16 @@ public class UserRepositoryTest {
         Customer customer = entityManager.persist(newCustomer);
         Assert.assertNotNull(customer); // 널이 아니여지 성공
         Assert.assertEquals(customer.getCid(), newCustomer.getCid());
+    }
+
+    @Test
+    public void testInserNewAdmin() throws Exception {
+        MarketAdmin newAdmin = new MarketAdmin();
+        newAdmin.setAdminid("tester6");
+        newAdmin.setAdminpwd("Test1234");
+
+        MarketAdmin admin = entityManager.persist(newAdmin);
+        Assert.assertNotNull(admin); // 널이 아니여지 성공
+        Assert.assertEquals(admin.getAdminid(), admin.getAdminpwd());
     }
 }

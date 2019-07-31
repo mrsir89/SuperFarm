@@ -7,32 +7,33 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="marketadmin")
+@Table(name = "marketadmin", uniqueConstraints = {@UniqueConstraint(columnNames = "admin_id")})
 public class MarketAdmin implements UserDetails {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="admin_id")
-    private String admin_id;
+    @Column(name = "admin_num", nullable = false, updatable = false)
+    private Long adminNum;
+
+    @Column(name="admin_id", nullable = false, updatable = false)
+    private String adminid;
 
     @Column(name="admin_pwd")
-    private String admin_pwd;
+    private String adminpwd;
 
     @Column(name="admin_name")
     private String admin_name;
 
-    @Column(name="admin_authority")
-    private String admin_authority;
-
     @Column(name="admin_phone")
-    private Integer admin_phone;
+    private int admin_phone;
 
     @Column(name="admin_business_num")
-    private Integer admin_business_num;
+    private int admin_business_num;
 
     @Column(name="admin_regday")
     @CreationTimestamp
@@ -41,7 +42,7 @@ public class MarketAdmin implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "admin_id",
+            name = "admin_roles",
             joinColumns = @JoinColumn(name = "admin_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
@@ -50,17 +51,21 @@ public class MarketAdmin implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> authorities = new HashSet<>();
+        for (Roles role : getRoles()) {
+            authorities.addAll(role.getPrivileges());
+        }
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return admin_pwd;
+        return adminpwd;
     }
 
     @Override
     public String getUsername() {
-        return admin_id;
+        return adminid;
     }
 
     @Override
@@ -83,20 +88,28 @@ public class MarketAdmin implements UserDetails {
         return true;
     }
 
-    public String getAdmin_id() {
-        return admin_id;
+    public Long getAdminNum() {
+        return adminNum;
     }
 
-    public void setAdmin_id(String admin_id) {
-        this.admin_id = admin_id;
+    public void setAdminNum(Long adminNum) {
+        this.adminNum = adminNum;
     }
 
-    public String getAdmin_pwd() {
-        return admin_pwd;
+    public String getAdminid() {
+        return adminid;
     }
 
-    public void setAdmin_pwd(String admin_pwd) {
-        this.admin_pwd = admin_pwd;
+    public void setAdminid(String adminid) {
+        this.adminid = adminid;
+    }
+
+    public String getAdminpwd() {
+        return adminpwd;
+    }
+
+    public void setAdminpwd(String adminpwd) {
+        this.adminpwd = adminpwd;
     }
 
     public String getAdmin_name() {
@@ -105,14 +118,6 @@ public class MarketAdmin implements UserDetails {
 
     public void setAdmin_name(String admin_name) {
         this.admin_name = admin_name;
-    }
-
-    public String getAdmin_authority() {
-        return admin_authority;
-    }
-
-    public void setAdmin_authority(String admin_authority) {
-        this.admin_authority = admin_authority;
     }
 
     public Integer getAdmin_phone() {

@@ -2,7 +2,9 @@ package com.project.superfarm.controller;
 
 
 import com.project.superfarm.entity.Customer;
+import com.project.superfarm.entity.MarketAdmin;
 import com.project.superfarm.model.Signup;
+import com.project.superfarm.model.SignupAdmin;
 import com.project.superfarm.service.CustomerService;
 import com.project.superfarm.service.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,19 @@ public class JoinController {
 
     @Autowired
     private SignupService signupService;
+
+    @PreAuthorize("hasRole('GUEST')")
+    @RequestMapping( value="signupAdmin",
+            method = RequestMethod.POST,
+            produces = {
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public MarketAdmin joinAdmin(@RequestBody SignupAdmin signupAdmin){
+
+        return signupService.createAdmin(signupAdmin);
+
+    }
 
     @PreAuthorize("hasRole('GUEST')")
     @RequestMapping( value="signup",
