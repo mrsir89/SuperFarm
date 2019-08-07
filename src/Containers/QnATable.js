@@ -11,7 +11,7 @@ class QnAtable extends Component{
     console.log('여기 실행 되나?', this.state)
   }
 
-  handleClick(e){
+    handleClick(e){
     const {Clickitem}=this.state;
     this.setState({
       Clickitem:{
@@ -36,17 +36,15 @@ class QnAtable extends Component{
               <div>
                 <div className="row">
                   <div className="col">{item.questionBoardStatus}</div>
-                  <div className="col-7">
-                  <details>
-                  <summary>{item.questionBoardContent}</summary>
-                          {item.questionAnswer.map((answer) => (
-                          <div className="row" hidden={item.isExpanded}>
-                            <div className="col-10">{answer.answerContent}</div>
-                            <div className="col-2">{answer.answerWriter}</div>
-                          </div>
-                          ))}
-                  </details> 
-                  </div>
+                  <div className="col-7" data-toggle="collapse" data-target="#demo">
+                  {item.questionBoardContent}
+                    {item.questionAnswer.map((answer) => (
+                      <div id="demo" class="collapse">
+                        <div className="col-10">{answer.answerContent}</div>
+                        <div className="col">{answer.answerWriter}</div>
+                      </div>
+                      ))}
+                      </div>
                   <div className="col-1">{item.user.username}</div>
                 <div className="col-2">{item.questionBoardRegdate}</div>
                 </div>      
