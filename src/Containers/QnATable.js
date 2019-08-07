@@ -32,19 +32,19 @@ class QnAtable extends Component{
                 <div className="col-1">작성자</div>
                 <div className="col-2">작성일</div>
             </div>
-            {items.map((item) =>(
+            {items.map((item, index) =>(
               <div>
                 <div className="row">
                   <div className="col">{item.questionBoardStatus}</div>
-                  <div className="col-7" data-toggle="collapse" data-target="#demo">
+                  <div className="col-7" data-toggle="collapse" data-target={"#demo-" + index}>
                   {item.questionBoardContent}
                     {item.questionAnswer.map((answer) => (
-                      <div id="demo" class="collapse">
-                        <div className="col-10">{answer.answerContent}</div>
-                        <div className="col">{answer.answerWriter}</div>
+                      <div id={"demo-" + index} class="collapse">
+                        <div className="textarea">{answer.answerContent}</div>
+                        <div className="col-5">작성자:{answer.answerWriter}</div>
                       </div>
                       ))}
-                      </div>
+                  </div>
                   <div className="col-1">{item.user.username}</div>
                 <div className="col-2">{item.questionBoardRegdate}</div>
                 </div>      
