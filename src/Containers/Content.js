@@ -4,8 +4,7 @@ class Content extends Component{
     render(){
       return(
         <article>
-            <h2>{this.props.title}</h2>
-            {this.props.desc}
+           {this.props.boardlist.questionBoardNum} {this.props.boardlist.customerId} {this.props.boardlist.questionBoardContent} {this.props.boardlist.questionBoardRegdate}
         </article>
       ); 
     }

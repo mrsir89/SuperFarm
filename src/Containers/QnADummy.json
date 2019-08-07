@@ -1,0 +1,76 @@
+{  
+   "items":[  
+      {  
+         "questionBoardNum":"1",
+         "porductBoardNum":"1",
+         "customerId":"tester1",
+         "questionBoardContent":"이상품이 이상한거 같아요 왜 이런지 모르겠어요 정말 모르겠어요",
+         "questionBoardRegdate":"2019-07-01 12:11:05",
+         "questionBoardStatus":"true",
+         "user": {
+            "username": "steve",
+            "email": "steve.p@bitcamp.co.kr"
+         },
+         "isExpanded": false,
+         "questionAnswer":[  
+            {  
+               "answerNum":"1",
+               "answerDate":"2019-07-01 12:22:07",
+               "answerContent":"그게 왜요? 안 이상한대요????",
+               "questionBoardNum":"1",
+               "answerWriter":"관리자"
+            },
+            {  
+               "answerNum":"2",
+               "answerDate":"2019-07-03 16:22:07",
+               "answerContent":"아니 정말 안된다고요",
+               "questionBoardNum":"2",
+               "answerWriter":"tester1"
+            },
+            {  
+               "answerNum":"3",
+               "answerDate":"2019-07-03 18:24:07",
+               "answerContent":"오케 알아 보겠습니다.",
+               "questionBoardNum":"3",
+               "answerWriter":"관리자"
+            }
+         ]
+      },
+      {  
+         "questionBoardNum":"2",
+         "porductBoardNum":"2",
+         "customerId":"10000",
+         "questionBoardContent":"쌀인데 보리맛이 나요 이게 말로만 듣던 쌀보리인가요?",
+         "questionBoardRegdate":"2019-07-04 10:11:05",
+         "questionBoardStatus":"true",
+         "user": {
+            "username": "steve",
+            "email": "steve.p@bitcamp.co.kr"
+         },
+         "isExpanded": false,
+         "questionAnswer":[  
+            {  
+               "answerNum":"1",
+               "answerDate":"2019-07-04 12:22:07",
+               "answerContent":"오 정답답답답",
+               "questionBoardNum":"4",
+               "answerWriter":"관리자"
+            },
+            {  
+               "answerNum":"2",
+               "answerDate":"2019-07-04 13:02:07",
+               "answerContent":"근데 전 쌀을 샀는데 거참",
+               "questionBoardNum":"5",
+               "answerWriter":"tester1"
+            },
+            {  
+               "answerNum":"3",
+               "answerDate":"2019-07-04 17:14:07",
+               "answerContent":"이거 사신거 맞습니다.",
+               "questionBoardNum":"6",
+               "answerWriter":"관리자"
+            }
+         ]
+      }
+   ]
+}
