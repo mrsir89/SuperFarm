@@ -1,0 +1,13 @@
+.txt_ellipsis {
+    text-align:left;
+    display: inline-block;
+    width: 300px;
+    height: 18px;
+    *padding-bottom: 3px;
+    color: #666;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    line-height: 1.2;
+}

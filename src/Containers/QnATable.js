@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './QnATable.css'
 
 class QnAtable extends Component{
   constructor(props){
@@ -22,38 +23,41 @@ class QnAtable extends Component{
   }
 
     render(){
-      const {items}=this.state;
-      console.log(this.state, 'render');
+      const {items}=this.props;
+      console.log(this.state, 'state');
+      console.log(this.props, 'props');
         return(
+          <div>
+          <div className="row">
+              <div className="col">답변상태</div>
+              <div className="col-7">제목</div>
+              <div className="col-1">작성자</div>
+              <div className="col-2">작성일</div>
+          </div>
+          {items.map((item, index) =>(
             <div>
-            <div className="row">
-                <div className="col">답변상태</div>
-                <div className="col-7">제목</div>
-                <div className="col-1">작성자</div>
-                <div className="col-2">작성일</div>
-            </div>
-            {items.map((item, index) =>(
-              <div>
-                <div className="row">
-                  <div className="col">{item.questionBoardStatus}</div>
-                  <div className="col-7" data-toggle="collapse" data-target={"#demo-" + index}>
+              <div className="row">
+                <div className="col">{item.questionBoardStatus}</div>
+                <div className="col-7" data-toggle="collapse" data-target={"#demo-" + index}>
                   {item.questionBoardContent}
-                    {item.questionAnswer.map((answer) => (
-                      <div id={"demo-" + index} class="collapse">
-                        <div className="textarea">{answer.answerContent}</div>
+                  {(item.questionAnswer !== undefined && item.questionAnswer !== null) ?
+                    item.questionAnswer.map((answer) => (
+                      <div id={"demo-" + index} className="collapse">
+                        <div className="col-11">{answer.answerContent}</div>
                         <div className="col-5">작성자:{answer.answerWriter}</div>
                       </div>
-                      ))}
-                  </div>
-                  <div className="col-1">{item.user.username}</div>
+                      )) : ""
+                  }
+                </div>
+                <div className="col-1">{item.user.username}</div>
                 <div className="col-2">{item.questionBoardRegdate}</div>
-                </div>      
-              </div>
-              ))}
-               </div>
-
+              </div>      
+            </div>
+            ))}
+             </div>
         );
     }
 }
 
 export default QnAtable;
+// class="txt_ellipsis"   class="txt_ellipsis" 
