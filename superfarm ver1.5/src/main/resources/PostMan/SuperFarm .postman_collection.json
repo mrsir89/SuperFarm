@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "bdeef2d9-35fa-4ee3-85ae-d4c86133c875",
+		"name": "SuperFarm ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Review게시판 Writer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productBoardNum\":\"4\",\n\t\"customerId\":\"tester02\",\n\t\"reviewBoardImg\":\"./resource/review08.jpg\",\n\t\"reviewBoardTitle\":\"jSon 테스트중 \",\n\t\"reviewBoardContent\":\"안에 내용이 들어 갔는지 확인 중입니다.\",\n\t\"reviewBoardRating\":\"4\"\n\t\n\t\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/review/write",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"review",
+						"write"
+					]
+				},
+				"description": "market review 게시판 write"
+			},
+			"response": []
+		},
+		{
+			"name": "QuestionBoard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				},
+				"description": "질문 작성"
+			},
+			"response": []
+		},
+		{
+			"name": "Question Answer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"answerContent\":\"댓글 테스트 입니다.\",\n\t\"questionBoardNum\":\"1\",\n\t\"answerWriter\":\"test02\"\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/question/writeanswer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"question",
+						"writeanswer"
+					]
+				},
+				"description": "질문에 대한 답변 작성"
+			},
+			"response": []
+		}
+	]
+}
