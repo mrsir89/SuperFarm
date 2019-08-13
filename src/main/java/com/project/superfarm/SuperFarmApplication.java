@@ -18,6 +18,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SuperFarmApplication {
 
+    /**
+     *
+     * @param : merging test
+     */
+
     public static void main(String[] args) {
         SpringApplication.run(SuperFarmApplication.class, args);
     }
