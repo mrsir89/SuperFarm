@@ -20,7 +20,7 @@ public class SuperFarmApplication {
 
     /**
      *
-     * @param : merging test
+     * @param : merging test // kanji sign
      */
 
     public static void main(String[] args) {
