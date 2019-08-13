@@ -1,17 +1,20 @@
 
-	#### Start Project Market ver 0.1  2019.07.14
+	#### Start Project Market ver 2.2  2018.08.13
 	### 데이터 베이스 생성 및 유저 생성
+	## 관리자까지 다시 만드려면 밑에 주석 해제 하고 사용
+
+-- 	DROP USER IF EXISTS `bitmaster`;
+
+-- 	CREATE USER IF NOT EXISTS 'bitmaster'@'%' IDENTIFIED BY 'Test1234';
+
 	DROP DATABASE IF EXISTS `market`;
 
 	CREATE DATABASE IF NOT EXISTS `market`
 	  DEFAULT CHARACTER SET utf8
 	  DEFAULT COLLATE utf8_general_ci;
 
-	DROP USER IF EXISTS `bitmaster`;
-
-	CREATE USER IF NOT EXISTS 'bitmaster'@'%' IDENTIFIED BY 'Test1234';
-
 	GRANT ALL PRIVILEGES ON market.* To 'bitmaster'@'%';
+
 
 	USE `market`;
 
@@ -39,6 +42,19 @@
 	DROP TABLE IF EXISTS oauth_approvals;
 	DROP TABLE IF EXISTS oauth_access_token;
 
+
+	#### DROP TABLE  #####################
+	DROP TABLE IF EXISTS `customer_roles`;
+	DROP TABLE IF EXISTS `role_privileges`;
+    DROP TABLE IF EXISTS `privileges`;
+	DROP TABLE IF EXISTS `roles`;
+
+    DROP TABLE IF EXISTS `grade`;
+	DROP TABLE IF EXISTS `customer_contact`;
+	DROP TABLE IF EXISTS `customer_loged`;
+	DROP TABLE IF EXISTS `customer`;
+	DROP TABLE IF EXISTS `cart`;
+	DROP TABLE IF EXISTS `cart_product`;
 
 
 
@@ -142,75 +158,55 @@ CREATE TABLE IF NOT EXISTS `oauth_approvals` (
 	  86400, 2592000, true);
 
 
-
-	#### DROP TABLE  #####################
-	DROP TABLE IF EXISTS `customer_roles`;
-	DROP TABLE IF EXISTS `role_privileges`;
-    DROP TABLE IF EXISTS `privileges`;
-	DROP TABLE IF EXISTS `roles`;
-
-    DROP TABLE IF EXISTS `grade`;
-	DROP TABLE IF EXISTS `customer_contact`;
-	DROP TABLE IF EXISTS `customer_loged`;
-	DROP TABLE IF EXISTS `customer`;
-	DROP TABLE IF EXISTS `cart`;
-	DROP TABLE IF EXISTS `cart_product`;
-
-
-
-
-
-
-	###### 2019.07.15
 	###### CREATE TABLE SHEET customer
 
+DROP TABLE IF EXISTS admins;
+DROP TABLE IF EXISTS farmer;
+
+
+
+	CREATE TABLE IF NOT EXISTS users(
+    user_num				BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id					VARCHAR(20) UNIQUE NOT NULL,
+    user_password			VARCHAR(20) NOT NULL,
+    user_name				VARCHAR(20) NOT NULL,
+    user_type				VARCHAR(8) DEFAULT 'customer' CHECK(user_type IN('admin','customer')) ,
+    user_regday				DATETIME NOT NULL,
+    user_email	 			VARCHAR(50) NOT NULL UNIQUE,
+    user_last_connect		DATETIME NOT NULL
+    ) ENGINE = 'InnoDB' DEFAULT CHARACTER SET ='UTF8';
+
+    ### AUTO_INCREMENT 시작값 설정 CUSTOMER는 10000 부터 시작
+	ALTER TABLE users AUTO_INCREMENT = 10000;
+
 	CREATE TABLE IF NOT EXISTS customer(
-	customer_num 			BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	customer_id 			VARCHAR(20) UNIQUE NOT NULL,
-	customer_pwd 			VARCHAR(20) NOT NULL,
-	customer_name 			VARCHAR(20) NOT NULL,
-	customer_birth 			DATE,
+	user_num				BIGINT PRIMARY KEY,
+    customer_birth 			DATE,
 	customer_gender 		CHAR(2) CHECK(customer_gender IN('남','여')),
-	customer_regday 		DATETIME NOT NULL,
 	customer_grade 			VARCHAR(10) NOT NULL DEFAULT '일반',
 	customer_point 			INTEGER DEFAULT 0,
-	customer_coupon 		JSON NULL
-	) ENGINE = 'InnoDB' DEFAULT CHARACTER SET ='UTF8';
-	### AUTO_INCREMENT 시작값 설정 CUSTOMER는 10000 부터 시작
-	ALTER TABLE customer AUTO_INCREMENT = 10000;
-
-    CREATE TABLE IF NOT EXISTS customer_contact(
-	customer_num 				BIGINT NOT NULL PRIMARY KEY,
-	customer_phone 				VARCHAR(20) NOT NULL,
-	customer_addr 				VARCHAR(50) NOT NULL,
-	customer_email	 			VARCHAR(50) NOT NULL UNIQUE,
-	FOREIGN KEY(customer_num) REFERENCES customer (customer_num)
+	customer_coupon 		JSON NULL,
+    customer_phone 			VARCHAR(20) NOT NULL,
+	customer_addr 			VARCHAR(50) NOT NULL,
+	FOREIGN KEY(user_num) REFERENCES users (user_num)
 	) ENGINE = 'InnoDB' DEFAULT CHARACTER SET ='UTF8';
 
-	CREATE TABLE IF NOT EXISTS customer_loged(
-	customer_num 				BIGINT NOT NULL PRIMARY KEY,
-	customer_lastlog 			DATETIME NOT NULL,
-	FOREIGN KEY(customer_num) 	REFERENCES customer(customer_num)
-	)ENGINE ='InnoDB' DEFAULT CHARACTER SET='UTF8';
 
-	CREATE TABLE IF NOT EXISTS cart(
-	cart_id 					BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	customer_id 				VARCHAR(20) NOT NULL,
-	customer_num 				BIGINT NOT NULL,
-	cart_product 				JSON NULL,
-	cart_totalprice 			INTEGER DEFAULT 0
-	)ENGINE = 'InnoDB' DEFAULT CHARACTER SET = 'UTF8';
-	ALTER TABLE cart AUTO_INCREMENT = 100;
+	CREATE TABLE IF NOT EXISTS admins(
+	user_num			BIGINT NOT NULL,
+	admin_authority 	CHAR(15) NOT NULL,
+	admin_phone			VARCHAR(20) NOT NULL,
+	admin_business_num  VARCHAR(20) NOT NULL,
+	FOREIGN KEY(user_num) REFERENCES users (user_num)
+	)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
-	CREATE TABLE IF NOT EXISTS cart_product(
-	cart_id 				BIGINT NOT NULL,
-	product_code 			BIGINT NOT NULL,
-	product_name 			VARCHAR(20) NOT NULL,
-	cart_count 				INT DEFAULT 1 ,
-	product_option1 		VARCHAR(20),
-	product_option2 		VARCHAR(20),
-	product_option3 		INTEGER DEFAULT 0 NOT NULL
-	)ENGINE ='InnoDB' DEFAULT CHARACTER SET ='UTF8';
+	CREATE TABLE IF NOT EXISTS admin_loged(
+	admin_id			VARCHAR(10),
+	admin_loged			DATETIME,
+
+    FOREIGN KEY(admin_id) REFERENCES users(user_id)
+	)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
 
 	CREATE TABLE IF NOT EXISTS grade(
 	customer_grade 			VARCHAR(10) NOT NULL,
@@ -259,13 +255,13 @@ CREATE TABLE IF NOT EXISTS `oauth_approvals` (
 	  FOREIGN KEY (`privilege_id`) REFERENCES `privileges` (`id`)
 	) ENGINE = `InnoDB` DEFAULT CHARACTER SET = `utf8`;
 
-	CREATE TABLE IF NOT EXISTS `customer_roles` (
-	  `customer_id`             BIGINT NOT NULL,
+	CREATE TABLE IF NOT EXISTS `user_roles` (
+	  `user_num`             	BIGINT NOT NULL,
 	  `role_id`             	VARCHAR(255) NOT NULL,
 
-	  UNIQUE (`customer_id`, `role_id`),
+	  UNIQUE (`user_num`, `role_id`),
 
-	  FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_num`),
+	  FOREIGN KEY (`user_num`) REFERENCES `users` (`user_num`),
 	  FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 	) ENGINE = `InnoDB` DEFAULT CHARACTER SET = `utf8`;
 
@@ -290,45 +286,10 @@ CREATE TABLE IF NOT EXISTS `oauth_approvals` (
 	, ('guest', 'product_read')
 	;
 
-############################################
-#########     ADMIN 07.22     ##############
-
-DROP TABLE IF EXISTS marketadmin;
-DROP TABLE IF EXISTS admin_loged;
-DROP TABLE IF EXISTS farmer;
-
-CREATE TABLE IF NOT EXISTS marketadmin(
-admin_id 			VARCHAR(10) PRIMARY KEY,
-admin_pwd 			VARCHAR(20) NOT NULL,
-admin_name			VARCHAR(10) NOT NULL,
-admin_authority 	CHAR(15) NOT NULL,
-admin_phone			VARCHAR(20) NOT NULL,
-admin_business_num  VARCHAR(20) NOT NULL,
-admin_regday		DATETIME NOT NULL,
-admin_loged			DATE NOT NULL
-)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
-CREATE TABLE IF NOT EXISTS admin_loged(
-admin_id			VARCHAR(10),
-admin_loged			DATETIME
-)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
-
-CREATE TABLE IF NOT EXISTS farmer(
-farmer_id				VARCHAR(10) PRIMARY KEY,
-farmer_name				VARCHAR(20) NOT NULL,
-farmer_addr				VARCHAR(10) NOT NULL,
-farmer_phone			VARCHAR(20) NOT NULL,
-farmer_business_number	VARCHAR(20) NOT NULL,
-farmer_business_check	VARCHAR(12) CHECK(farmer_business_check IN('business','individual','corporation'))
-)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
-
 
 #####################################################
 ######### PRODUCT ###################################
 #####################################################
-
 
 ###    TABLES ABOUT PRODUCT    ###
 
@@ -345,19 +306,21 @@ DROP TABLE IF EXISTS upper_lower;
 DROP TABLE IF EXISTS lower_category;
 DROP TABLE IF EXISTS upper_category;
 
-
+## 상위 카테고리
 CREATE TABLE IF NOT EXISTS lower_category(
 	lower_code			INTEGER PRIMARY KEY AUTO_INCREMENT,
     lower_title			VARCHAR(20)
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+## 하위 카테고리
 CREATE TABLE IF NOT EXISTS upper_category(
 	upper_code			INTEGER PRIMARY KEY AUTO_INCREMENT,
     upper_title			VARCHAR(20)
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+## 상위 하위 카테고리 서로 참조 테이블
 CREATE TABLE IF NOT EXISTS upper_lower(
 	upper_code INTEGER NOT NULL,
     lower_code INTEGER NOT NULL UNIQUE,
@@ -366,13 +329,28 @@ CREATE TABLE IF NOT EXISTS upper_lower(
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+
+## 제품 정보와 같은 제품을 묶어 주는 group 처럼 묶어 주는 테이블
 CREATE TABLE IF NOT EXISTS product_type(
 	product_type_code 			BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	product_type_name 			VARCHAR(20) NOT NULL,
 	product_unit 				VARCHAR(20),
-	product_origin	 			VARCHAR(20)
+	product_origin	 			VARCHAR(20),
+    product_meterial			VARCHAR(20)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+## 실제 생산자가 다를 경우 farmer를 등록 하는 테이블 최초에는 판매자만 등록 하면 된다
+	CREATE TABLE IF NOT EXISTS farmer(
+	farmer_id				VARCHAR(10) PRIMARY KEY,
+	farmer_name				VARCHAR(20) NOT NULL,
+	farmer_addr				VARCHAR(10) NOT NULL,
+	farmer_phone			VARCHAR(20) NOT NULL,
+	farmer_business_number	VARCHAR(20) NOT NULL,
+	farmer_business_check	VARCHAR(12) CHECK(farmer_business_check IN('business','individual','corporation'))
+	)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
+
+## 실제 제품 테이블
 CREATE TABLE IF NOT EXISTS product(
 	product_code			BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_name			VARCHAR(20) NOT NULL,
@@ -381,19 +359,47 @@ CREATE TABLE IF NOT EXISTS product(
     product_type_code		BIGINT NOT NULL,
     product_option1			VARCHAR(20) DEFAULT 'empty',
     product_option2			VARCHAR(20) DEFAULT 'empty',
-    product_price			INTEGER NOT NULL,
+    product_price			DECIMAL(18,5) NOT NULL,
     product_made_date		DATE,
-    product_notax_price		INTEGER,
-    product_taxprice		INTEGER,
-    product_tax				Float DEFAULT 0.1,
+    product_notax_price		DECIMAL(18,5),
+    product_taxprice		DECIMAL(17,5),
+    product_tax				DECIMAL(6,3) DEFAULT 0.1,
     product_stock			INTEGER DEFAULT 0,
     product_total_sales		INTEGER DEFAULT 0,
     product_status			CHAR(5) DEFAULT 'true' CHECK(product_status IN('true','false')),
+    farmer_id				VARCHAR(10),
+
+    FOREIGN KEY(farmer_id) REFERENCES farmer(farmer_id),
     FOREIGN KEY(product_type_code) REFERENCES product_type(product_type_code)
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 ALTER TABLE product AUTO_INCREMENT = 100; -- 초기값 얼마?????????
 
+## 제품의 재고 테이블
+	CREATE TABLE IF NOT EXISTS product_inventory(
+    product_code 			BIGINT UNIQUE NOT NULL,
+    product_stock			INTEGER,
+    product_total_sales		INTEGER,
+
+    FOREIGN KEY(product_code) REFERENCES product(product_code)
+)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
+##카트 테이블
+	CREATE TABLE IF NOT EXISTS cart(
+    cart_num				BIGINT PRIMARY KEY AUTO_INCREMENT,
+	user_num 				BIGINT NOT NULL,
+	product_board_num		BIGINT NOT NULL,
+    cart_product_name		VARCHAR(20) NOT NULL,
+    cart_product_option1	VARCHAR(20),
+	cart_product_option2	VARCHAR(20),
+    cart_product_price		DECIMAL(18,5),
+    cart_product_count		INTEGER DEFAULT 1,
+    cart_product_img		VARCHAR(255),
+    FOREIGN KEY(user_num) REFERENCES users(user_num)
+
+	)ENGINE ='InnoDB' DEFAULT CHARACTER SET ='UTF8';
+
+## 쿠폰 테이블
 CREATE TABLE IF NOT EXISTS coupon(
 	coupon_id			VARCHAR(20) PRIMARY KEY,
     coupon_name			VARCHAR(20),
@@ -408,42 +414,10 @@ CREATE TABLE IF NOT EXISTS coupon(
 
 
 
-
-###   TABLE ABOUT ORDER    ###
-DROP TABLE IF EXISTS orderlist;
-DROP TABLE IF EXISTS orders;
--- DROP TABLE 거래내역;  미정
-
-
-CREATE TABLE IF NOT EXISTS orders(   -- order 예약어로 사용불가
-	orders_code				VARCHAR(20) PRIMARY KEY,
-    product_code			VARCHAR(20),
-    product_name			VARCHAR(20),
-    orders_sell_date		DATETIME,
-    orders_release_state	VARCHAR(10),
-    orders_delivery_num		INTEGER,
-    orders_price			INTEGER,
-    orders_way				VARCHAR(20),
-    orders_count			INTEGER,
-    customer_num			BIGINT
-)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
-
-CREATE TABLE IF NOT EXISTS orderlist(
-	orders_code				VARCHAR(20),
-	customer_num			BIGINT,
-	orders_record_bill		VARCHAR(20),
-    orders_sell_date		DATETIME,
-    orders_record_check		VARCHAR(10)
-)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
-##########     07.30    ##################################
-########## CREATE BOARD ##################################
-
-
-
+## 게시판 테이블들
 ###########################################################
 
+##제품 등록 게시판 테이블
 CREATE TABLE IF NOT EXISTS product_board(
 product_board_num 				BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
 product_code					BIGINT NOT NULL,
@@ -460,13 +434,12 @@ product_board_detail 			VARCHAR(255),
 product_board_bottom 			VARCHAR(255),
 product_edit_content 			VARCHAR(2000),
 product_add_date				DATETIME,
-product_board_status 			CHAR(5) DEFAULT 'true' CHECK(product_board_status IN('false','true')),
+product_board_deleted 			CHAR(5) DEFAULT 'false' CHECK(product_board_deleted IN('false','true')),
 
 FOREIGN KEY(product_code) REFERENCES product(product_code)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
-
-
+## 리뷰 게시판 테이블
 CREATE TABLE IF NOT EXISTS review_board (
 review_board_num 				BIGINT PRIMARY KEY AUTO_INCREMENT,
 product_board_num 				BIGINT NOT NULL,
@@ -474,43 +447,110 @@ customer_id 					VARCHAR(20) NOT NULL,
 review_board_img				VARCHAR(100),
 review_board_title				VARCHAR(20),
 review_board_content 			VARCHAR(1000),
-review_board_rating 			INTEGER CHECK(review_board_rating AND(review_board_rating <=5 )),
+review_board_rating 			INTEGER DEFAULT 3 CHECK(review_board_rating AND(review_board_rating <=5 )),
 review_board_regdate 			DATETIME NOT NULL,
-review_board_status 			CHAR(5) NOT NULL DEFAULT 'true' CHECK(review_board_status IN('false','true'))
+review_board_deleted 			CHAR(5) NOT NULL DEFAULT 'false' CHECK(review_board_deleted IN('false','true')),
+review_board_delete_date		DATETIME
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+
+## Q&A 게시판 테이블
 CREATE TABLE IF NOT EXISTS question_board(
 question_board_num				BIGINT PRIMARY KEY AUTO_INCREMENT,
 product_board_num 				BIGINT,
-customer_id						VARCHAR(20),
-question_board_password			char(10),
+user_id							VARCHAR(20),
+question_board_title			VARCHAR(50),
+question_board_password			char(4),
 question_board_content 			VARCHAR(1000),
 question_board_regdate 			DATETIME,
-question_board_status 			CHAR(5) NOT NULL DEFAULT 'true' CHECK(question_board_status IN('false','true'))
+question_board_status 			CHAR(5) NOT NULL DEFAULT 'false' CHECK(question_board_status IN('false','true')),
+question_board_deleted 			CHAR(5) NOT NULL DEFAULT 'false' CHECK(question_board_deleted IN('false','true')),
+question_board_delete_date		DATETIME NULL
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+## Q&A 게시판 답글 테이블
 CREATE TABLE IF NOT EXISTS question_answer(
 answer_num						BIGINT PRIMARY KEY AUTO_INCREMENT,
 answer_date						DATETIME,
 answer_content					VARCHAR(1000),
 question_board_num				BIGINT,
 answer_writer					VARCHAR(20) NOT NULL,
+answer_deleted					CHAR(5) DEFAULT 'false' CHECK(answer_deleted IN('false','true')),
+answer_board_delete_date        DATETIME,
 FOREIGN KEY(question_board_num) REFERENCES question_board(question_board_num)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
 
-	############### 연 습 장 ##############################users
+##    주문 관련 테이블
 
-	SELECT * FROM marketadmin;
-	SELECT *FROM customer;
-    SELECT * FROM customer_contact;
-    SELECT * FROM customer_loged;
-	SELECT * FROM oauth_access_token;
-	SELECT * FROM oauth_client_token;
-	SELECT * FROM oauth_client_details;
-	SELECT * FROM oauth_refresh_token;
-	SELECT * FROM  oauth_code;
-	SELECT * FROM  oauth_access_token;
-	commit;
+## 실제 주문 테이블
+CREATE TABLE IF NOT EXISTS orders(
+order_num 					BIGINT PRIMARY KEY AUTO_INCREMENT,
+user_num 					BIGINT NOT NULL,
+order_record_bill			VARCHAR(200),
+order_payment_date			DATETIME,  -- 결제 날짜
+order_sell_date				DATETIME,  -- 구매 날짜
+payment_method				VARCHAR(20) NOT NULL,
+order_total_price			DECIMAL(18,5) NOT NULL,
+order_memo					VARCHAR(1000), -- 주문에 대한 메모,
+
+FOREIGN KEY (user_num) REFERENCES users(user_num)
+)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
+## 주문에 대한 제품 테이블
+CREATE TABLE IF NOT EXISTS order_items(
+order_item_num			BIGINT PRIMARY KEY AUTO_INCREMENT,
+product_code			BIGINT NOT NULL,
+order_item_group		BIGINT ,
+order_item_depth		INT DEFAULT 0,
+order_item_price		DECIMAL(18,5),
+order_count				INTEGER DEFAULT 1,
+order_item_send_status	VARCHAR(10) CHECK(order_item_send_status IN('발송완료','입고완료','입고대기','입고지연')),
+order_item_status		VARCHAR(10) CHECK(order_item_status IN('배송완료','거래완료','반품접수','반품완료','교환접수','교환완료','환불접수','환불완료')),
+order_shipping_memo		VARCHAR(50),
+FOREIGN KEY(product_code) REFERENCES product(product_code)
+)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
+
+## 주문에 대한 배송 테이블
+CREATE TABLE IF NOT EXISTS shipping(
+shipping_num				BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+tracking_number				VARCHAR(30),
+shipping_courier			VARCHAR(20),
+delivery_address			VARCHAR(100) NOT NULL,
+shipping_method				VARCHAR(10) NOT NULL,
+shipping_price				DECIMAL(10,3) NOT NULL,
+shipping_status				VARCHAR(10),
+shipping_arrivel_date		DATE,
+shipping_reciever			VARCHAR(20) NOT NULL,
+shipping_reciever_phone		VARCHAR(20) NOT NULL,
+shipping_memo				VARCHAR(100)
+
+)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
+## 배송에 대한 제품 테이블
+CREATE TABLE IF NOT EXISTS shipping_item(
+shipping_num			 BIGINT NOT NULL,
+product_code			 BIGINT NOT NULL,
+product_name			 VARCHAR(20) NOT NULL,
+product_option1		     VARCHAR(20),
+product_option2          VARCHAR(20),
+product_price			 DECIMAL(18,5),
+order_sell_date			 DATETIME,
+
+FOREIGN KEY(shipping_num) REFERENCES shipping(shipping_num)
+)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
+## 주문에 대한 서로 참조 테이블 1:N:N (orders : orderItem : shipping)
+CREATE TABLE IF NOT EXISTS orders_shipping(
+order_num					BIGINT NOT NULL,
+shipping_num				BIGINT NOT NULL,
+order_item_num				BIGINT NOT NULL,
+
+FOREIGN KEY(order_num) REFERENCES orders(order_num),
+FOREIGN KEY(shipping_num) REFERENCES shipping(shipping_num),
+FOREIGN KEY(order_item_num) REFERENCES order_items(order_item_num)
+)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
