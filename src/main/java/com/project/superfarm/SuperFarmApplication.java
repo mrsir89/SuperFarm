@@ -18,6 +18,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SuperFarmApplication {
 
+// kangil test
+
     public static void main(String[] args) {
         SpringApplication.run(SuperFarmApplication.class, args);
     }
