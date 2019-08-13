@@ -8,17 +8,14 @@
 
 
 git remote를 내 로컬에 복사하기(프로젝트 다운)
-
  $ git clone https://github.com/mrsir89/SuperFarm
 
 
 'SuperFarm' 프로젝트가 복사됨, 해당 프로젝트로 이동하기
-
  $ cd SuperFarm 
 
 
 내가 push(remote에 upload)할 branch로 이동하기
-
  $ git checkout 브랜치명
 
 
@@ -30,9 +27,8 @@ git remote를 내 로컬에 복사하기(프로젝트 다운)
 
 
 변경된 프로젝트를 내 branch에 upload 하기
-
  $ git branch                  (현재 branch 어디인지 확인!!)
- 
+
  $ git status                  (상태확인, 무엇이 바뀌었는지 빨간색으로 처리됨)
  
  $ git add 변경된파일이름          (변경사항이 초록색으로 바뀜(staging 영역으로) -A는 전부 다)
