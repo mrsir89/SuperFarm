@@ -32,7 +32,7 @@ public class CategoryController {
     /**
      * @apiNote    : 카테고리 전체를 리턴 upper 상위카테고리 / lower 하위카테고리
      * @Url        : /category
-     * @see        : entity Cart   DB: cart
+     * @see        : entity category   DB: category
      * @return     Json
      *         "upperCode": 1,
      *         "upperTitle": "농산물",

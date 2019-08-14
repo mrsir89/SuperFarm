@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
           @apiNote   : 카트  추가,삭제,전체삭제, 수량 수정
           @Url /cart : /add, /delete, /deleteAll, /edit
@@ -26,6 +28,14 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+
+    /**
+     *
+     */
+//    @Re
+//    public List<Cart> loadCartList(@RequestParam(name ="userNum")Long userNum){
+//
+//    }
 
     /** Todo : error 발생 규격화
      *  @apiNote : 고개번호로 카트 상품추가
