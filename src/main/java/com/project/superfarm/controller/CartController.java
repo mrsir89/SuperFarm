@@ -31,7 +31,7 @@ public class CartController {
 
     /**
      *  @apiNote : 고개번호로 카트 상품추가
-     *  @Url     : /cart/add
+     *  @Url     : /cart
      *  @see     : java : Cart.java
      *               DB : cart
         @param   :Json
