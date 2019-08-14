@@ -60,4 +60,8 @@ Customer안에 Contact정보가 없기에 추가 사항
 
 
 
-2019.07.31
+## 2019. 08.13
+
+스키마 변경으로 인한 전체적으로 수정
+review 게시판 QnA 게시판 Page로 변경
+Admin과 Customer 각각 분리 형태를 User로 통합적인 부분을 같이 쓰면서 User 에서 파생되어 나누어짐

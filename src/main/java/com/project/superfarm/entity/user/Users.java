@@ -15,11 +15,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+
 @Entity
 @Table(name="users")
 @DynamicUpdate
 @DynamicInsert
-@Setter @Getter @ToString
+@Setter
+@Getter
+@ToString
 public class Users<T> implements Serializable , UserDetails {
 
     @Id
@@ -110,5 +113,79 @@ public class Users<T> implements Serializable , UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////
+    public Long getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(Long userNum) {
+        this.userNum = userNum;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public Date getUserRegday() {
+        return userRegday;
+    }
+
+    public void setUserRegday(Date userRegday) {
+        this.userRegday = userRegday;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public Date getUserLastConnect() {
+        return userLastConnect;
+    }
+
+    public void setUserLastConnect(Date userLastConnect) {
+        this.userLastConnect = userLastConnect;
+    }
+
+    public Set<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
     }
 }
