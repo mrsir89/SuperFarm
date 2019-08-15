@@ -6,8 +6,13 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @DynamicInsert
 @DynamicUpdate
@@ -38,7 +43,7 @@ public class ProductBoard implements Serializable {
     @Column(name="product_board_deliveryprice")
     private Integer productBoardDeliveryPrice;
 
-    @Column(name="product_baord_best")
+    @Column(name="product_board_best")
     private Integer productBoardBest;
 
     @Column(name="product_board_tag")
@@ -66,21 +71,24 @@ public class ProductBoard implements Serializable {
     private String productBoardDeleted;
 
 
-    @OneToOne(fetch=FetchType.EAGER )
-    @JoinColumn(name="product_code",referencedColumnName = "product_code",
-            insertable = false, updatable = false)
-    private Product product;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "productBoard_product",
+//            joinColumns = @JoinColumn(name="product_board_num"),
+//            inverseJoinColumns = @JoinColumn(name="product_code"))
+////    @LazyCollection(LazyCollectionOption.EXTRA)
+//    private List<Product> product;
 
 
-    @OneToOne
-    @JoinColumn(name="product_board_num",referencedColumnName = "product_board_num",
-    insertable = false,updatable = false)
-    private QuestionBoard questionBoard;
 
-    @OneToOne
-    @JoinColumn(name="product_board_num", referencedColumnName = "product_board_num",
-    insertable = false, updatable = false)
-    private ReviewBoard reviewBoard;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="product_board_num",referencedColumnName = "product_board_num")
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<QuestionBoard> questionBoard;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="product_board_num", referencedColumnName = "product_board_num")
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<ReviewBoard> reviewBoard;
 
 
 }

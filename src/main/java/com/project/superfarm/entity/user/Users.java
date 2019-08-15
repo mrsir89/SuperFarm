@@ -20,7 +20,7 @@ import java.util.*;
 @DynamicUpdate
 @DynamicInsert
 @Setter @Getter @ToString
-public class Users<T> implements Serializable , UserDetails {
+public class Users<T extends Object> implements Serializable , UserDetails {
 
     @Id
     @Column(name="user_num",updatable = false,insertable = false,nullable = false)

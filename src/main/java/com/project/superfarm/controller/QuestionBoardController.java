@@ -41,6 +41,7 @@ public class QuestionBoardController {
 
     // TODO 질문 사항  Stream으로 컬렉션을 넣을때는 정렬이 안되고  getContent List로 넣을때는 정렬이 된다.
 
+
     /**
      * @apiNote   : 상위 카테고리에 등록되어있는 모든 productBoard 리턴
      * @Url       : /product
@@ -80,7 +81,8 @@ public class QuestionBoardController {
      *     "size": 10,
      *     "totalCount": 16,
      *     "totalPage": 2,
-     *     "hasNext": false
+     *     "hasNext": false,
+     *     "boardNum": 5,
      *
      */
 
@@ -100,13 +102,14 @@ public class QuestionBoardController {
         if(productNum !=null) {
             Page<QuestionBoard> questionBoards=
                     questionBoardService.loadFromProductBoard(productNum,pageable);
-
             if(questionBoards==null){
                 return new ResultItems<QuestionBoard>();
             }
             else{
-                return new ResultItems<QuestionBoard>(questionBoards.getContent(), page,size,
+                ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page,size,
                         questionBoards.getTotalElements(),questionBoards.getTotalPages(),questionBoards.hasNext());
+                questionBoardResultItems.setBoardNum(productNum);
+                return questionBoardResultItems;
             }
         }
         return null;
@@ -149,8 +152,9 @@ public class QuestionBoardController {
                 return new ResultItems<QuestionBoard>();
             }
             else {
-                return new ResultItems<QuestionBoard>(questionBoards.getContent(), page, size, questionBoards.getTotalElements()
-                        , questionBoards.getTotalPages(), questionBoards.hasNext());
+                ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page,size,
+                        questionBoards.getTotalElements(),questionBoards.getTotalPages(),questionBoards.hasNext());
+                return questionBoardResultItems;
             }
         }
         else
@@ -159,7 +163,7 @@ public class QuestionBoardController {
     }
 
     /**
-     * @apiNote   : userId로 등록되어있는 모든 productBoard 리턴
+     * @apiNote   : productBoard에 속한 QnA 게시판에 글쓰기
      * @Url       : /write/question
      * @See       : java : QuestionBoard.java \n
      *              DB   : question_board
@@ -169,7 +173,6 @@ public class QuestionBoardController {
      *             "questionBoardPassword": "1234",
      *             "questionBoardTitle": "zzzzzzzzzzzzz3",
      *             "questionBoardContent": "어????????????????????? ",
-     *             "questionAnswer": []
      * @return    : Json
      *            : /product 와 같음
      */
@@ -190,7 +193,7 @@ public class QuestionBoardController {
     }
 
     /**
-     * @apiNote   : userId로 등록되어있는 모든 productBoard 리턴
+     * @apiNote   : ProductBoard에 속한 QnA 게시판에 댓글 쓰기
      * @Url       : /write/answer
      * @See       : java : QuestionBoard.java, QuestionAnswer\n
      *              DB   : question_board, question_answer
@@ -218,7 +221,7 @@ public class QuestionBoardController {
 
 
     /**
-     * @apiNote   : userId로 등록되어있는 모든 productBoard 리턴
+     * @apiNote   : productBoard에 속한 QnA보드의 내용 수정
      * @Url       : /update/question
      * @See       : java : QuestionBoard.java \n
      *              DB   : question_board

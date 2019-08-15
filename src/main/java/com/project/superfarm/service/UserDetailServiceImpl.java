@@ -33,17 +33,19 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-
+        System.out.println(username + " username");
         Optional<Users> usersOptional =  usersRepository.findByUserId(username);
-
-        if(usersOptional.isPresent()) {
+        System.out.println("loadUserByUsername 실행");
+      //  if(usersOptional.isPresent()) {
             // 접속 기록 Log 남기기
 //            usersRepository.createLog(username);
             if(usersOptional.get().getUserType().equals("customer")) {
+                System.out.println("customer 실행 확인 ");
+
                 Users<Customer> user = usersOptional.get();
                 Optional<Customer> customerOptional = customerRepository.findById(user.getUserNum());
                     user.setPosition(customerOptional.get());
-
+                System.out.println(user.toString());
                 return  user;
 
             }else if(usersOptional.get().getUserType().equals("admin")){
@@ -51,15 +53,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 Optional<Admin> adminOptional = adminsRepository.findById(user.getUserNum());
                 Admin admin = adminOptional.get();
                 user.setPosition(admin);
-
                 return user;
             }
-            else{
-                return null;
-            }
 
-        }else
-                throw new UsernameNotFoundException(username);
-
+     //   }else
+            //return throw new UsernameNotFoundException(username);
+            return usersOptional.get();
     }
 }

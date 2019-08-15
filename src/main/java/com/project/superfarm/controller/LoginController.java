@@ -59,7 +59,7 @@ public class LoginController {
             }
     )
     public Users me(Principal principal) {
-
+        System.out.println(principal.getName()+"      -<< name");
         return (Users)userDetailService.loadUserByUsername(PrincipalUtil.from(principal).getUsername());
     }
 

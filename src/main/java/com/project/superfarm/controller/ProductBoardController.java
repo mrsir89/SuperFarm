@@ -151,9 +151,9 @@ public class ProductBoardController {
             method = {RequestMethod.POST,RequestMethod.GET},
             produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardLower(@RequestParam int lower){
+    public List<ProductBoard> loadProductBoardLower(@RequestParam(name="lower") int lower){
 
-        return loadProductBoardLower(lower);
+        return productBoardService.loadProductBoardLower(lower);
     }
 
     /**

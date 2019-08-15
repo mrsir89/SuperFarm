@@ -73,7 +73,7 @@ public class ReviewBoardController {
 
         Page<ReviewBoard> reviewBoards = reviewBoardService.loadAllReviewBoard(pageable);
 
-        return new ResultItems<ReviewBoard>(reviewBoards.getContent(),size,page,reviewBoards.getTotalElements()
+        return new ResultItems<ReviewBoard>(reviewBoards.getContent(),page,size,reviewBoards.getTotalElements()
                                     ,reviewBoards.getTotalPages(),reviewBoards.hasNext());
     }
 
@@ -106,8 +106,8 @@ public class ReviewBoardController {
             if (reviewBoard == null) {
                 return new ResultItems<ReviewBoard>();
             } else {
-                return new ResultItems<ReviewBoard>(reviewBoard.getContent(), size,
-                        page, reviewBoard.getTotalElements(), reviewBoard.getTotalPages(), reviewBoard.hasNext());
+                return new ResultItems<ReviewBoard>(reviewBoard.getContent(), page,
+                        size, reviewBoard.getTotalElements(), reviewBoard.getTotalPages(), reviewBoard.hasNext());
             }
         }
         else

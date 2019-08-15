@@ -12,6 +12,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,21 +59,8 @@ public class QuestionBoard implements Serializable{
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="question_board_num", referencedColumnName ="question_board_num")
     @Where(clause = "answer_deleted = 'false'")
-    @OrderBy("answer_num ASC" )
     @Fetch(FetchMode.SUBSELECT)
-    private Set<QuestionAnswer> questionAnswer;
-
-    public Set<QuestionAnswer> getQuestionAnswer() {
-        return questionAnswer;
-    }
-
-    public void setQuestionAnswer(Set<QuestionAnswer> questionAnswer) {
-
-        this.questionAnswer = questionAnswer;
-
-    }
-
-
+    private List<QuestionAnswer> questionAnswer;
 
 
 
