@@ -64,23 +64,33 @@ public class UserDetailServiceImpl implements UserDetailsService {
             //return throw new UsernameNotFoundException(username);
             return usersOptional.get();
     }
-
+    // 회원정보 수정
     public Users edit(CustomerEdit customerEdit) {
 
-        Customer customer = new Customer();
-        Users<Customer> user = new Users<Customer>();
 
+        // 수정할 객체 생성 초기화
         Users<Customer> editUser = new Users<Customer>();
         Customer editCustomer = new Customer();
 
-        if(customerEdit != null){
-            user = customerEdit.getUsers();
-            customer = customerEdit.getCustomer();
+        if(customerEdit.getUserNum() != null){
+            Long userNum = customerEdit.getUserNum();
 
-            editUser  =usersRepository.save(user);
-            editCustomer = customerRepository.save(customer);
+            Optional<Users> user = usersRepository.findById(userNum);
+            Optional<Customer> customer = customerRepository.findById(userNum);
+
+            if(user.isPresent()){
+                editUser = user.get();
+                editUser.setEditUser(customerEdit);
+
+                editCustomer = customer.get();
+                editCustomer.setCustomerEdit(customerEdit);
+            }
+
+            editUser  =usersRepository.save(editUser);
+            editCustomer = customerRepository.save(editCustomer);
 
             editUser.setPosition(editCustomer);
+
             return editUser;
         }else
             throw new UrlNotFountException();

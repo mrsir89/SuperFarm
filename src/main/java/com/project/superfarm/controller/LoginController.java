@@ -7,6 +7,7 @@ import com.project.superfarm.service.UserDetailServiceImpl;
 import com.project.superfarm.util.PrincipalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,15 +66,22 @@ public class LoginController {
         return (Users)userDetailService.loadUserByUsername(PrincipalUtil.from(principal).getUsername());
     }
 
-    @RequestMapping(value="/userEdit",
+                /**
+                 *
+                 * @param customerEdit
+                 *        
+                 * @return
+                 */
+    @RequestMapping(value="/edit",
             method=RequestMethod.POST,
             produces = {
             MediaType.APPLICATION_JSON_UTF8_VALUE,
             MediaType.APPLICATION_ATOM_XML_VALUE
     })
-    public Users<Customer> me(CustomerEdit customerEdit){
+    public Users<Customer> customerEdit(@RequestBody CustomerEdit customerEdit){
+        System.out.println(customerEdit.toString());
         Users<Customer> customerUser =userDetailService.edit(customerEdit);
-        return null;
+        return customerUser;
     }
 
 }
