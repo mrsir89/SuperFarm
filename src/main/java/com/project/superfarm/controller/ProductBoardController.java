@@ -175,5 +175,18 @@ public class ProductBoardController {
 
     }
 
+    @PreAuthorize("hasRole('Guest')")
+    @RequestMapping(value="/productDetail",
+            method={RequestMethod.POST,RequestMethod.GET},
+            produces={ MediaType.APPLICATION_JSON_UTF8_VALUE,
+                        MediaType.APPLICATION_ATOM_XML_VALUE})
+    public ProductBoard loadProductDetail(@RequestParam(name="num")Long num) throws ClassNotFoundException {
+        if(num !=null){
+
+            return productBoardService.loadProductDetails(num);
+        }else
+            throw new NullPointerException();
+
+    }
 
 }

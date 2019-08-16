@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -65,4 +66,14 @@ public class ProductBoardService {
     }
 
 
+    public ProductBoard loadProductDetails(Long num) throws ClassNotFoundException {
+
+        Optional<ProductBoard> productBoard ;
+        productBoard = productBoardRepository.findById(num);
+        if(productBoard.isPresent()){
+            return productBoard.get();
+        }else{
+            throw new ClassNotFoundException();
+        }
+    }
 }
