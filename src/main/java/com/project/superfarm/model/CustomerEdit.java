@@ -5,9 +5,7 @@ import com.project.superfarm.entity.user.Users;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -49,7 +47,7 @@ public class CustomerEdit implements Serializable {
     public Customer getCustomer(){
         Customer customer = new Customer();
         customer.setUserNum(userNum);
-        customer.setCustomer_birth(customerBirth);
+        customer.setCustomerBirth(customerBirth);
         customer.setCustomerGender(customerGender);
         customer.setCustomerPhone(customerPhone);
         customer.setCustomerAddr(customerAddr);

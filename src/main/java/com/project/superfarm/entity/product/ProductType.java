@@ -26,7 +26,4 @@ public class ProductType {
     @Column(name="product_origin")
     private String productOrigin;
 
-//    @OneToOne(fetch = FetchType.EAGER)
-//    @MapsId
-//    private Product product;
 }

@@ -23,7 +23,7 @@ public class Customer  implements Serializable {
     private Long userNum;
 
     @Column(name="customer_birth")
-    private Date customer_birth;
+    private Date customerBirth;
 
     @Column(name="customer_gender")
     private String customerGender;

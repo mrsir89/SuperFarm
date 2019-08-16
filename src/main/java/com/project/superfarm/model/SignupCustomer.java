@@ -54,8 +54,8 @@ public class SignupCustomer implements Serializable {
     public Customer getCustomer(){
 
         Customer customer = new Customer();
-        customer.setCustomer_gender(customerGender);
-        customer.setCustomer_birth(customerBirth);
+        customer.setCustomerGender(customerGender);
+        customer.setCustomerBirth(customerBirth);
         customer.setCustomerAddr(customerAddr);
         customer.setCustomerPhone(customerPhone);
         customer.setCustomerCoupon(null);
