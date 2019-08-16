@@ -60,7 +60,7 @@ public class QuestionBoard implements Serializable{
     @JoinColumn(name="question_board_num", referencedColumnName ="question_board_num")
     @Where(clause = "answer_deleted = 'false'")
     @Fetch(FetchMode.SUBSELECT)
-    private List<QuestionAnswer> questionAnswer;
+    private Set<QuestionAnswer> questionAnswer;
 
 
 

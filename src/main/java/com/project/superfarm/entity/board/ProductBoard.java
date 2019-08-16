@@ -26,6 +26,7 @@ public class ProductBoard implements Serializable {
 
     @Id
     @Column(name="product_board_num",nullable = false,updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productBoardNum;
 
     @Column(name="upper_code")
@@ -41,7 +42,7 @@ public class ProductBoard implements Serializable {
     private String productBoardThumbnail;
 
     @Column(name="product_board_deliveryprice")
-    private Integer productBoardDeliveryPrice;
+    private Double productBoardDeliveryPrice;
 
     @Column(name="product_board_best")
     private Integer productBoardBest;
@@ -70,25 +71,15 @@ public class ProductBoard implements Serializable {
     @Column(name="product_board_deleted")
     private String productBoardDeleted;
 
-
 //    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "productBoard_product",
-//            joinColumns = @JoinColumn(name="product_board_num"),
-//            inverseJoinColumns = @JoinColumn(name="product_code"))
-////    @LazyCollection(LazyCollectionOption.EXTRA)
-//    private List<Product> product;
-
-
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_board_num",referencedColumnName = "product_board_num")
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    private List<QuestionBoard> questionBoard;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_board_num", referencedColumnName = "product_board_num")
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    private List<ReviewBoard> reviewBoard;
+//    @JoinTable(
+//            name = "productBoard_product",
+//            joinColumns = @JoinColumn(name = "product_board_num"),
+//            inverseJoinColumns = @JoinColumn(name = "product_code")
+//    )
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="product_board_num", referencedColumnName ="product_board_num")
+    private List<Product> productList;
 
 
 }

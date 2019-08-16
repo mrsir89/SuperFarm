@@ -1,10 +1,10 @@
 package com.project.superfarm.repository;
 
-import com.project.superfarm.entity.product.Product_Type;
+import com.project.superfarm.entity.product.ProductType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductTypeRepository extends JpaRepository<Product_Type,Long> {
+public interface ProductTypeRepository extends JpaRepository<ProductType,Long> {
 
 }

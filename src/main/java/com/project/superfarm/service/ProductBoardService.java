@@ -14,6 +14,11 @@ public class ProductBoardService {
     @Autowired
     private ProductBoardRepository productBoardRepository;
 
+    @Autowired
+    private QuestionBoardService questionBoardService;
+
+    @Autowired
+    private ReviewBoardService reviewBoardService;
 
     public List<ProductBoard> loadProductBoardAll() {
 

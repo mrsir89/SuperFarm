@@ -1,14 +1,19 @@
 package com.project.superfarm.entity.product;
 
 
+import com.project.superfarm.entity.board.ProductBoard;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="product")
@@ -36,19 +41,20 @@ public class Product implements Serializable {
     private String productOption2;
 
     @Column(name = "product_price")
-    private Integer productPrice;
+    private Double productPrice;
 
     @Column(name = "product_made_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date productMadeDate;
 
     @Column(name = "product_notax_price")
-    private Integer productNotaxPrice;
+    private Double productNotaxPrice;
 
     @Column(name = "product_taxprice")
-    private Integer productTaxprice;
+    private Double productTaxprice;
 
     @Column(name = "product_tax")
-    private Float productTax;
+    private Double productTax;
 
     @Column(name = "product_stock")
     private Integer productStock;
@@ -59,16 +65,18 @@ public class Product implements Serializable {
     @Column(name = "product_status")
     private String productStatus;
 
-    @Column(name="farmer_id")
+    @Column(name = "farmer_id")
     private String farmerId;
 
-
-    @OneToOne(fetch=FetchType.EAGER )
-    @JoinColumn(name="product_type_code",referencedColumnName = "product_type_code",
-            insertable = false, updatable = false)
-    private Product_Type productType;
+//    @ManyToMany()
+//    private List<ProductBoard> productList;
 
 
-
+//
+//    @OneToOne(fetch = FetchType.EAGER)
+//    private ProductType productType;
 
 }
+
+
+
