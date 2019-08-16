@@ -26,7 +26,7 @@ public class Customer  implements Serializable {
     private Date customer_birth;
 
     @Column(name="customer_gender")
-    private String customer_gender;
+    private String customerGender;
 
     @Column(name="customer_grade")
     private String customerGrade;

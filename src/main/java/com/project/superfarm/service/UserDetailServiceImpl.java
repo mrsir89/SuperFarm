@@ -4,9 +4,11 @@ package com.project.superfarm.service;
 import com.project.superfarm.entity.user.Admin;
 import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
+import com.project.superfarm.model.CustomerEdit;
 import com.project.superfarm.repository.userRepository.AdminsRepository;
 import com.project.superfarm.repository.userRepository.CustomerRepository;
 import com.project.superfarm.repository.userRepository.UsersRepository;
+import com.project.superfarm.util.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +21,8 @@ import java.util.Optional;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
+
+
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -59,5 +63,29 @@ public class UserDetailServiceImpl implements UserDetailsService {
      //   }else
             //return throw new UsernameNotFoundException(username);
             return usersOptional.get();
+    }
+
+    public Users edit(CustomerEdit customerEdit) {
+
+        Customer customer = new Customer();
+        Users<Customer> user = new Users<Customer>();
+
+        Users<Customer> editUser = new Users<Customer>();
+        Customer editCustomer = new Customer();
+
+        if(customerEdit != null){
+            user = customerEdit.getUsers();
+            customer = customerEdit.getCustomer();
+
+            editUser  =usersRepository.save(user);
+            editCustomer = customerRepository.save(customer);
+
+            editUser.setPosition(editCustomer);
+            return editUser;
+        }else
+            throw new UrlNotFountException();
+
+
+
     }
 }

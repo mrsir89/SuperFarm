@@ -1,6 +1,8 @@
 package com.project.superfarm.controller;
 
+import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
+import com.project.superfarm.model.CustomerEdit;
 import com.project.superfarm.service.UserDetailServiceImpl;
 import com.project.superfarm.util.PrincipalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,17 @@ public class LoginController {
     public Users me(Principal principal) {
         System.out.println(principal.getName()+"      -<< name");
         return (Users)userDetailService.loadUserByUsername(PrincipalUtil.from(principal).getUsername());
+    }
+
+    @RequestMapping(value="/userEdit",
+            method=RequestMethod.POST,
+            produces = {
+            MediaType.APPLICATION_JSON_UTF8_VALUE,
+            MediaType.APPLICATION_ATOM_XML_VALUE
+    })
+    public Users<Customer> me(CustomerEdit customerEdit){
+        Users<Customer> customerUser =userDetailService.edit(customerEdit);
+        return null;
     }
 
 }
