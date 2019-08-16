@@ -6,13 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @DynamicInsert
 @DynamicUpdate
@@ -71,6 +68,9 @@ public class ProductBoard implements Serializable {
     @Column(name="product_board_deleted")
     private String productBoardDeleted;
 
+    @Transient
+    private String productTypeName;
+
 //    @ManyToMany(fetch = FetchType.EAGER)
 //    @JoinTable(
 //            name = "productBoard_product",
@@ -80,6 +80,9 @@ public class ProductBoard implements Serializable {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="product_board_num", referencedColumnName ="product_board_num")
     private List<Product> productList;
+//    = new ArrayList<>();
+//    @Transient
+//    List<Product> productList;
 
 
 }

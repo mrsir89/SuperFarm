@@ -2,6 +2,7 @@ package com.project.superfarm.repository;
 
 
 import com.project.superfarm.entity.board.ProductBoard;
+import com.project.superfarm.entity.product.Product;
 import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
 import com.project.superfarm.repository.boardRepository.ProductBoardRepository;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -46,6 +48,8 @@ public class UsersRepositoryTest {
     @Autowired
     private QuestionBoardRepository questionBoardRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
     @Test
     public void productBoardTeset(){
         List<ProductBoard> productBoardList = productBoardRepository.findAll();
@@ -64,6 +68,14 @@ public class UsersRepositoryTest {
         Users<Customer> user = usersRepository.findByUserId("tester01").get();
         System.out.println(user.toString());
 
+    }
+
+    @Test
+    public void productTestSelectProductType(){
+
+
+        Optional<Product>product = productRepository.findById(1L);
+        System.out.println(product.toString());
     }
 
 

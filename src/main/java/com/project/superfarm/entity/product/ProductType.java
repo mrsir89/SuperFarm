@@ -3,12 +3,13 @@ package com.project.superfarm.entity.product;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product_type")
-@Setter@Getter
+@Setter@Getter@ToString
 public class ProductType {
 
 
@@ -25,7 +26,7 @@ public class ProductType {
     @Column(name="product_origin")
     private String productOrigin;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @MapsId
-    private Product product;
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @MapsId
+//    private Product product;
 }

@@ -31,8 +31,11 @@ public class Product implements Serializable {
     @Column(name = "lower_code")
     private Integer lowerCode;
 
+    @Column(name ="product_board_num")
+    private Long productBoardNum;
+
     @Column(name = "product_type_code")
-    private Long productTypecode;
+    private Long productTypeCode;
 
     @Column(name = "product_option1")
     private String productOption1;
@@ -48,10 +51,10 @@ public class Product implements Serializable {
     private Date productMadeDate;
 
     @Column(name = "product_notax_price")
-    private Double productNotaxPrice;
+    private Double productNoTaxPrice;
 
     @Column(name = "product_taxprice")
-    private Double productTaxprice;
+    private Double productTaxPrice;
 
     @Column(name = "product_tax")
     private Double productTax;
@@ -68,13 +71,11 @@ public class Product implements Serializable {
     @Column(name = "farmer_id")
     private String farmerId;
 
-//    @ManyToMany()
-//    private List<ProductBoard> productList;
 
-
-//
-//    @OneToOne(fetch = FetchType.EAGER)
-//    private ProductType productType;
+    @OneToOne(fetch=FetchType.EAGER )
+    @JoinColumn(name="product_type_code",referencedColumnName = "product_type_code",
+            insertable = false, updatable = false)
+    private ProductType productType;
 
 }
 

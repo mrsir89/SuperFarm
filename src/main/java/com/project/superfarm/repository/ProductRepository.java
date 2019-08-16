@@ -24,5 +24,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "WHERE product_name LIKE %?%",nativeQuery = true)
     List<Product> loadFindItemName(String itemName);
 
+    List<Product> findAllByProductBoardNum(Long num);
+
 
 }
