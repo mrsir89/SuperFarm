@@ -15,9 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
-
-
-
 /**
              TODO : ID 방식으로 검색 해 오기
              TODO : 내용 검색으로 검색할수 있게 해 오기  ProductBoard에서
@@ -335,5 +332,13 @@ public class QuestionBoardController {
             return null;
     }
 
+
+    public QuestionBoardService getQuestionBoardService() {
+        return questionBoardService;
+    }
+
+    public void setQuestionBoardService(QuestionBoardService questionBoardService) {
+        this.questionBoardService = questionBoardService;
+    }
 
 }

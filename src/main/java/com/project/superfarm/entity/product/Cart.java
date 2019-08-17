@@ -46,4 +46,75 @@ public class Cart implements Serializable {
     @Column(name="cart_product_img")
     private String cartProductImg;
 
+    public Long getCartNum() {
+        return cartNum;
+    }
+
+    public void setCartNum(Long cartNum) {
+        this.cartNum = cartNum;
+    }
+
+    public Long getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(Long userNum) {
+        this.userNum = userNum;
+    }
+
+    public Long getProductBoardNum() {
+        return productBoardNum;
+    }
+
+    public void setProductBoardNum(Long productBoardNum) {
+        this.productBoardNum = productBoardNum;
+    }
+
+    public String getCartProductName() {
+        return cartProductName;
+    }
+
+    public void setCartProductName(String cartProductName) {
+        this.cartProductName = cartProductName;
+    }
+
+    public String getCartProductOption1() {
+        return cartProductOption1;
+    }
+
+    public void setCartProductOption1(String cartProductOption1) {
+        this.cartProductOption1 = cartProductOption1;
+    }
+
+    public String getCartProductOption2() {
+        return cartProductOption2;
+    }
+
+    public void setCartProductOption2(String cartProductOption2) {
+        this.cartProductOption2 = cartProductOption2;
+    }
+
+    public Double getCartProductPrice() {
+        return cartProductPrice;
+    }
+
+    public void setCartProductPrice(Double cartProductPrice) {
+        this.cartProductPrice = cartProductPrice;
+    }
+
+    public int getCartProductCount() {
+        return cartProductCount;
+    }
+
+    public void setCartProductCount(int cartProductCount) {
+        this.cartProductCount = cartProductCount;
+    }
+
+    public String getCartProductImg() {
+        return cartProductImg;
+    }
+
+    public void setCartProductImg(String cartProductImg) {
+        this.cartProductImg = cartProductImg;
+    }
 }

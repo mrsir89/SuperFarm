@@ -35,4 +35,35 @@ public class Admin implements Serializable {
     @Column(name="admin_business_num",nullable = false)
     private String adminBusinessNum;
 
+    public Long getUser_num() {
+        return user_num;
+    }
+
+    public void setUser_num(Long user_num) {
+        this.user_num = user_num;
+    }
+
+    public String getAdminAuthority() {
+        return adminAuthority;
+    }
+
+    public void setAdminAuthority(String adminAuthority) {
+        this.adminAuthority = adminAuthority;
+    }
+
+    public String getAdminPhone() {
+        return adminPhone;
+    }
+
+    public void setAdminPhone(String adminPhone) {
+        this.adminPhone = adminPhone;
+    }
+
+    public String getAdminBusinessNum() {
+        return adminBusinessNum;
+    }
+
+    public void setAdminBusinessNum(String adminBusinessNum) {
+        this.adminBusinessNum = adminBusinessNum;
+    }
 }

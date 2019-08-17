@@ -44,6 +44,12 @@ public class Customer  implements Serializable {
     @Column(name="customer_addr")
     private String customerAddr;
 
+
+    /////////////////////////////////////////////////////////////////////
+    public Long getUserNum() {
+        return userNum;
+    }
+
     @Transient
     public void setCustomerEdit(CustomerEdit customerEdit){
         this.userNum = customerEdit.getUserNum();
@@ -52,4 +58,81 @@ public class Customer  implements Serializable {
     }
 
 
+
+    public void setUserNum(Long userNum) {
+        this.userNum = userNum;
+    }
+
+    public Date getCustomer_birth() {
+        return customerBirth;
+    }
+
+    public void setCustomer_birth(Date customer_birth) {
+        this.customerBirth = customer_birth;
+    }
+
+//    public String getCustomer_gender() {
+//        return customer_gender;
+//    }
+//
+//    public void setCustomer_gender(String customer_gender) {
+//        this.customer_gender = customer_gender;
+//    }
+
+    public String getCustomerGrade() {
+        return customerGrade;
+    }
+
+    public void setCustomerGrade(String customerGrade) {
+        this.customerGrade = customerGrade;
+    }
+
+    public Integer getCustomerPoint() {
+        return customerPoint;
+    }
+
+    public void setCustomerPoint(Integer customerPoint) {
+        this.customerPoint = customerPoint;
+    }
+
+    public CouponJSON getCustomerCoupon() {
+        return customerCoupon;
+    }
+
+    public void setCustomerCoupon(CouponJSON customerCoupon) {
+        this.customerCoupon = customerCoupon;
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+    public String getCustomerAddr() {
+        return customerAddr;
+    }
+
+    public void setCustomerAddr(String customerAddr) {
+        this.customerAddr = customerAddr;
+    }
+
+
+    public Date getCustomerBirth() {
+        return customerBirth;
+    }
+
+    public void setCustomerBirth(Date customerBirth) {
+        this.customerBirth = customerBirth;
+    }
+
+    public String getCustomerGender() {
+        return customerGender;
+    }
+
+    public void setCustomerGender(String customerGender) {
+        this.customerGender = customerGender;
+    }
 }
