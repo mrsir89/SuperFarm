@@ -108,7 +108,7 @@ public class QuestionBoardController {
             else{
                 ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page,size,
                         questionBoards.getTotalElements(),questionBoards.getTotalPages(),questionBoards.hasNext());
-                questionBoardResultItems.setBoardNum(productNum);
+
                 return questionBoardResultItems;
             }
         }
