@@ -1,11 +1,14 @@
 package com.project.superfarm.service;
 
 import com.project.superfarm.entity.board.ProductBoard;
+import com.project.superfarm.entity.product.Product;
+import com.project.superfarm.repository.ProductRepository;
 import com.project.superfarm.repository.boardRepository.ProductBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -60,4 +63,17 @@ public class ProductBoardService {
     }
 
 
+    public ProductBoard loadProductDetails(Long num) throws ClassNotFoundException {
+
+        Optional<ProductBoard> productBoard ;
+        productBoard = productBoardRepository.findById(num);
+
+        if(productBoard.isPresent()){
+            productBoard.get().setProductTypeName(
+                    productBoard.get().getProductList().get(0).getProductType().getProductTypeName());
+            return productBoard.get();
+        }else{
+            throw new ClassNotFoundException();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.project.superfarm.entity.user;
 
 import com.project.superfarm.model.CouponJSON;
+import com.project.superfarm.model.CustomerEdit;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,8 +13,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@DynamicInsert
 @DynamicUpdate
+@DynamicInsert
 @Table(name = "customer")
 @Setter@Getter@ToString
 public class Customer  implements Serializable {
@@ -23,10 +24,10 @@ public class Customer  implements Serializable {
     private Long userNum;
 
     @Column(name="customer_birth")
-    private Date customer_birth;
+    private Date customerBirth;
 
     @Column(name="customer_gender")
-    private String customer_gender;
+    private String customerGender;
 
     @Column(name="customer_grade")
     private String customerGrade;
@@ -43,30 +44,40 @@ public class Customer  implements Serializable {
     @Column(name="customer_addr")
     private String customerAddr;
 
+
     /////////////////////////////////////////////////////////////////////
     public Long getUserNum() {
         return userNum;
     }
+
+    @Transient
+    public void setCustomerEdit(CustomerEdit customerEdit){
+        this.userNum = customerEdit.getUserNum();
+        this.customerPhone = customerEdit.getCustomerPhone();
+        this.customerAddr = customerEdit.getCustomerAddr();
+    }
+
+
 
     public void setUserNum(Long userNum) {
         this.userNum = userNum;
     }
 
     public Date getCustomer_birth() {
-        return customer_birth;
+        return customerBirth;
     }
 
     public void setCustomer_birth(Date customer_birth) {
-        this.customer_birth = customer_birth;
+        this.customerBirth = customer_birth;
     }
 
-    public String getCustomer_gender() {
-        return customer_gender;
-    }
-
-    public void setCustomer_gender(String customer_gender) {
-        this.customer_gender = customer_gender;
-    }
+//    public String getCustomer_gender() {
+//        return customer_gender;
+//    }
+//
+//    public void setCustomer_gender(String customer_gender) {
+//        this.customer_gender = customer_gender;
+//    }
 
     public String getCustomerGrade() {
         return customerGrade;
@@ -106,5 +117,22 @@ public class Customer  implements Serializable {
 
     public void setCustomerAddr(String customerAddr) {
         this.customerAddr = customerAddr;
+    }
+
+
+    public Date getCustomerBirth() {
+        return customerBirth;
+    }
+
+    public void setCustomerBirth(Date customerBirth) {
+        this.customerBirth = customerBirth;
+    }
+
+    public String getCustomerGender() {
+        return customerGender;
+    }
+
+    public void setCustomerGender(String customerGender) {
+        this.customerGender = customerGender;
     }
 }

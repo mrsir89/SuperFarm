@@ -2,12 +2,14 @@ package com.project.superfarm.entity.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.superfarm.model.CustomerEdit;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,14 +25,14 @@ import java.util.*;
 @Setter
 @Getter
 @ToString
-public class Users<T> implements Serializable , UserDetails {
+public class Users<T extends Object> implements Serializable , UserDetails {
 
     @Id
     @Column(name="user_num",updatable = false,insertable = false,nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userNum;
 
-    @Column(name = "user_id",nullable = false,updatable = false)
+    @Column(name = "user_id",updatable = false)
     private String userId;
 
     @Column(name ="user_password",nullable = false)
@@ -42,7 +44,7 @@ public class Users<T> implements Serializable , UserDetails {
     @Column(name="user_type")
     private String userType;
 
-    @Column(name="user_regday")
+    @Column(name="user_regday",nullable = true)
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date userRegday;
@@ -53,7 +55,7 @@ public class Users<T> implements Serializable , UserDetails {
 
     @Column(name="user_last_connect")
     @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
+    @UpdateTimestamp
     private Date userLastConnect;
 
 
@@ -114,6 +116,7 @@ public class Users<T> implements Serializable , UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 
     /////////////////////////////////////////////////////////////////////////
@@ -188,4 +191,17 @@ public class Users<T> implements Serializable , UserDetails {
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
+
+    @Transient
+    public void setEditUser(CustomerEdit customerEdit){
+        this.userNum = customerEdit.getUserNum();
+        this.userId = customerEdit.getUserId();
+        this.userPassword = customerEdit.getUserPassword();
+        this.userEmail = customerEdit.getUserEmail();
+    }
+
+
+
+
+
 }

@@ -18,6 +18,7 @@ public class PrincipalUtil {
             } else if (principal instanceof UsernamePasswordAuthenticationToken) {
                 token = (UsernamePasswordAuthenticationToken) principal;
             }
+
             userDetails = (UserDetails) token.getPrincipal();
 
         } catch (NullPointerException ex) {

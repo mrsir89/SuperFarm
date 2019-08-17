@@ -12,6 +12,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,23 +59,95 @@ public class QuestionBoard implements Serializable{
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="question_board_num", referencedColumnName ="question_board_num")
     @Where(clause = "answer_deleted = 'false'")
-    @OrderBy("answer_num ASC" )
     @Fetch(FetchMode.SUBSELECT)
     private Set<QuestionAnswer> questionAnswer;
+
+
+    public Long getQuestionBoardNum() {
+        return questionBoardNum;
+    }
+
+    public void setQuestionBoardNum(Long questionBoardNum) {
+        this.questionBoardNum = questionBoardNum;
+    }
+
+    public Long getProductBoardNum() {
+        return productBoardNum;
+    }
+
+    public void setProductBoardNum(Long productBoardNum) {
+        this.productBoardNum = productBoardNum;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getQuestionBoardPassword() {
+        return questionBoardPassword;
+    }
+
+    public void setQuestionBoardPassword(String questionBoardPassword) {
+        this.questionBoardPassword = questionBoardPassword;
+    }
+
+    public String getQuestionBoardTitle() {
+        return questionBoardTitle;
+    }
+
+    public void setQuestionBoardTitle(String questionBoardTitle) {
+        this.questionBoardTitle = questionBoardTitle;
+    }
+
+    public String getQuestionBoardContent() {
+        return questionBoardContent;
+    }
+
+    public void setQuestionBoardContent(String questionBoardContent) {
+        this.questionBoardContent = questionBoardContent;
+    }
+
+    public Date getQuestionBoardRegdate() {
+        return questionBoardRegdate;
+    }
+
+    public void setQuestionBoardRegdate(Date questionBoardRegdate) {
+        this.questionBoardRegdate = questionBoardRegdate;
+    }
+
+    public String getQuestionBoardStatus() {
+        return questionBoardStatus;
+    }
+
+    public void setQuestionBoardStatus(String questionBoardStatus) {
+        this.questionBoardStatus = questionBoardStatus;
+    }
+
+    public String getQuestionBoardDeleted() {
+        return questionBoardDeleted;
+    }
+
+    public void setQuestionBoardDeleted(String questionBoardDeleted) {
+        this.questionBoardDeleted = questionBoardDeleted;
+    }
+
+    public Date getQuestionBoardDeleteDate() {
+        return questionBoardDeleteDate;
+    }
+
+    public void setQuestionBoardDeleteDate(Date questionBoardDeleteDate) {
+        this.questionBoardDeleteDate = questionBoardDeleteDate;
+    }
 
     public Set<QuestionAnswer> getQuestionAnswer() {
         return questionAnswer;
     }
 
     public void setQuestionAnswer(Set<QuestionAnswer> questionAnswer) {
-
         this.questionAnswer = questionAnswer;
-
     }
-
-
-
-
-
-
 }

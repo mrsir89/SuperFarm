@@ -69,8 +69,83 @@ public class QuestionBoardAll implements Serializable{
     }
 
 
+    public Long getQuestBoardNum() {
+        return questBoardNum;
+    }
 
+    public void setQuestBoardNum(Long questBoardNum) {
+        this.questBoardNum = questBoardNum;
+    }
 
+    public Long getProductBoardNum() {
+        return productBoardNum;
+    }
 
+    public void setProductBoardNum(Long productBoardNum) {
+        this.productBoardNum = productBoardNum;
+    }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getQuestionBoardPassword() {
+        return questionBoardPassword;
+    }
+
+    public void setQuestionBoardPassword(String questionBoardPassword) {
+        this.questionBoardPassword = questionBoardPassword;
+    }
+
+    public String getQuestionBoardTitle() {
+        return questionBoardTitle;
+    }
+
+    public void setQuestionBoardTitle(String questionBoardTitle) {
+        this.questionBoardTitle = questionBoardTitle;
+    }
+
+    public String getQuestionBoardContent() {
+        return questionBoardContent;
+    }
+
+    public void setQuestionBoardContent(String questionBoardContent) {
+        this.questionBoardContent = questionBoardContent;
+    }
+
+    public Date getQuestionBoardRegdate() {
+        return questionBoardRegdate;
+    }
+
+    public void setQuestionBoardRegdate(Date questionBoardRegdate) {
+        this.questionBoardRegdate = questionBoardRegdate;
+    }
+
+    public String getQuestionBoardStatus() {
+        return questionBoardStatus;
+    }
+
+    public void setQuestionBoardStatus(String questionBoardStatus) {
+        this.questionBoardStatus = questionBoardStatus;
+    }
+
+    public String getQuestionBoardDeleted() {
+        return questionBoardDeleted;
+    }
+
+    public void setQuestionBoardDeleted(String questionBoardDeleted) {
+        this.questionBoardDeleted = questionBoardDeleted;
+    }
+
+    public Date getQuestionBoardDeleteDate() {
+        return questionBoardDeleteDate;
+    }
+
+    public void setQuestionBoardDeleteDate(Date questionBoardDeleteDate) {
+        this.questionBoardDeleteDate = questionBoardDeleteDate;
+    }
 }

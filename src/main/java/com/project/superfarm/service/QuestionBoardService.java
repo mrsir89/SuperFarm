@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -35,6 +36,13 @@ public class QuestionBoardService {
         }else{
             return questionBoards;
         }
+    }
+    public Page<QuestionBoard> testttt(Pageable pageable){
+
+       Page<QuestionBoard> qqq = questionBoardRepository
+               .findAllByProductBoardNumAndQuestionBoardDeletedAndQuestionAnswer_AnswerDeleted(
+                       5L,"false","false",pageable);
+       return qqq;
     }
 
 

@@ -43,4 +43,6 @@ public class QuestionAnswer implements Serializable {
     private Date answerBoardDeletedDate;
 
 
+
+
 }

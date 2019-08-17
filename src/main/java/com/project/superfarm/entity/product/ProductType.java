@@ -1,11 +1,17 @@
 package com.project.superfarm.entity.product;
 
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product_type")
-public class Product_Type {
+@Setter@Getter@ToString
+public class ProductType {
+
 
     @Id
     @Column(name="product_type_code",updatable = false,nullable = false)
@@ -19,7 +25,6 @@ public class Product_Type {
 
     @Column(name="product_origin")
     private String productOrigin;
-
 
 
     public Long getProductTypeCode() {

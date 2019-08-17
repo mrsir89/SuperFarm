@@ -66,7 +66,6 @@ public class CustomerSignupService {
         else{
                 return null;
         }
-
     }
 
     /*

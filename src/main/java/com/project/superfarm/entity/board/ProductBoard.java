@@ -6,8 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @DynamicInsert
 @DynamicUpdate
@@ -21,6 +23,7 @@ public class ProductBoard implements Serializable {
 
     @Id
     @Column(name="product_board_num",nullable = false,updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productBoardNum;
 
     @Column(name="upper_code")
@@ -36,9 +39,9 @@ public class ProductBoard implements Serializable {
     private String productBoardThumbnail;
 
     @Column(name="product_board_deliveryprice")
-    private Integer productBoardDeliveryPrice;
+    private Double productBoardDeliveryPrice;
 
-    @Column(name="product_baord_best")
+    @Column(name="product_board_best")
     private Integer productBoardBest;
 
     @Column(name="product_board_tag")
@@ -65,22 +68,21 @@ public class ProductBoard implements Serializable {
     @Column(name="product_board_deleted")
     private String productBoardDeleted;
 
+    @Transient
+    private String productTypeName;
 
-    @OneToOne(fetch=FetchType.EAGER )
-    @JoinColumn(name="product_code",referencedColumnName = "product_code",
-            insertable = false, updatable = false)
-    private Product product;
-
-
-    @OneToOne
-    @JoinColumn(name="product_board_num",referencedColumnName = "product_board_num",
-    insertable = false,updatable = false)
-    private QuestionBoard questionBoard;
-
-    @OneToOne
-    @JoinColumn(name="product_board_num", referencedColumnName = "product_board_num",
-    insertable = false, updatable = false)
-    private ReviewBoard reviewBoard;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "productBoard_product",
+//            joinColumns = @JoinColumn(name = "product_board_num"),
+//            inverseJoinColumns = @JoinColumn(name = "product_code")
+//    )
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="product_board_num", referencedColumnName ="product_board_num")
+    private List<Product> productList;
+//    = new ArrayList<>();
+//    @Transient
+//    List<Product> productList;
 
 
 }

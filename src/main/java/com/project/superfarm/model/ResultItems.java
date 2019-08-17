@@ -1,8 +1,13 @@
 package com.project.superfarm.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Collection;
 
+@Setter
+@Getter
 public class ResultItems<T extends Object> implements Serializable {
 
     private Collection<T> items;
@@ -16,6 +21,8 @@ public class ResultItems<T extends Object> implements Serializable {
     private int totalPage;
 
     private boolean hasNext;
+
+    private Long boardNum;
 
     public ResultItems(){
 
@@ -37,6 +44,7 @@ public class ResultItems<T extends Object> implements Serializable {
     public void setItems(Collection<T> items) {
         this.items = items;
     }
+
 
     public int getPage() {
         return page;
@@ -62,7 +70,9 @@ public class ResultItems<T extends Object> implements Serializable {
         this.totalCount = totalCount;
     }
 
-    public int getTotalPage() { return totalPage; }
+    public int getTotalPage() {
+        return totalPage;
+    }
 
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
@@ -74,5 +84,13 @@ public class ResultItems<T extends Object> implements Serializable {
 
     public void setHasNext(boolean hasNext) {
         this.hasNext = hasNext;
+    }
+
+    public Long getBoardNum() {
+        return boardNum;
+    }
+
+    public void setBoardNum(Long boardNum) {
+        this.boardNum = boardNum;
     }
 }

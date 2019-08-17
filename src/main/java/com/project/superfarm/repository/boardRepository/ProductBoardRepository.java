@@ -24,5 +24,4 @@ public interface ProductBoardRepository extends JpaRepository<ProductBoard,Long>
 
 
 
-
 }

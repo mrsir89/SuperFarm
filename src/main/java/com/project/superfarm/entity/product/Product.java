@@ -1,14 +1,19 @@
 package com.project.superfarm.entity.product;
 
 
+import com.project.superfarm.entity.board.ProductBoard;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="product")
@@ -26,8 +31,11 @@ public class Product implements Serializable {
     @Column(name = "lower_code")
     private Integer lowerCode;
 
+    @Column(name ="product_board_num")
+    private Long productBoardNum;
+
     @Column(name = "product_type_code")
-    private Long productTypecode;
+    private Long productTypeCode;
 
     @Column(name = "product_option1")
     private String productOption1;
@@ -36,19 +44,20 @@ public class Product implements Serializable {
     private String productOption2;
 
     @Column(name = "product_price")
-    private Integer productPrice;
+    private Double productPrice;
 
     @Column(name = "product_made_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date productMadeDate;
 
     @Column(name = "product_notax_price")
-    private Integer productNotaxPrice;
+    private Double productNoTaxPrice;
 
     @Column(name = "product_taxprice")
-    private Integer productTaxprice;
+    private Double productTaxPrice;
 
     @Column(name = "product_tax")
-    private Float productTax;
+    private Double productTax;
 
     @Column(name = "product_stock")
     private Integer productStock;
@@ -59,16 +68,152 @@ public class Product implements Serializable {
     @Column(name = "product_status")
     private String productStatus;
 
-    @Column(name="farmer_id")
+    @Column(name = "farmer_id")
     private String farmerId;
 
 
     @OneToOne(fetch=FetchType.EAGER )
     @JoinColumn(name="product_type_code",referencedColumnName = "product_type_code",
             insertable = false, updatable = false)
-    private Product_Type productType;
+    private ProductType productType;
 
 
+    public Long getProductCode() {
+        return productCode;
+    }
 
+    public void setProductCode(Long productCode) {
+        this.productCode = productCode;
+    }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Integer getLowerCode() {
+        return lowerCode;
+    }
+
+    public void setLowerCode(Integer lowerCode) {
+        this.lowerCode = lowerCode;
+    }
+
+    public Long getProductBoardNum() {
+        return productBoardNum;
+    }
+
+    public void setProductBoardNum(Long productBoardNum) {
+        this.productBoardNum = productBoardNum;
+    }
+
+    public Long getProductTypeCode() {
+        return productTypeCode;
+    }
+
+    public void setProductTypeCode(Long productTypeCode) {
+        this.productTypeCode = productTypeCode;
+    }
+
+    public String getProductOption1() {
+        return productOption1;
+    }
+
+    public void setProductOption1(String productOption1) {
+        this.productOption1 = productOption1;
+    }
+
+    public String getProductOption2() {
+        return productOption2;
+    }
+
+    public void setProductOption2(String productOption2) {
+        this.productOption2 = productOption2;
+    }
+
+    public Double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(Double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    public Date getProductMadeDate() {
+        return productMadeDate;
+    }
+
+    public void setProductMadeDate(Date productMadeDate) {
+        this.productMadeDate = productMadeDate;
+    }
+
+    public Double getProductNoTaxPrice() {
+        return productNoTaxPrice;
+    }
+
+    public void setProductNoTaxPrice(Double productNoTaxPrice) {
+        this.productNoTaxPrice = productNoTaxPrice;
+    }
+
+    public Double getProductTaxPrice() {
+        return productTaxPrice;
+    }
+
+    public void setProductTaxPrice(Double productTaxPrice) {
+        this.productTaxPrice = productTaxPrice;
+    }
+
+    public Double getProductTax() {
+        return productTax;
+    }
+
+    public void setProductTax(Double productTax) {
+        this.productTax = productTax;
+    }
+
+    public Integer getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(Integer productStock) {
+        this.productStock = productStock;
+    }
+
+    public Integer getProductTotalSales() {
+        return productTotalSales;
+    }
+
+    public void setProductTotalSales(Integer productTotalSales) {
+        this.productTotalSales = productTotalSales;
+    }
+
+    public String getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(String productStatus) {
+        this.productStatus = productStatus;
+    }
+
+    public String getFarmerId() {
+        return farmerId;
+    }
+
+    public void setFarmerId(String farmerId) {
+        this.farmerId = farmerId;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
 }
+
+
+

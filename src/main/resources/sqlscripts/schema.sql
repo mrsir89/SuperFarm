@@ -1,7 +1,7 @@
 
 	#### Start Project Market ver 2.2  2018.08.13
 	### 데이터 베이스 생성 및 유저 생성
-	## 관리자까지 다시 만드려면 밑에 주석 해제 하고 사용
+
 
 -- 	DROP USER IF EXISTS `bitmaster`;
 
@@ -13,7 +13,7 @@
 	  DEFAULT CHARACTER SET utf8
 	  DEFAULT COLLATE utf8_general_ci;
 
-	GRANT ALL PRIVILEGES ON market.* To 'bitmaster'@'%';
+##	GRANT ALL PRIVILEGES ON market.* To 'bitmaster'@'%';
 
 
 	USE `market`;
@@ -67,10 +67,10 @@ DROP TABLE IF EXISTS `oauth_refresh_token`;
 DROP TABLE IF EXISTS `oauth_access_token`;
 DROP TABLE IF EXISTS `oauth_client_token`;
 DROP TABLE IF EXISTS `oauth_client_details`;
-
 --
 -- Table structure for table `oauth_client_details`
 --
+
 CREATE TABLE IF NOT EXISTS `oauth_client_details` (
   `client_id`               VARCHAR(255) PRIMARY KEY,
   `resource_ids`            VARCHAR(255),
@@ -324,11 +324,11 @@ CREATE TABLE IF NOT EXISTS upper_category(
 CREATE TABLE IF NOT EXISTS upper_lower(
 	upper_code INTEGER NOT NULL,
     lower_code INTEGER NOT NULL UNIQUE,
+
     FOREIGN KEY(lower_code) REFERENCES lower_category(lower_code),
     FOREIGN KEY(upper_code) REFERENCES upper_category(upper_code)
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
 
 ## 제품 정보와 같은 제품을 묶어 주는 group 처럼 묶어 주는 테이블
 CREATE TABLE IF NOT EXISTS product_type(
@@ -350,39 +350,6 @@ CREATE TABLE IF NOT EXISTS product_type(
 	)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
 
-## 실제 제품 테이블
-CREATE TABLE IF NOT EXISTS product(
-	product_code			BIGINT PRIMARY KEY AUTO_INCREMENT,
-    product_name			VARCHAR(20) NOT NULL,
-    upper_code				INTEGER NOT NULL,
-    lower_code				INTEGER NOT NULL,
-    product_type_code		BIGINT NOT NULL,
-    product_option1			VARCHAR(20) DEFAULT 'empty',
-    product_option2			VARCHAR(20) DEFAULT 'empty',
-    product_price			DECIMAL(18,5) NOT NULL,
-    product_made_date		DATE,
-    product_notax_price		DECIMAL(18,5),
-    product_taxprice		DECIMAL(17,5),
-    product_tax				DECIMAL(6,3) DEFAULT 0.1,
-    product_stock			INTEGER DEFAULT 0,
-    product_total_sales		INTEGER DEFAULT 0,
-    product_status			CHAR(5) DEFAULT 'true' CHECK(product_status IN('true','false')),
-    farmer_id				VARCHAR(10),
-
-    FOREIGN KEY(farmer_id) REFERENCES farmer(farmer_id),
-    FOREIGN KEY(product_type_code) REFERENCES product_type(product_type_code)
-
-)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-ALTER TABLE product AUTO_INCREMENT = 100; -- 초기값 얼마?????????
-
-## 제품의 재고 테이블
-	CREATE TABLE IF NOT EXISTS product_inventory(
-    product_code 			BIGINT UNIQUE NOT NULL,
-    product_stock			INTEGER,
-    product_total_sales		INTEGER,
-
-    FOREIGN KEY(product_code) REFERENCES product(product_code)
-)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
 
 ##카트 테이블
 	CREATE TABLE IF NOT EXISTS cart(
@@ -410,23 +377,18 @@ CREATE TABLE IF NOT EXISTS coupon(
     coupon_discount		INTEGER
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
-
-
-
-
+SELECT * FROM question_board;
 ## 게시판 테이블들
 ###########################################################
-
 ##제품 등록 게시판 테이블
 CREATE TABLE IF NOT EXISTS product_board(
 product_board_num 				BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-product_code					BIGINT NOT NULL,
 upper_code						INTEGER NOT NULL,
 lower_code 						INTEGER NOT NULL,
 product_board_title 			VARCHAR(40) NOT NULL,
 product_board_thumbnail 		VARCHAR(255),
 product_board_deliveryprice 	INTEGER DEFAULT 0,
-product_baord_best 				INTEGER DEFAULT 0,
+product_board_best 				INTEGER DEFAULT 0,
 product_board_tag 				VARCHAR(100),
 product_board_link 				VARCHAR(100),
 product_board_common 			VARCHAR(255),
@@ -434,10 +396,57 @@ product_board_detail 			VARCHAR(255),
 product_board_bottom 			VARCHAR(255),
 product_edit_content 			VARCHAR(2000),
 product_add_date				DATETIME,
-product_board_deleted 			CHAR(5) DEFAULT 'false' CHECK(product_board_deleted IN('false','true')),
+product_board_deleted 			CHAR(5) DEFAULT 'false' CHECK(product_board_deleted IN('false','true'))
 
-FOREIGN KEY(product_code) REFERENCES product(product_code)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+
+--  ## productBoard와 product에 대한 연결 테이블
+--  CREATE TABLE IF NOT EXISTS productBoard_product(
+--  product_board_num BIGINT NOT NULL,
+--  product_code	   BIGINT NOT NULL,
+--
+--  UNIQUE (`product_board_num`, `product_code`),
+--
+--  FOREIGN KEY(product_board_num) REFERENCES product_board(product_board_num),
+--  FOREIGN KEY(product_code) REFERENCES product(product_code)
+--
+--  )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+--
+ ## 실제 제품 테이블
+CREATE TABLE IF NOT EXISTS product(
+	product_code			BIGINT PRIMARY KEY AUTO_INCREMENT,
+    product_name			VARCHAR(20) NOT NULL,
+    upper_code				INTEGER NOT NULL,
+    lower_code				INTEGER NOT NULL,
+    product_board_num		BIGINT NOT NULL,
+    product_type_code		BIGINT NOT NULL,
+    product_option1			VARCHAR(20) DEFAULT 'empty',
+    product_option2			VARCHAR(20) DEFAULT 'empty',
+    product_price			DECIMAL(18,5) NOT NULL,
+    product_made_date		DATE,
+    product_notax_price		DECIMAL(18,5),
+    product_taxprice		DECIMAL(17,5),
+    product_tax				DECIMAL(6,3) DEFAULT 0.1,
+    product_stock			INTEGER DEFAULT 0,
+    product_total_sales		INTEGER DEFAULT 0,
+    product_status			CHAR(5) DEFAULT 'true' CHECK(product_status IN('true','false')),
+    farmer_id				VARCHAR(10),
+
+    FOREIGN KEY(farmer_id) REFERENCES farmer(farmer_id),
+    FOREIGN KEY(product_type_code) REFERENCES product_type(product_type_code),
+    FOREIGN KEY(product_board_num) REFERENCES product_board(product_board_num)
+)ENGINE ='InnoDB' CHARACTER SET 'UTF8';
+ALTER TABLE product AUTO_INCREMENT = 100; -- 초기값 얼마?????????
+
+## 제품의 재고 테이블
+	CREATE TABLE IF NOT EXISTS product_inventory(
+    product_code 			BIGINT UNIQUE NOT NULL,
+    product_stock			INTEGER,
+    product_total_sales		INTEGER,
+
+    FOREIGN KEY(product_code) REFERENCES product(product_code)
+)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
 
 ## 리뷰 게시판 테이블
 CREATE TABLE IF NOT EXISTS review_board (
