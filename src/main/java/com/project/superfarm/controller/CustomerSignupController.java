@@ -4,6 +4,7 @@ import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
 import com.project.superfarm.model.SignupCustomer;
 import com.project.superfarm.service.CustomerSignupService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,14 +74,17 @@ public class CustomerSignupController {
 
             })
     public Users<Customer> joinCreate(@RequestBody SignupCustomer signupCustomer) {
-        System.out.println("=============회원 가입 시작 ============");
 
-        return customerSignupService.singupCutomer(signupCustomer);
+        if(signupCustomer != null || signupCustomer.getUserId() != null) {
+            return customerSignupService.singupCutomer(signupCustomer);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 
     /**
-     * Todo      : 프론트중복 처리 String ->  status 에러로 변경 하기
+     * Todo      : 프론트중복 처리 String ->  status 에러로 변경 하기 !완료!
      * @apiNote  : param으로 들어 오는 email 중복처리
      * @Url      : /signup/emailCheck
      * @param    : String email
@@ -94,13 +98,17 @@ public class CustomerSignupController {
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public String overlapEmail(@RequestParam String email ){
 
-        return  customerSignupService.overlapEmail(email);
+        if(email != null) {
+            return customerSignupService.overlapEmail(email);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 
 
     /**
-     * Todo : 프론트중복 처리 String ->  status 에러로 변경 하기
+     * Todo : 프론트중복 처리 String ->  status 에러로 변경 하기 !완료!
      * @apiNote  : param으로 들어 오는 id 중복처리
      * @Url      : /signup/idCheck
      * @param    : string id
@@ -114,7 +122,11 @@ public class CustomerSignupController {
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public String overlapId(@RequestParam String id ){
 
-        return  customerSignupService.overlapId(id);
+        if(id != null) {
+            return customerSignupService.overlapId(id);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 

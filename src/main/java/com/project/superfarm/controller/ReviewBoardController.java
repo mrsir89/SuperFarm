@@ -4,6 +4,7 @@ package com.project.superfarm.controller;
 import com.project.superfarm.entity.board.ReviewBoard;
 import com.project.superfarm.model.ResultItems;
 import com.project.superfarm.service.ReviewBoardService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,13 +69,16 @@ public class ReviewBoardController {
     public ResultItems<ReviewBoard>loadAllReviewBoard(
             @RequestParam(name = "page",defaultValue = "1",required = false) int page,
             @RequestParam(name = "size",defaultValue = "10", required = false) int size,
-            @RequestParam(name = "sort",defaultValue = "reviewBoardNum",required = false)String sort){
+            @RequestParam(name = "sort",defaultValue = "reviewBoardNum",required = false) String sort){
+
         Pageable pageable = PageRequest.of(page-1,size,Sort.by(sort).descending());
 
-        Page<ReviewBoard> reviewBoards = reviewBoardService.loadAllReviewBoard(pageable);
+        Page<ReviewBoard> reviewBoards =
+                reviewBoardService.loadAllReviewBoard(pageable);
 
-        return new ResultItems<ReviewBoard>(reviewBoards.getContent(),page,size,reviewBoards.getTotalElements()
-                                    ,reviewBoards.getTotalPages(),reviewBoards.hasNext());
+        return new ResultItems<ReviewBoard>(reviewBoards.getContent(),
+                                            page,size,reviewBoards.getTotalElements(),
+                                            reviewBoards.getTotalPages(),reviewBoards.hasNext());
     }
 
     /**
@@ -99,19 +103,23 @@ public class ReviewBoardController {
             @RequestParam(name ="size" ,defaultValue = "10", required = false)int size,
             @RequestParam(name = "page",defaultValue = "1",required = false) int page,
             @RequestParam (name="sort", defaultValue = "reviewBoardNum",required = false)String sort) {
-        if (productBoardNum != null) {
-            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
 
-            Page<ReviewBoard> reviewBoard = reviewBoardService.loadFromProductBoard(productBoardNum, pageable);
+        if (productBoardNum != null || productBoardNum >0) {
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
+            Page<ReviewBoard> reviewBoard =
+                    reviewBoardService.loadFromProductBoard(productBoardNum, pageable);
+
             if (reviewBoard == null) {
-                return new ResultItems<ReviewBoard>();
+                throw new UrlNotFountException();
+
             } else {
                 return new ResultItems<ReviewBoard>(reviewBoard.getContent(), page,
-                        size, reviewBoard.getTotalElements(), reviewBoard.getTotalPages(), reviewBoard.hasNext());
+                                                    size, reviewBoard.getTotalElements(),
+                                                    reviewBoard.getTotalPages(),reviewBoard.hasNext());
             }
-        }
-        else
-            return new ResultItems<ReviewBoard>();
+
+        }else
+            throw new UrlNotFountException();
     }
 
     /**
@@ -136,11 +144,16 @@ public class ReviewBoardController {
                 MediaType.APPLICATION_ATOM_XML_VALUE})
     public ReviewBoard writeReviewBoard(@RequestBody ReviewBoard reviewBoard){
 
-        return reviewBoardService.writeReviewBoard(reviewBoard);
+        if(reviewBoard !=null) {
+            return reviewBoardService.writeReviewBoard(reviewBoard);
+
+        }else
+            throw new UrlNotFountException();
+        
     }
 
     /**
-     *  Todo : 오류 에대한 예외처리 예정 String -> status 오류 발생
+     *  Todo : 오류 에대한 예외처리 예정 String -> status 오류 발생 !완료!
      *
      * @apiNote   : reviewBoard soft 삭제
      * @Url       : /review/delete
@@ -157,7 +170,12 @@ public class ReviewBoardController {
                 MediaType.APPLICATION_ATOM_XML_VALUE})
     public String deleteReviewBoard(@RequestParam Long reviewBoardNum){
 
-        return reviewBoardService.deleteReviewBoard(reviewBoardNum);
+        if(reviewBoardNum != null || reviewBoardNum >0) {
+            return reviewBoardService.deleteReviewBoard(reviewBoardNum);
+
+        }else
+            throw new UrlNotFountException();
+
     }
 
     /**
@@ -182,7 +200,12 @@ public class ReviewBoardController {
                     MediaType.APPLICATION_ATOM_XML_VALUE})
     public ReviewBoard updateReviewBoard(@RequestBody ReviewBoard reviewBoard){
 
-        return reviewBoardService.writeReviewBoard(reviewBoard);
+        if(reviewBoard != null) {
+            return reviewBoardService.writeReviewBoard(reviewBoard);
+
+        }else
+            throw new UrlNotFountException();
+
     }
 
 }

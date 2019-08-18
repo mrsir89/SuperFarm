@@ -5,6 +5,7 @@ import com.project.superfarm.entity.board.QuestionAnswer;
 import com.project.superfarm.entity.board.QuestionBoard;
 import com.project.superfarm.model.ResultItems;
 import com.project.superfarm.service.QuestionBoardService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -102,8 +103,10 @@ public class QuestionBoardController {
         if(productNum !=null) {
             Page<QuestionBoard> questionBoards=
                     questionBoardService.loadFromProductBoard(productNum,pageable);
+
             if(questionBoards==null){
-                return new ResultItems<QuestionBoard>();
+                throw new UrlNotFountException();
+
             }
             else{
                 ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page,size,
@@ -111,8 +114,8 @@ public class QuestionBoardController {
                 questionBoardResultItems.setBoardNum(productNum);
                 return questionBoardResultItems;
             }
-        }
-        return null;
+        }else
+            throw new UrlNotFountException();
     }
 
 
@@ -143,22 +146,20 @@ public class QuestionBoardController {
             @RequestParam (name="sort", defaultValue = "questionBoardNum",required = false)String sort){
         // 1 . UserId 체크
         if(userId !=null) {
-
             Pageable pageable = PageRequest.of(page-1,size,Sort.by(sort).descending());
-
             Page<QuestionBoard> questionBoards =questionBoardService.loadFromUserId(userId,pageable);
 
             if(questionBoards==null){
-                return new ResultItems<QuestionBoard>();
-            }
-            else {
+                throw new UrlNotFountException();
+
+            }else {
                 ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page,size,
                         questionBoards.getTotalElements(),questionBoards.getTotalPages(),questionBoards.hasNext());
                 return questionBoardResultItems;
             }
-        }
-        else
-            return new ResultItems<QuestionBoard>();
+
+        }else
+            throw new UrlNotFountException();
 
     }
 
@@ -186,9 +187,9 @@ public class QuestionBoardController {
 
         if(questionBoard !=null) {
              return questionBoardService.writeQuestionBoard(questionBoard);
-        }
-        else
-            return null;
+
+        }else
+            throw new UrlNotFountException();
 
     }
 
@@ -214,9 +215,9 @@ public class QuestionBoardController {
 
         if(questionAnswer != null) {
             return questionBoardService.writeAnswerBoard(questionAnswer);
-        }
-        else
-            return null;
+
+        }else
+            throw new UrlNotFountException();
     }
 
 
@@ -242,11 +243,12 @@ public class QuestionBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public QuestionBoard updateQuestionBoard(@RequestBody QuestionBoard questionBoard){
+
         if(questionBoard != null) {
             return questionBoardService.updateQuestionBoard(questionBoard);
-        }
-        else
-            return null;
+
+        }else
+            throw new UrlNotFountException();
     }
 
     /**
@@ -269,12 +271,14 @@ public class QuestionBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public QuestionBoard updateAnswerBoard(@RequestBody QuestionAnswer questionAnswer){
+
         System.out.println(questionAnswer.toString());
+
         if(questionAnswer != null) {
             return questionBoardService.updateAnswer(questionAnswer);
-        }
-        else
-           return null;
+
+        }else
+            throw new UrlNotFountException();
     }
 
     /**
@@ -296,13 +300,15 @@ public class QuestionBoardController {
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
-    public QuestionBoard deleteAnswer(@RequestBody QuestionAnswer questionAnswer){
+    public QuestionBoard deleteAnswer(@RequestBody QuestionAnswer questionAnswer) throws ClassNotFoundException {
+
         System.out.println(questionAnswer.toString());
+
         if(questionAnswer != null) {
             return questionBoardService.deletedAnswer(questionAnswer);
-        }
-        else
-            return null;
+
+        }else
+            throw new UrlNotFountException();
     }
 
     /**
@@ -327,12 +333,14 @@ public class QuestionBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public QuestionBoard deleteQuestionBoard(@RequestBody QuestionBoard questionBoard){
+
         System.out.println(questionBoard.toString());
+
         if(questionBoard != null) {
             return questionBoardService.deletedQuestionBoard(questionBoard);
-        }
-        else
-            return null;
+
+        }else
+            throw new UrlNotFountException();
     }
 
 

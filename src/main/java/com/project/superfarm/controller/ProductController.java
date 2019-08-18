@@ -3,6 +3,7 @@ package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.product.Product;
 import com.project.superfarm.service.ProductItemService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -90,10 +91,13 @@ public class ProductController {
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
-    public List<Product> loadItemFromLowerCategory(@RequestParam(name="lower") int lower){
+    public List<Product> loadItemFromLowerCategory(@RequestParam(name="lower") Integer lower){
 
-        return productItemService.fromLowerCategory(lower);
+        if(lower != null || lower >0) {
+            return productItemService.fromLowerCategory(lower);
 
+        }else
+            throw new UrlNotFountException();
     }
 
 
@@ -113,9 +117,13 @@ public class ProductController {
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
-    public List<Product> loadItemFromUpperCategory(@RequestParam(name="upper") int upper){
+    public List<Product> loadItemFromUpperCategory(@RequestParam(name="upper") Integer upper){
 
-        return productItemService.fromLowerCategory(upper);
+        if(upper != null || upper >0) {
+            return productItemService.fromLowerCategory(upper);
+
+        }else
+            throw new UrlNotFountException();
 
     }
 
@@ -138,7 +146,11 @@ public class ProductController {
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public List<Product> loadFindItemName(@RequestParam(name="name") String name){
 
-        return productItemService.loadFindItemName(name);
+        if(name != null) {
+            return productItemService.loadFindItemName(name);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 

@@ -3,6 +3,7 @@ package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.product.Cart;
 import com.project.superfarm.service.CartService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,6 @@ import java.util.List;
                      : /edit   수량 수정
 
  **/
-
-
 @RequestMapping("/cart")
 @RestController
 public class CartController {
@@ -51,10 +50,11 @@ public class CartController {
                             MediaType.APPLICATION_ATOM_XML_VALUE})
     public List<Cart> loadUserCart(@RequestParam(name="userNum")Long userNum){
 
-        if(userNum !=null){
+        if(userNum !=null || userNum >0){
             return cartService.loadCart(userNum);
+
         }else
-            return null;
+            throw new UrlNotFountException();
 
     }
 
@@ -80,13 +80,20 @@ public class CartController {
     method = RequestMethod.POST,
     produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
                 MediaType.APPLICATION_ATOM_XML_VALUE})
-    public Cart addCartProduct(@RequestBody Cart cart) throws ClassNotFoundException {
+    public Cart addCartProduct(@RequestBody Cart cart) {
 
-        Cart cartCheck = cartService.saveCartProduct(cart);
-        if(cartCheck ==null){
-            throw new ClassNotFoundException();
-        }
-        return cartCheck;
+        if(cart != null) {
+            Cart cartCheck = cartService.saveCartProduct(cart);
+
+            if (cartCheck != null) {
+                throw new UrlNotFountException();
+
+            }else
+                return cartCheck;
+
+        }else
+            throw new UrlNotFountException();
+
     }
 
 
@@ -104,7 +111,11 @@ public class CartController {
     method = RequestMethod.DELETE)
     public void deleteCartProduct(@RequestParam(name ="cartNum")Long cartNum){
 
-        cartService.deleteCart(cartNum);
+       if(cartNum !=null || cartNum>0) {
+           cartService.deleteCart(cartNum);
+
+       }else
+           throw new UrlNotFountException();
 
     }
 
@@ -122,7 +133,12 @@ public class CartController {
     method = RequestMethod.DELETE)
     public void deleteCartProductAll(@RequestParam(name ="userNum")Long userNum){
 
-        cartService.deleteAllCart(userNum);
+        if(userNum !=null || userNum != 0) {
+            cartService.deleteAllCart(userNum);
+
+        }else
+            throw new UrlNotFountException();
+
     }
 
 
@@ -139,12 +155,14 @@ public class CartController {
      */
     @RequestMapping(path="/edit",
     method = RequestMethod.PATCH)
-    public Cart cartProductEdit(@RequestParam(name="cartProductNum")Long cartProductNum
-            , @RequestParam(name="count")Integer count){
-        if(cartProductNum !=null && count !=count) {
+    public Cart cartProductEdit(@RequestParam(name="cartProductNum")Long cartProductNum,
+                                @RequestParam(name="count")Integer count){
+
+        if(cartProductNum !=null || cartProductNum > 0 || count >= 1) {
             return cartService.productCountUpdate(cartProductNum, count);
-        }
-        else
-            return null;
+
+        }else
+            throw new UrlNotFountException();
+
     }
 }

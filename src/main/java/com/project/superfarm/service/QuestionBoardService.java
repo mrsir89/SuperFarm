@@ -4,13 +4,13 @@ import com.project.superfarm.entity.board.QuestionAnswer;
 import com.project.superfarm.entity.board.QuestionBoard;
 import com.project.superfarm.repository.boardRepository.QuestionAnswerRepository;
 import com.project.superfarm.repository.boardRepository.QuestionBoardRepository;
+import com.project.superfarm.util.ExceptionList.UrlNoLoginAndNotMyself;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -99,14 +99,35 @@ public class QuestionBoardService {
             return null;
         }
     }
+
+    /**
+     * @apiNote QnA 게시판 댓글을 softDelete
+     * @param questionAnswer
+     * @return QuestionBoard
+     * @throws ClassNotFoundException
+     */
     @Transactional
-    public QuestionBoard deletedAnswer(QuestionAnswer questionAnswer){
-        int result =
-                questionAnswerRepository.deleteAnswer(questionAnswer.getAnswerNum());
-        if(result==1){
-            return loadQuestionBoard(questionAnswer.getQuestionBoardNum());
-        }else
-            return null;
+    public QuestionBoard deletedAnswer(QuestionAnswer questionAnswer) {
+
+        String requestId = questionAnswer.getAnswerWriter();
+        Long requestBoardNum = questionAnswer.getAnswerNum();
+        System.out.println(questionAnswer.toString());
+        Optional<QuestionAnswer> check = questionAnswerRepository.findById(requestBoardNum);
+
+        String originUserId = check.get().getAnswerWriter();
+
+        if(requestId.equals(originUserId)) {
+            int result =
+                    questionAnswerRepository.deleteAnswer(requestBoardNum);
+            if (result == 1) {
+                return loadQuestionBoard(requestBoardNum);
+            } else
+                throw new UrlNoLoginAndNotMyself();
+        }else{
+            throw new UrlNoLoginAndNotMyself();
+        }
+
+
     }
 
     @Transactional
@@ -115,6 +136,8 @@ public class QuestionBoardService {
         return questionBoardRepository.save(questionBoard);
 
     }
+
+
     @Transactional
     public QuestionBoard deletedQuestionBoard(QuestionBoard questionBoard){
         int result =

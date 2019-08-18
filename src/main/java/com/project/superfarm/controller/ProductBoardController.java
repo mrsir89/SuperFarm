@@ -2,6 +2,7 @@ package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.board.ProductBoard;
 import com.project.superfarm.service.ProductBoardService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -132,9 +133,13 @@ public class ProductBoardController {
             method = {RequestMethod.POST,RequestMethod.GET},
             produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardUpper(@RequestParam int upper){
+    public List<ProductBoard> loadProductBoardUpper(@RequestParam Integer upper){
 
-        return productBoardService.loadProductBoardUpper(upper);
+        if(upper != null || upper > 0) {
+            return productBoardService.loadProductBoardUpper(upper);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 
@@ -151,9 +156,13 @@ public class ProductBoardController {
             method = {RequestMethod.POST,RequestMethod.GET},
             produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardLower(@RequestParam(name="lower") int lower){
+    public List<ProductBoard> loadProductBoardLower(@RequestParam(name="lower") Integer lower){
 
-        return productBoardService.loadProductBoardLower(lower);
+        if(lower != null || lower > 0) {
+            return productBoardService.loadProductBoardLower(lower);
+
+        }else
+            throw new UrlNotFountException();
     }
 
     /**
@@ -171,21 +180,32 @@ public class ProductBoardController {
                     MediaType.APPLICATION_ATOM_XML_VALUE})
     public List<ProductBoard> loadProductBoardSearch(String search){
 
-        return productBoardService.loadProductBoardSearch(search);
+        if(search != null) {
+            return productBoardService.loadProductBoardSearch(search);
+
+        }else
+            throw new UrlNotFountException();
 
     }
 
+    /**
+     * @apiNote productBoard의 상세 정보 단1개만 들어 있는 정보를 return
+     * @param num
+     * @return
+     * @throws ClassNotFoundException
+     */
     @PreAuthorize("hasRole('Guest')")
     @RequestMapping(value="/productDetail",
             method={RequestMethod.POST,RequestMethod.GET},
             produces={ MediaType.APPLICATION_JSON_UTF8_VALUE,
                         MediaType.APPLICATION_ATOM_XML_VALUE})
     public ProductBoard loadProductDetail(@RequestParam(name="num")Long num) throws ClassNotFoundException {
-        if(num !=null){
 
+        if(num !=null || num > 0){
             return productBoardService.loadProductDetails(num);
+
         }else
-            throw new NullPointerException();
+            throw new UrlNotFountException();
 
     }
 

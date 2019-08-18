@@ -4,6 +4,7 @@ import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
 import com.project.superfarm.model.CustomerEdit;
 import com.project.superfarm.service.UserDetailServiceImpl;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import com.project.superfarm.util.PrincipalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -62,8 +63,11 @@ public class LoginController {
             }
     )
     public Users me(Principal principal) {
+
         System.out.println(principal.getName()+"      -<< name");
+
         return (Users)userDetailService.loadUserByUsername(PrincipalUtil.from(principal).getUsername());
+
     }
 
                 /**
@@ -79,9 +83,15 @@ public class LoginController {
             MediaType.APPLICATION_ATOM_XML_VALUE
     })
     public Users<Customer> customerEdit(@RequestBody CustomerEdit customerEdit){
+
         System.out.println(customerEdit.toString());
-        Users<Customer> customerUser =userDetailService.edit(customerEdit);
-        return customerUser;
+        if(customerEdit != null) {
+            Users<Customer> customerUser = userDetailService.edit(customerEdit);
+
+            return customerUser;
+
+        }else
+            throw new UrlNotFountException();
     }
 
 }
