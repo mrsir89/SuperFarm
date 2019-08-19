@@ -58,7 +58,8 @@ public class CartController {
 
     }
 
-    /** Todo : error 발생 규격화
+    /** Todo : error 발생 규격화 !완료!
+     *
      *  @apiNote : 고개번호로 카트 상품추가
      *  @Url     : /cart/add
      *  @see     : java : Cart.java

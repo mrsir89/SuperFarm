@@ -50,7 +50,7 @@ public class ProductBoardService {
         }
     }
 
-    public List<ProductBoard> loadProductBoardLower(int lowerCode){
+    public List<ProductBoard> loadProductBoardLower(Integer lowerCode){
 
         List<ProductBoard> productBoards=
                 productBoardRepository.findAllByLowerCodeAndProductBoardDeleted(lowerCode,"false");
