@@ -94,7 +94,7 @@ public class QuestionBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public ResultItems<QuestionBoard> loadFromProductBoard(
-            @RequestParam (name="productNum",required = true) Long productNum,
+            @RequestParam (name="productNum",required = false) Long productNum,
             @RequestParam (name="page", defaultValue="1", required = false) int page,
             @RequestParam (name="size", defaultValue = "10", required = false) int size,
             @RequestParam (name="sort", defaultValue = "questionBoardNum",required = false)String sort){

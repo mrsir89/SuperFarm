@@ -1,7 +1,7 @@
 package com.project.superfarm.service;
 
 
-import com.project.superfarm.entity.util.File;
+import com.project.superfarm.entity.util.ReviewFiles;
 import com.project.superfarm.repository.file.FileRepository;
 import com.project.superfarm.util.ExceptionList.FileStorageException;
 import com.project.superfarm.util.ExceptionList.MyFileNotFoundException;
@@ -44,7 +44,7 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file, HttpServletRequest request, Principal principal) {
+    public String storeFile(MultipartFile file, HttpServletRequest request, Principal principal,Long reviewBoardNum) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -67,19 +67,20 @@ public class FileStorageService {
 
             // 파일 명 변경 후 DB 매핑작업 진행.
             //Member member = (Member) PrincipalUtil.from(principal);
-            File fileEntity = new File();
-            fileEntity.setFileOriginName(fileName);
-            fileEntity.setFileName(replaceFileName);
-            fileEntity.setFileSize(file.getSize());
-            fileEntity.setFileUploadIp(request.getRemoteAddr());
+            ReviewFiles reviewFilesEntity = new ReviewFiles();
+            reviewFilesEntity.setFileOriginName(fileName);
+            reviewFilesEntity.setFileName(replaceFileName);
+            reviewFilesEntity.setFileSize(file.getSize());
+            reviewFilesEntity.setFileUploadIp(request.getRemoteAddr());
 
             // 실제 운용 시 위 코드로 전환 (아래 10001은 테스트용)
-            // fileEntity.setMemberId(member.getMemberId());
-            fileEntity.setUserId(10001L);
+            // reviewFilesEntity.setMemberId(member.getMemberId());
+            // reviewBoardnum를 넣어 준다.
+            reviewFilesEntity.setUserId(principal.getName());
+            reviewFilesEntity.setReviewBoardNum(reviewBoardNum);
+            reviewFilesEntity.setFileContentType(file.getContentType());
 
-            fileEntity.setFileContentType(file.getContentType());
-
-            fileRepository.save(fileEntity);
+            fileRepository.save(reviewFilesEntity);
 
             return replaceFileName;
         } catch (IOException ex) {
@@ -94,10 +95,10 @@ public class FileStorageService {
             if(resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found " + fileName);
+                throw new MyFileNotFoundException("ReviewFiles not found " + fileName);
             }
         } catch (MalformedURLException ex) {
-            throw new MyFileNotFoundException("File not found " + fileName, ex);
+            throw new MyFileNotFoundException("ReviewFiles not found " + fileName, ex);
         }
     }
 

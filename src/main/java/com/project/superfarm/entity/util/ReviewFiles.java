@@ -6,17 +6,14 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "file")
+@Table(name = "review_file")
 @DynamicUpdate
 @DynamicInsert
-public class File {
+public class ReviewFiles {
     @Id
     @Column(name = "file_id")
     @Getter
@@ -48,14 +45,21 @@ public class File {
     @Setter
     private String fileUploadIp;
 
-    @Column(name = "user_num")
+    @Column(name = "user_id")
     @Getter
     @Setter
-    private Long userId;
+    private String userId;
 
     @Column(name = "file_content_type")
     @Getter
     @Setter
     @Nullable
     private String fileContentType;
+
+    @Column(name="review_board_num")
+    @Getter
+    @Setter
+    private Long reviewBoardNum;
+
+
 }
