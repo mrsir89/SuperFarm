@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,7 +31,8 @@ public class FileUploadController {
     @Autowired
     private FileStorageService fileStorageService;
 
-    @PostMapping(value = "/file", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/file", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+                                                MediaType.MULTIPART_FORM_DATA_VALUE})
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request, Principal principal) {
         System.out.println("file 업로드 테스트 "+request.toString());
         String replaceFileName = fileStorageService.storeFile(file, request, principal);
@@ -51,7 +53,7 @@ public class FileUploadController {
                 .map(file -> uploadFile(file, request, principal))
                 .collect(Collectors.toList());
     }
-
+    @PreAuthorize("hasRole('GUEST,customer')")
     @GetMapping("/files/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
