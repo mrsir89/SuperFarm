@@ -25,11 +25,17 @@ public class Cart implements Serializable {
     @Column(name= "user_num",updatable = false,nullable = false)
     private Long   userNum;
 
+    @Column(name="product_board_title")
+    private String productBoardTitle;
+
     @Column(name="product_board_num")
     private Long   productBoardNum;
 
     @Column(name="cart_product_name")
     private String cartProductName;
+
+    @Column(name="product_code")
+    private Long productCode;
 
     @Column(name="cart_product_option1")
     private String cartProductOption1;

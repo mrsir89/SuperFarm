@@ -1,5 +1,5 @@
 
-	#### Start Project Market ver 2.2  2018.08.13
+	#### Start Project Market ver 2.2  2018.08.21
 	### 데이터 베이스 생성 및 유저 생성
 
 
@@ -171,7 +171,7 @@ DROP TABLE IF EXISTS farmer;
     user_password			VARCHAR(20) NOT NULL,
     user_name				VARCHAR(20) NOT NULL,
     user_type				VARCHAR(8) DEFAULT 'customer' CHECK(user_type IN('admin','customer')) ,
-    user_regday				DATETIME NOT NULL,
+    user_regday				DATETIME,
     user_email	 			VARCHAR(50) NOT NULL UNIQUE,
     user_last_connect		DATETIME NOT NULL
     ) ENGINE = 'InnoDB' DEFAULT CHARACTER SET ='UTF8';
@@ -355,7 +355,9 @@ CREATE TABLE IF NOT EXISTS product_type(
 	CREATE TABLE IF NOT EXISTS cart(
     cart_num				BIGINT PRIMARY KEY AUTO_INCREMENT,
 	user_num 				BIGINT NOT NULL,
+    product_board_title		VARCHAR(40) NOT NULL,
 	product_board_num		BIGINT NOT NULL,
+    product_code		    BIGINT NOT NULL,
     cart_product_name		VARCHAR(20) NOT NULL,
     cart_product_option1	VARCHAR(20),
 	cart_product_option2	VARCHAR(20),
@@ -377,7 +379,7 @@ CREATE TABLE IF NOT EXISTS coupon(
     coupon_discount		INTEGER
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
-SELECT * FROM question_board;
+
 ## 게시판 테이블들
 ###########################################################
 ##제품 등록 게시판 테이블
@@ -462,7 +464,6 @@ review_board_deleted 			CHAR(5) NOT NULL DEFAULT 'false' CHECK(review_board_dele
 review_board_delete_date		DATETIME
 
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
 
 ## Q&A 게시판 테이블
 CREATE TABLE IF NOT EXISTS question_board(
@@ -563,3 +564,20 @@ FOREIGN KEY(shipping_num) REFERENCES shipping(shipping_num),
 FOREIGN KEY(order_item_num) REFERENCES order_items(order_item_num)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
+
+CREATE TABLE IF NOT EXISTS review_file(
+	file_id 			LONG,
+    file_origin_name 	VARCHAR(255),
+    file_name			VARCHAR(255),
+    file_size 			LONG,
+    file_reg_dated		DATETIME,
+    file_upload_ip		VARCHAR(230),
+    file_content_type	VARCHAR(255),
+    user_id				VARCHAR(20) NOT NULL,
+    review_board_num	BIGINT NOT NULL,
+
+    FOREIGN KEY(user_id) REFERENCES users(user_id),
+    FOREIGN KEY(review_board_num) REFERENCES review_board(review_board_num)
+
+
+)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';

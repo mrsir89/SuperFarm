@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -48,7 +49,8 @@ public class CartController {
     @RequestMapping(method = {RequestMethod.POST,RequestMethod.GET},
                 produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
                             MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<Cart> loadUserCart(@RequestParam(name="userNum")Long userNum){
+    public List<Cart> loadUserCart(@RequestParam(name="userNum") Long userNum, Principal principal){
+        System.out.println(principal);
 
         if(userNum !=null || userNum >0){
             return cartService.loadCart(userNum);
