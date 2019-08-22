@@ -158,14 +158,13 @@ public class CartController {
      */
     @RequestMapping(path="/edit",
     method = RequestMethod.PATCH)
-    public Cart cartProductEdit(@RequestParam(name="cartProductNum")Long cartProductNum,
-                                @RequestParam(name="count")Integer count){
+    public List<Cart> cartProductEdit(@RequestBody Cart cart){
 
-        if(cartProductNum !=null || cartProductNum > 0 || count >= 1) {
-            return cartService.productCountUpdate(cartProductNum, count);
+        if(cart !=null){
+
+            return cartService.productCountUpdate(cart);
 
         }else
             throw new UrlNotFountException();
-
     }
 }
