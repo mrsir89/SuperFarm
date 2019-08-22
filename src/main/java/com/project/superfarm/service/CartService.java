@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -40,9 +41,14 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteCart(Long cartProductNum){
+    public Cart deleteCart(Long cartProductNum){
 
         cartRepository.deleteById(cartProductNum);
+        Optional<Cart> cartOptional = cartRepository.findById(cartProductNum);
+        if(cartOptional.isPresent()){
+            return cartOptional.get();
+        }else
+            throw new UrlNotFountException();
 
     }
 

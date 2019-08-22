@@ -112,10 +112,10 @@ public class CartController {
      */
     @RequestMapping(path="/delete",
     method = RequestMethod.DELETE)
-    public void deleteCartProduct(@RequestParam(name ="cartNum")Long cartNum){
+    public Long deleteCartProduct(@RequestParam(name ="cartNum")Long cartNum){
 
        if(cartNum !=null || cartNum>0) {
-           cartService.deleteCart(cartNum);
+           return cartService.deleteCart(cartNum);
 
        }else
            throw new UrlNotFountException();
