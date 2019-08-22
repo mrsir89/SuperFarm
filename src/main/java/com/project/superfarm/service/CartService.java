@@ -46,9 +46,9 @@ public class CartService {
         cartRepository.deleteById(cartProductNum);
         Optional<Cart> cartOptional = cartRepository.findById(cartProductNum);
         if(cartOptional.isPresent()){
-            return cartOptional.get();
-        }else
             throw new UrlNotFountException();
+        }else
+            return cartOptional.get();
 
     }
 
