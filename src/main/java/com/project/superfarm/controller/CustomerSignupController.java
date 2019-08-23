@@ -5,6 +5,7 @@ import com.project.superfarm.entity.user.Users;
 import com.project.superfarm.model.SignupCustomer;
 import com.project.superfarm.service.CustomerSignupService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,7 +76,7 @@ public class CustomerSignupController {
             })
     public Users<Customer> joinCreate(@RequestBody SignupCustomer signupCustomer) {
 
-        if(signupCustomer != null || signupCustomer.getUserId() != null) {
+        if(!ObjectUtils.isEmpty(signupCustomer)) {
             return customerSignupService.singupCutomer(signupCustomer);
 
         }else
@@ -91,14 +92,14 @@ public class CustomerSignupController {
      * @return   : True / false
      */
     @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(path="/emailCheck",
+    @RequestMapping(value="/emailCheck",
             method = {RequestMethod.GET,RequestMethod.POST},
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
     public String overlapEmail(@RequestParam String email ){
 
-        if(email != null) {
+        if(!ObjectUtils.isEmpty(email)) {
             return customerSignupService.overlapEmail(email);
 
         }else
@@ -115,14 +116,14 @@ public class CustomerSignupController {
      * @return   : True / false
      */
     @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(path="/idCheck",
+    @RequestMapping(value="/idCheck",
             method = {RequestMethod.GET,RequestMethod.POST},
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
-    public String overlapId(@RequestParam String id ){
+    public String overlapId(@RequestParam(name="id") String id ){
 
-        if(id != null) {
+        if(!ObjectUtils.isEmpty(id)) {
             return customerSignupService.overlapId(id);
 
         }else

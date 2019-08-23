@@ -100,8 +100,8 @@ public class ReviewBoardController {
                 MediaType.APPLICATION_ATOM_XML_VALUE})
     public ResultItems<ReviewBoard> loadFromProductBoard(
             @RequestParam(name ="productBoardNum",required = false) Long productBoardNum,
-            @RequestParam(name ="size" ,defaultValue = "10", required = false)int size,
-            @RequestParam(name = "page",defaultValue = "1",required = false) int page,
+            @RequestParam(name ="size" ,defaultValue = "10", required = false )int size,
+            @RequestParam(name = "page",defaultValue = "1",required = false ) int page,
             @RequestParam (name="sort", defaultValue = "reviewBoardNum",required = false)String sort) {
 
         if (productBoardNum != null || productBoardNum >0) {

@@ -30,31 +30,34 @@ public class CategoryController {
 
 
     /**
-     * @apiNote    : 카테고리 전체를 리턴 upper 상위카테고리 / lower 하위카테고리
-     * @Url        : /category
-     * @see        : entity Cart   DB: cart
-     * @return     Json
-     *         "upperCode": 1,
-     *         "upperTitle": "농산물",
-     *         "lowerCategory": [
-     *             {
-     *                 "lowerCode": 1,
-     *                 "lowerTitle": "채소"
-     *             },
-     *             {
-     *                 "lowerCode": 2,
-     *                 "lowerTitle": "쌀"
-     *             },
-     *             {
-     *                 "lowerCode": 3,
-     *                 "lowerTitle": "과일"
-     *             },
+     * @apiNote    : 카테고리 전체를 리턴 upper 상위카테고리 / lower 하위카테
+     *             },고리
+     *      * @Url        : /category
+     *      * @see        : entity Cart   DB: cart
+     *      * @return     Json
+     *      *         "upperCode": 1,
+     *      *         "upperTitle": "농산물",
+     *      *         "lowerCategory": [
+     *      *             {
+     *      *                 "lowerCode": 1,
+     *      *                 "lowerTitle": "채소"
+     *      *             },
+     *      *             {
+     *      *                 "lowerCode": 2,
+     *      *                 "lowerTitle": "쌀"
+     *      *             },
+     *      *             {
+     *      *                 "lowerCode": 3,
+     *      *                 "lowerTitle": "과일"
      *             {
      *                 "lowerCode": 4,
      *                 "lowerTitle": "야채"
      *             }
-     *         ]
+     *         ],
+     *        upperCode.
+     *
      *     },
+     *     `http://localhost:8080/product/lower?lower=${lower.num}`
      *
      */
     @PreAuthorize("hasRole('GUEST')")

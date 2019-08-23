@@ -4,6 +4,7 @@ package com.project.superfarm.controller;
 import com.project.superfarm.entity.product.Cart;
 import com.project.superfarm.service.CartService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,6 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-
     /**
      *  @apiNote : 고개번호로 카트 상품추가
      *  @Url     : /cart
@@ -52,7 +52,7 @@ public class CartController {
     public List<Cart> loadUserCart(@RequestParam(name="userNum") Long userNum, Principal principal){
         System.out.println(principal);
 
-        if(userNum !=null || userNum >0){
+        if(userNum != null || userNum > 0 ){
             return cartService.loadCart(userNum);
 
         }else
@@ -85,16 +85,17 @@ public class CartController {
                 MediaType.APPLICATION_ATOM_XML_VALUE})
     public Cart addCartProduct(@RequestBody Cart cart) {
 
-        if(cart != null) {
+        if(ObjectUtils.isEmpty(cart)) {
             Cart cartCheck = cartService.saveCartProduct(cart);
 
-            if (cartCheck != null) {
+            if (ObjectUtils.isEmpty(cart)) {
                 throw new UrlNotFountException();
 
             }else
                 return cartCheck;
 
         }else
+
             throw new UrlNotFountException();
 
     }
@@ -112,7 +113,7 @@ public class CartController {
      */
     @RequestMapping(path="/delete",
     method = RequestMethod.DELETE)
-    public Long deleteCartProduct(@RequestParam(name ="cartNum")Long cartNum){
+    public Cart deleteCartProduct(@RequestParam(name ="cartNum")Long cartNum){
 
        if(cartNum !=null || cartNum>0) {
            return cartService.deleteCart(cartNum);
