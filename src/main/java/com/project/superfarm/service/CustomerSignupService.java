@@ -76,9 +76,12 @@ public class CustomerSignupService {
  */
     public String overlapEmail(String email) {
 
-        String checkEmail = usersRepository.overlapEmail(email);
-
-        return columnCheck(email);
+        Optional<String> overlapEmail = usersRepository.overlapEmail(email);
+        if(overlapEmail.isPresent()){
+            throw new UrlNotFountException();
+        }else{
+            return "Success";
+        }
     }
 
     public String overlapId(String id){

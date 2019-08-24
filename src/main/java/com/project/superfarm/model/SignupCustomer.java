@@ -27,7 +27,7 @@ public class SignupCustomer implements Serializable {
 
     private Date customerBirth;
 
-    private String customerGender;
+//    private String customerGender;
 
     private String customerPhone;
 
@@ -54,7 +54,7 @@ public class SignupCustomer implements Serializable {
     public Customer getCustomer(){
 
         Customer customer = new Customer();
-        customer.setCustomerGender(customerGender);
+//        customer.setCustomerGender(customerGender);
         customer.setCustomerBirth(customerBirth);
         customer.setCustomerAddr(customerAddr);
         customer.setCustomerPhone(customerPhone);

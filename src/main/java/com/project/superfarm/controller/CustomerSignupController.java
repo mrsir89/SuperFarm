@@ -75,7 +75,7 @@ public class CustomerSignupController {
 
             })
     public Users<Customer> joinCreate(@RequestBody SignupCustomer signupCustomer) {
-
+        System.out.println(signupCustomer.toString());
         if(!ObjectUtils.isEmpty(signupCustomer)) {
             return customerSignupService.singupCutomer(signupCustomer);
 
@@ -89,7 +89,7 @@ public class CustomerSignupController {
      * @apiNote  : param으로 들어 오는 email 중복처리
      * @Url      : /signup/emailCheck
      * @param    : String email
-     * @return   : True / false
+     * @return   : Success( 200 ok ) / NotFoundException
      */
     @PreAuthorize("hasRole('GUEST')")
     @RequestMapping(value="/emailCheck",
@@ -97,7 +97,7 @@ public class CustomerSignupController {
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
-    public String overlapEmail(@RequestParam String email ){
+    public String overlapEmail(@RequestParam(name="email") String email ){
 
         if(!ObjectUtils.isEmpty(email)) {
             return customerSignupService.overlapEmail(email);
@@ -113,7 +113,7 @@ public class CustomerSignupController {
      * @apiNote  : param으로 들어 오는 id 중복처리
      * @Url      : /signup/idCheck
      * @param    : string id
-     * @return   : True / false
+     * @return   : Success( 200 ok ) / NotFoundException
      */
     @PreAuthorize("hasRole('GUEST')")
     @RequestMapping(value="/idCheck",
@@ -128,6 +128,14 @@ public class CustomerSignupController {
 
         }else
             throw new UrlNotFountException();
+    }
+
+    /**
+     * @apiNote FAKE API 리액트에서 비동기를 동기로 처리 하기 위해서 만듬
+     */
+    @PostMapping(value="/asyncAction")
+    public void fakeAsyncAction(){
+
     }
 
 

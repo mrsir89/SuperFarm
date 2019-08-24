@@ -4,6 +4,7 @@ import com.project.superfarm.entity.board.ProductBoard;
 import com.project.superfarm.entity.product.Product;
 import com.project.superfarm.repository.ProductRepository;
 import com.project.superfarm.repository.boardRepository.ProductBoardRepository;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +56,7 @@ public class ProductBoardService {
         List<ProductBoard> productBoards=
                 productBoardRepository.findAllByLowerCodeAndProductBoardDeleted(lowerCode,"false");
         if(productBoards.size()==0){
-            return null;
+            throw new UrlNotFountException();
         }else{
             return productBoards;
         }

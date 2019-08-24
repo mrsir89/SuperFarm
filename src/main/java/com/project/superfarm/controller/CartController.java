@@ -49,8 +49,9 @@ public class CartController {
     @RequestMapping(method = {RequestMethod.POST,RequestMethod.GET},
                 produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
                             MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<Cart> loadUserCart(@RequestParam(name="userNum") Long userNum, Principal principal){
-        System.out.println(principal);
+    public List<Cart> loadUserCart(@RequestParam(name="userNum") Long userNum){
+        System.out.println("cart 실행 ");
+//        System.out.println(principal);
 
         if(userNum != null || userNum > 0 ){
             return cartService.loadCart(userNum);
