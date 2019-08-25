@@ -1,6 +1,8 @@
 
-	#### Start Project Market ver 2.2  2018.08.21
+	#### Start Project Market ver 2.5  2018.08.25
 	### 데이터 베이스 생성 및 유저 생성
+
+    ### noticeBoard  FAQBOARD 추가
 
 
 -- 	DROP USER IF EXISTS `bitmaster`;
@@ -581,3 +583,41 @@ CREATE TABLE IF NOT EXISTS review_file(
 
 
 )ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
+
+-- 날짜만 시간은 관리 용도로,
+CREATE TABLE IF NOT EXISTS notice_board(
+notice_num            	BIGINT PRIMARY KEY AUTO_INCREMENT,
+notice_title          	VARCHAR(100) ,
+notice_writer_num     	BIGINT ,
+notice_writer_name    	VARCHAR(20) ,
+notice_write_date      	DATETIME ,
+notice_edit_date		DATETIME,
+notice_content         	VARCHAR(2000) ,
+notice_img            	VARCHAR(255),
+notice_deleted          CHAR(5) CHECK(notice_deleted IN('true','false')),
+notice_views         	BIGINT
+
+)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
+-- 날짜만 시간은 관리 용도로,
+CREATE TABLE IF NOT EXISTS faq_board(
+faq_board            	BIGINT PRIMARY KEY AUTO_INCREMENT,
+faq_writer_num          BIGINT ,
+faq_question			VARCHAR(100),
+faq_answer				VARCHAR(2000),
+faq_write_date      	DATETIME ,
+faq_edit_date			DATETIME,
+faq_img            		VARCHAR(255),
+faq_deleted          	CHAR(5) CHECK(faq_deleted IN('true','false'))
+
+)ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
+
+
+
+
+
+
+
+

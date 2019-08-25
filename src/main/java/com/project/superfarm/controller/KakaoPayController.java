@@ -21,7 +21,7 @@ public class KakaoPayController {
 
     }
 
-    @PostMapping("/kakaoPay")
+    @PostMapping(path="/kakaoPay")
     public String kakaoPay(){
          log.info("kakaoPay post ...............................");
 
@@ -32,6 +32,8 @@ public class KakaoPayController {
     public void kakaoPaySuccess(@RequestParam("pg_token")String pg_token, Model model){
         log.info("kakaoPaySuccess get....................................");
         log.info("kakaoPaySuccess pg_token:"+ pg_token);
+
+        model.addAttribute("info",kaKaopay.kakaoPayInfo(pg_token));
     }
 
 }

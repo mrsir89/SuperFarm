@@ -1,4 +1,4 @@
-package com.project.superfarm.model;
+package com.project.superfarm.model.payment;
 
 
 import lombok.Data;

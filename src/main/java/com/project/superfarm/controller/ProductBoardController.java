@@ -162,7 +162,7 @@ public class ProductBoardController {
             return productBoardService.loadProductBoardLower(lower);
 
         }else
-            throw new UrlNotFountException();
+            return null;
     }
 
     /**

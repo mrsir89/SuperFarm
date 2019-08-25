@@ -32,6 +32,7 @@ public class NoticeBoardController {
         Pageable pageable = PageRequest.of(page-1,size);
 
         Page<NoticeBoard> noticeBoards = noticeBoardService.loadAllNoticeBoard(pageable);
+        System.out.println(noticeBoards.getContent().toString());
         return new ResultItems<NoticeBoard>(noticeBoards.getContent(),page,size,noticeBoards.getTotalElements(),
                 noticeBoards.getTotalPages(),noticeBoards.hasNext());
     }

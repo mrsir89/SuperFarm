@@ -3,30 +3,32 @@ package com.project.superfarm.entity.orders;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name="order_itmes")
+@Table(name="order_items")
 @ToString
+@DynamicUpdate
+@DynamicInsert
 @Setter
 @Getter
-public class OrderItem {
+public class OrderItems {
 
     @Id
     @Column(name="order_item_num",updatable = false,nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemNum;
 
-    @Column(name="product_code")
+    @Column(name="order_item_group")
     private Long orderItemGroup;
 
-    @Column(name="order_item_group")
+    @Column(name="order_item_depth")
     private Integer orderItemDepth;
 
-    @Column(name="order_item_depth")
+    @Column(name="product_code")
     private Long productCode;
 
     @Column(name="order_item_price")

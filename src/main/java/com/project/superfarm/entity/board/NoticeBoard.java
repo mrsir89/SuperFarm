@@ -1,5 +1,8 @@
 package com.project.superfarm.entity.board;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -8,9 +11,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 
+@ToString
 @Entity
 @DynamicInsert
-@DynamicUpdate
+@DynamicUpdate @Getter @Setter
 @Table(name="notice_board")
 public class NoticeBoard {
 
@@ -25,7 +29,7 @@ public class NoticeBoard {
         @Column(name="notice_writer_num")
         private String noticeWriterNum;
 
-        @Column(name="notice_wrtier_name")
+        @Column(name="notice_writer_name")
         private String noticeWriterName;
 
         @Column(name="notice_write_date")
