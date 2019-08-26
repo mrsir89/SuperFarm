@@ -1,5 +1,6 @@
 package com.project.superfarm.entity.orders;
 
+import com.project.superfarm.entity.product.Product;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +22,9 @@ public class OrderItems {
     @Column(name="order_item_num",updatable = false,nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemNum;
+
+//    @Column(name="order_num")
+//    private Long orderNum;
 
     @Column(name="order_item_group")
     private Long orderItemGroup;
@@ -45,5 +49,10 @@ public class OrderItems {
 
     @Column(name="order_shipping_memo")
     private String orderShippingMemo;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="product_code",referencedColumnName = "product_code",
+            insertable = false, updatable = false)
+    private Product product;
 
 }

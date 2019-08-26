@@ -11,7 +11,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -52,18 +54,22 @@ public class Orders implements Serializable {
     @Column(name="order_memo")
     private String orderMemo;
 
-    @Transient
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name ="orders_shipping",
-        joinColumns =@JoinColumn(name="order_num"),
-        inverseJoinColumns = @JoinColumn(name="order_item_num"))
-    private Set<OrderItems> orderItemSet;
+    @JoinTable(
+            name = "orders_shipping",
+            joinColumns = @JoinColumn(name = "order_num"),
+            inverseJoinColumns = @JoinColumn(name = "order_item_num")
+    )
+    private List<OrderItems> orderItemSet;
 
-    @Transient
+
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="orders_shipping",
-        joinColumns = @JoinColumn(name="order_num"),
-        inverseJoinColumns = @JoinColumn(name="order_item_num"))
-    private Set<Shipping> shippings;
+    @JoinTable(
+            name = "orders_shipping",
+            joinColumns = @JoinColumn(name = "order_num"),
+            inverseJoinColumns = @JoinColumn(name = "shipping_num")
+    )
+    private List<Shipping> shippings;
 
 }

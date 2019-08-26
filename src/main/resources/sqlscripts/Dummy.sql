@@ -59,22 +59,22 @@ INSERT INTO upper_lower VALUE
 ((SELECT upper_code FROM upper_category WHERE upper_title='축산물'),(SELECT lower_code FROM lower_category WHERE lower_title='돼지')),
 ((SELECT upper_code FROM upper_category WHERE upper_title='축산물'),(SELECT lower_code FROM lower_category WHERE lower_title='특수부위'));
 
-
+SELECT * FROM product_board;
 
 ######### BOARD #########################
 
 INSERT INTO product_board VALUE
-(1,1,1,'정말 좋은 이천쌀 입니다.','./resource/thumbnail01.jpg',3000,0,'쌀,이천쌀,햅쌀',null,'./resource/common01.jpg','./resource/detail01.jpg',
+(1,1,2,'정말 좋은 이천쌀 입니다.','./resource/thumbnail01.jpg',3000,0,'쌀,이천쌀,햅쌀',null,'./resource/common01.jpg','./resource/detail01.jpg',
 './resource/bottom01.jpg','여기는 product_edit_content 공간 입니다용','2019-07-31 10:15:12','false'),
-(2,1,1,'그냥 쌀이 아닌  김포쌀 입니다.','./resource/thumbnail02.jpg',3000,0,'쌀,김포쌀,햅쌀',null,'./resource/common02.jpg','./resource/detail02.jpg',
+(2,1,2,'그냥 쌀이 아닌  김포쌀 입니다.','./resource/thumbnail02.jpg',3000,0,'쌀,김포쌀,햅쌀',null,'./resource/common02.jpg','./resource/detail02.jpg',
 './resource/bottom02.jpg','여기는 product_edit_content 공간 입니다용','2019-07-31 10:15:12','true'),
-(3,2,1,'칼슘에 좋은 며르치 ','./resource/thumbnail03.jpg',3000,0,'멸치,생선,며르치',null,'./resource/common03.jpg','./resource/detail03.jpg',
+(3,2,6,'칼슘에 좋은 며르치 ','./resource/thumbnail03.jpg',3000,0,'멸치,생선,며르치',null,'./resource/common03.jpg','./resource/detail03.jpg',
 './resource/bottom03.jpg','여기는 product_edit_content 공간 입니다용','2019-07-31 10:15:12','false'),
-(4,2,2,'182cm 키조개','./resource/thumbnail04.jpg',3000,0,'조개,키조개,어패류',null,'./resource/common04.jpg','./resource/detail04.jpg',
+(4,2,6,'182cm 키조개','./resource/thumbnail04.jpg',3000,0,'조개,키조개,어패류',null,'./resource/common04.jpg','./resource/detail04.jpg',
 './resource/bottom04.jpg','여기는 product_edit_content 공간 입니다용','2019-07-31 10:15:12','true'),
-(5,3,1,'정말 좋은 특수부위 입니다.','./resource/thumbnail05.jpg',3000,0,'강원도,소,한우',null,'./resource/common05.jpg','./resource/detail05.jpg',
+(5,3,11,'정말 좋은 특수부위 입니다.','./resource/thumbnail05.jpg',3000,0,'강원도,소,한우',null,'./resource/common05.jpg','./resource/detail05.jpg',
 '/resource/bottom05.jpg','여기는 product_edit_content 공간 입니다용','2019-07-31 10:15:12','true'),
-(6,3,2,'오 정말 제주 흑돼지 원산지는 강원도스','./resource/thumbnail06.jpg',3000,0,'돼지,제주흑돼지,오',null,'./resource/common06.jpg','./resource/detail06.jpg',
+(6,3,10,'오 정말 제주 흑돼지 원산지는 강원도스','./resource/thumbnail06.jpg',3000,0,'돼지,제주흑돼지,오',null,'./resource/common06.jpg','./resource/detail06.jpg',
 './resource/bottom06.jpg','여기는 product_edit_content 공간 입니다용','2019-07-31 10:15:12','true');
 
 ########## PRODUCT ###############################
@@ -150,7 +150,6 @@ INSERT INTO review_board VALUE
 (14,4,'tester01','./resource/review14.jpg','3000만큼','이천쌀이 정말 맛있습니다용 ',5,'2019-07-24:17:27:11','false',null);
 
 
-
 INSERT INTO question_board VALUE
 (1,5,'tester01','테스트 제목 입니다.','1234','이거 제품에 대해 너무 비싼거 아니에요?','2019-07-31 10:22:12','false','false',null),
 (2,5,'tester02','wpahrdlqslek.','1234','당일 배송 가능 한가요?','2019-07-31 12:23:12','false','false',null),
@@ -208,4 +207,8 @@ INSERT INTO question_answer VALUE
 INSERT INTO cart VALUES
 (1,2,'정말 좋은 특수부위 입니다.',5,25,'등심','3Kg',null,63000,1,null),
 (2,2,'182cm 키조개',4,16,'키조개','2Kg','2cm',22000,1,'../../images/tangerin.png');
-SELECT * FROM cart;
+
+INSERT INTO notice_board VALUE
+(1,'첫번쨰 공지사항입니다.', 4, '관리자', '2019-08-21','2019-08-21', '첫번째 공지사항 게시판 내용입니다용 ', null, 'false', 1),
+(2,'두번쨰 공지사항입니다.', 4, '관리자', '2019-08-11','2019-08-11', '두번째 공지사항 게시판 내용입니다용 ', null, 'false', 1),
+(3,'세번쨰 공지사항입니다.', 4, '관리자', '2019-08-01','2019-08-01', '세번째 공지사항 게시판 내용입니다용 ', null, 'false', 1);

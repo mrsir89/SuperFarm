@@ -1,9 +1,9 @@
 
-	#### Start Project Market ver 2.5  2018.08.25
+	#### Start Project Market ver 2.6  2019.08.26
 	### 데이터 베이스 생성 및 유저 생성
 
-    ### noticeBoard  FAQBOARD 추가
-
+    ##   2019.08.26
+    ## orders 테이블 변화 NOTICEBOARD FAQBOARD 테이블 추가
 
 -- 	DROP USER IF EXISTS `bitmaster`;
 
@@ -496,7 +496,6 @@ FOREIGN KEY(question_board_num) REFERENCES question_board(question_board_num)
 
 
 ##    주문 관련 테이블
-
 ## 실제 주문 테이블
 CREATE TABLE IF NOT EXISTS orders(
 order_num 					BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -515,6 +514,7 @@ FOREIGN KEY (user_num) REFERENCES users(user_num)
 CREATE TABLE IF NOT EXISTS order_items(
 order_item_num			BIGINT PRIMARY KEY AUTO_INCREMENT,
 product_code			BIGINT NOT NULL,
+order_num				BIGINT NOT NULL,
 order_item_group		BIGINT ,
 order_item_depth		INT DEFAULT 0,
 order_item_price		DECIMAL(18,5),
@@ -522,6 +522,8 @@ order_count				INTEGER DEFAULT 1,
 order_item_send_status	VARCHAR(10) CHECK(order_item_send_status IN('발송완료','입고완료','입고대기','입고지연')),
 order_item_status		VARCHAR(10) CHECK(order_item_status IN('배송완료','거래완료','반품접수','반품완료','교환접수','교환완료','환불접수','환불완료')),
 order_shipping_memo		VARCHAR(50),
+
+FOREIGN KEY(order_num) REFERENCES orders(order_num),
 FOREIGN KEY(product_code) REFERENCES product(product_code)
 )ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
 
@@ -529,6 +531,7 @@ FOREIGN KEY(product_code) REFERENCES product(product_code)
 ## 주문에 대한 배송 테이블
 CREATE TABLE IF NOT EXISTS shipping(
 shipping_num				BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+order_num					BIGINT NOT NULL,
 tracking_number				VARCHAR(30),
 shipping_courier			VARCHAR(20),
 delivery_address			VARCHAR(100) NOT NULL,
@@ -538,8 +541,9 @@ shipping_status				VARCHAR(10),
 shipping_arrivel_date		DATE,
 shipping_reciever			VARCHAR(20) NOT NULL,
 shipping_reciever_phone		VARCHAR(20) NOT NULL,
-shipping_memo				VARCHAR(100)
+shipping_memo				VARCHAR(100),
 
+FOREIGN KEY(order_num) REFERENCES orders(order_num)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
 ## 배송에 대한 제품 테이블
@@ -552,20 +556,20 @@ product_option2          VARCHAR(20),
 product_price			 DECIMAL(18,5),
 order_sell_date			 DATETIME,
 
-FOREIGN KEY(shipping_num) REFERENCES shipping(shipping_num)
+FOREIGN KEY(shipping_num) REFERENCES shipping(shipping_num),
+FOREIGN KEY(product_code) REFERENCES product(product_code)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
 
 ## 주문에 대한 서로 참조 테이블 1:N:N (orders : orderItem : shipping)
 CREATE TABLE IF NOT EXISTS orders_shipping(
 order_num					BIGINT NOT NULL,
-shipping_num				BIGINT NOT NULL,
-order_item_num				BIGINT NOT NULL,
+shipping_num				BIGINT NOT NULL UNIQUE,
+order_item_num				BIGINT NOT NULL UNIQUE,
 
 FOREIGN KEY(order_num) REFERENCES orders(order_num),
 FOREIGN KEY(shipping_num) REFERENCES shipping(shipping_num),
 FOREIGN KEY(order_item_num) REFERENCES order_items(order_item_num)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
-
 
 CREATE TABLE IF NOT EXISTS review_file(
 	file_id 			LONG,
@@ -614,10 +618,6 @@ faq_deleted          	CHAR(5) CHECK(faq_deleted IN('true','false'))
 )ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
 
 
-
-
-
-
-
+SELECT * FROM orders_shipping;
 
 

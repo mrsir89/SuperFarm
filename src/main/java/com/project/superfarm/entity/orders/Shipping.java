@@ -23,6 +23,9 @@ public class Shipping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shippingNum;
 
+//    @Column(name="order_num")
+//    private Long orderNum;
+
     @Column(name="tracking_number")
     private String trackingNum;
 
@@ -54,4 +57,7 @@ public class Shipping {
     @Column(name="shipping_memo")
     private String shippingMemo;
 
+    @OneToOne
+    @JoinColumn(name="shipping_num",referencedColumnName = "shipping_num")
+    private ShippingItem shippingItem;
 }
