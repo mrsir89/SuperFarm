@@ -8,12 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
 @ToString
 @Getter
 @Setter
-public class OrderModel {
+public class OrderModel implements Serializable {
 
     // Orders 관련
     private Long userNum;
@@ -25,15 +26,17 @@ public class OrderModel {
     private String orderMemo;
 
     //shipping 관련
-    private String deleveryAddress;
+    private String deliveryAddress;
 
-    private String shippngMethod;
+    private String shippingMethod;
 
-    private double shippngPrice;
+    private double shippingPrice;
 
-    private String shippingReciever;
+    private String shippingReceiver;
 
-    private String shippingrecieverPhone;
+    private String shippingReceiverPhone;
+
+    private String shippingReceiverPhone2;
 
     private String shippingMemo;
 
@@ -54,11 +57,12 @@ public class OrderModel {
     public Shipping getShipping() {
 
         Shipping shipping = new Shipping();
-        shipping.setDeliveryAddress(deleveryAddress);
-        shipping.setShippingMethod(shippngMethod);
-        shipping.setShippingPrice(shippngPrice);
-        shipping.setShippingReciever(shippingReciever);
-        shipping.setShippingRecieverPhone(getShippingrecieverPhone());
+        shipping.setDeliveryAddress(deliveryAddress);
+        shipping.setShippingMethod(shippingMethod);
+        shipping.setShippingPrice(shippingPrice);
+        shipping.setShippingReciever(shippingReceiver);
+        shipping.setShippingRecieverPhone(getShippingReceiverPhone());
+        shipping.setShippingRecieverPhone2(getShippingReceiverPhone2());
         shipping.setShippingMemo(shippingMemo);
         return shipping;
     }

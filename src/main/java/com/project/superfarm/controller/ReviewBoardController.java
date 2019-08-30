@@ -205,7 +205,6 @@ public class ReviewBoardController {
 
         }else
             throw new UrlNotFountException();
-
     }
 
 }

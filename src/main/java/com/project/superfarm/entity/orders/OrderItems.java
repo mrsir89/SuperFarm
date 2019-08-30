@@ -23,8 +23,8 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemNum;
 
-//    @Column(name="order_num")
-//    private Long orderNum;
+    @Column(name="order_num")
+    private Long orderNum;
 
     @Column(name="order_item_group")
     private Long orderItemGroup;

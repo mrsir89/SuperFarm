@@ -100,7 +100,7 @@ public class QuestionBoardController {
             @RequestParam (name="sort", defaultValue = "questionBoardNum",required = false)String sort){
         Pageable pageable = PageRequest.of(page-1,size,Sort.by(sort).descending());
         System.out.println("----------- page"+page);
-        if(productNum !=null) {
+        if(productNum != null) {
             Page<QuestionBoard> questionBoards=
                     questionBoardService.loadFromProductBoard(productNum,pageable);
 

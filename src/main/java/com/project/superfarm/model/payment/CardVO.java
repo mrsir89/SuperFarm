@@ -2,8 +2,10 @@ package com.project.superfarm.model.payment;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class CardVO {
+public class CardVO implements Serializable {
 
     private String purchase_corp, purchase_corp_code;
     private String issuer_corp, issuer_corp_code;

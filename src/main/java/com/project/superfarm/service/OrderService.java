@@ -10,6 +10,7 @@ import com.project.superfarm.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,105 +38,125 @@ public class OrderService {
     private ProductRepository productRepository;
 
     // 동시에 저장
-    public List<OrdersShipping> checkoutOrder(OrderModel orderModel){
+
+
+    /**
+     * @param orderModel
+     * @return
+     * @apiNote order 생성시  shipping shipping_item orders order_item 과
+     * order_shipping 까지 같이 생성 해야 한다.
+     */
+    @Transactional
+    public Orders checkoutOrder(OrderModel orderModel) {
 
         // 초기 셋팅
-        Long shippingNum;
-        Long orderItemNum;
-        Long ordersNum;
+        Long shippingNum = 0L;
+        Long orderItemNum = 0L;
+        Long ordersNum = 0L;
 
-        //return할 객체 생성
-        List<OrdersShipping> ordersShippingList = new ArrayList<>();
+        if (orderModel != null) {
 
-        // 빈객체인지 체크
-        if(!ObjectUtils.isEmpty(orderModel)) {
+            // order번호를 생성 하기 위해 먼저 저장
+            Orders orders = orderModel.getOrder();
+            Orders returnOrders = ordersRepository.save(orders);
 
-            Orders order = orderModel.getOrder();
-            Shipping shippings = new Shipping();
-            orderModel.getShipping();
-            List<OrderItems> orderItems = orderModel.getOrderItemsList();
+            // 이번 주문에 대한 orderNum을 정한다.
+            ordersNum = returnOrders.getOrderNum();
 
-            Orders returnOrder = ordersRepository.save(order);
+            int orderItemCount = orderModel.getOrderItemsList().size();
 
-            ordersNum = returnOrder.getOrderNum();
+            //orderItem 개수에 따른 저장 시작
+            for (int i = 0; i < orderItemCount; i++) {
 
-            for (int i = 0; i < orderItems.size(); i++) {
-
-                // 초기화 작업 매 반복문 실행시 기존에 있는 자료를 초기화시키기위해
-
-                OrderItems returnOrderItems = new OrderItems();
+                // 초기화 임시로 저장값을 담을 객체와 리턴 받아 pk 키를 받을 객체를 생성
+                Shipping tmpShipping = new Shipping();
                 Shipping returnShipping = new Shipping();
 
+                OrderItems tmpOrderItem = new OrderItems();
+                OrderItems returnOrderItem = new OrderItems();
 
-                OrdersShipping ordersShipping = new OrdersShipping();
+                ShippingItem tmpShippingItem = new ShippingItem();
+
+                OrdersShipping tmpOrdersShipping = new OrdersShipping();
                 OrdersShipping returnOrderShipping = new OrdersShipping();
+                // order item 저장 / 저장 전 ordersnum 삽입 하고 저장
+                tmpOrderItem = orderModel.getOrderItemsList().get(i);
+                tmpOrderItem.setOrderNum(ordersNum);
+                returnOrderItem = orderItemsRepository.save(tmpOrderItem);
+                orderItemNum = returnOrderItem.getOrderItemNum();
 
-                // 새로운 객체의 새로운 값을 저장 하기 위해서 다시 한번 저장
-                // 다시 저장하지 않을시 pk가 늘어 나지 않는다.
-                shippings = orderModel.getShipping();
-
-
-                returnShipping = shippingRepository.save(shippings);
-                returnOrderItems = orderItemsRepository.save((orderItems.get(i)));
-                System.out.println(returnOrderItems.toString());
-                ShippingItem shippingItem = shippingItemSet(returnOrderItems);
-
+                // shipping 저장  / 저장전 ordersnum 삽입 하고 저장
+                tmpShipping = orderModel.getShipping();
+                tmpShipping.setOrderNum(ordersNum);
+                returnShipping = shippingRepository.save(tmpShipping);
                 shippingNum = returnShipping.getShippingNum();
-                orderItemNum = returnOrderItems.getOrderItemNum();
-                shippingItem.setShippingNum(shippingNum);
 
-                shippingItemRepository.save(shippingItem);
+                // shipping item setting
+                tmpShippingItem = shippingItemSet(returnOrderItem,shippingNum);
 
-
-                if(shippingNum !=null && orderItemNum !=null && ordersNum !=null){
-
-                    ordersShipping.setOrderNum(ordersNum);
-                    ordersShipping.setOrderItemNum(orderItemNum);
-                    ordersShipping.setShippingNum(shippingNum);
-
-                    returnOrderShipping =
-                            ordersShippingRepository.save(ordersShipping);
-
-                    ordersShippingList.add(ordersShipping);
+                // 예외처리 해야 함
+                if (tmpShippingItem == null) {
+                    return null;
                 }
+                // 3개의 값을 동시에 넣어 준다.
+                tmpOrdersShipping.setOrderNum(ordersNum);
+                tmpOrdersShipping.setShippingNum(shippingNum);
+                tmpOrdersShipping.setOrderItemNum(orderItemNum);
+
+                returnOrderShipping = ordersShippingRepository.save(tmpOrdersShipping);
+
+                // 여기도 예외처리 해야함
+                if (returnOrderShipping == null) {
+                    return null;
+                }
+
             }
+
+            Optional<Orders> resultOrder = ordersRepository.findById(ordersNum);
+            if (resultOrder.isPresent()) {
+
+                return resultOrder.get();
+            } else {
+
+                return null;
+            }
+        } else {
+
+            return null;
         }
-            return ordersShippingList;
 
     }
 
-    public Orders loadOrderList(Long num){
+    public Orders loadOrderList(Long num) {
 
         Optional<Orders> ordersList = ordersRepository.findById(num);
-        if(ordersList.isPresent()){
+        if (ordersList.isPresent()) {
             return ordersList.get();
-        }
-        else{
+        } else {
             return null;
         }
     }
 
-    private ShippingItem shippingItemSet(OrderItems orderItems){
+    private ShippingItem shippingItemSet(OrderItems orderItems,Long shippingNum) {
 
         ShippingItem shippingItem = new ShippingItem();
 
         Long productCode = orderItems.getProductCode();
         Optional<Product> optionalProduct = productRepository.findById(productCode);
 
-        if(optionalProduct.isPresent()) {
+        if (optionalProduct.isPresent()) {
 
-         Product product = optionalProduct.get();
+            Product product = optionalProduct.get();
             shippingItem.setProductCode(product.getProductCode());
             shippingItem.setProductName(product.getProductName());
             shippingItem.setProductOption1(product.getProductOption1());
             shippingItem.setProductOption2(product.getProductOption2());
             shippingItem.setProductPrice(product.getProductPrice());
+            shippingItem.setShippingNum(shippingNum);
 
         }
-        return shippingItem;
+        return shippingItemRepository.save(shippingItem);
     }
-
-
 
 
 }

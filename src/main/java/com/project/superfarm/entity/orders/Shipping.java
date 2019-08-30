@@ -23,8 +23,8 @@ public class Shipping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shippingNum;
 
-//    @Column(name="order_num")
-//    private Long orderNum;
+    @Column(name="order_num")
+    private Long orderNum;
 
     @Column(name="tracking_number")
     private String trackingNum;
@@ -53,6 +53,10 @@ public class Shipping {
 
     @Column(name="shipping_reciever_phone")
     private String shippingRecieverPhone;
+
+    @Column(name="shipping_reciever_phone2")
+    private String shippingRecieverPhone2;
+
 
     @Column(name="shipping_memo")
     private String shippingMemo;

@@ -1,7 +1,6 @@
 package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.orders.Orders;
-import com.project.superfarm.entity.orders.OrdersShipping;
 import com.project.superfarm.model.OrderModel;
 import com.project.superfarm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -21,15 +19,19 @@ public class OrderController {
 
     @Transactional
     @PostMapping(
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+                        MediaType.APPLICATION_ATOM_XML_VALUE}
     )
-    public List<OrdersShipping> checkout(@RequestBody OrderModel orderModel){
+    public Orders checkout(@RequestBody OrderModel orderModel){
+
         System.out.println(orderModel.toString());
+        System.out.println(orderModel.getOrderItemsList().toString());
+
         return orderService.checkoutOrder(orderModel);
     }
 
     @Transactional
-    @PostMapping(path = "/user",
+    @GetMapping(path = "/user",
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
     public Orders loadOrderList(@RequestParam(name="num")Long num){

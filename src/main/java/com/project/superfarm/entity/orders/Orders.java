@@ -11,10 +11,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name="orders")
@@ -25,6 +23,7 @@ import java.util.Set;
 @ToString
 public class Orders implements Serializable {
 
+
     @Id
     @Column(name= "order_num",nullable = false,updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +31,6 @@ public class Orders implements Serializable {
 
     @Column(name="user_num",nullable = false, updatable = false)
     private Long userNum;
-
 
     @Column(name="order_record_bill")
     private String orderRecordBill;
@@ -54,22 +52,30 @@ public class Orders implements Serializable {
     @Column(name="order_memo")
     private String orderMemo;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "orders_shipping",
-            joinColumns = @JoinColumn(name = "order_num"),
-            inverseJoinColumns = @JoinColumn(name = "order_item_num")
-    )
-    private List<OrderItems> orderItemSet;
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "orders_shipping",
+//            joinColumns = @JoinColumn(name = "order_num"),
+//            inverseJoinColumns = @JoinColumn(name = "order_item_num")
+//    )
+//    private List<OrderItems> orderItemSet;
+//
+//
+//
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "orders_shipping",
+//            joinColumns = @JoinColumn(name = "order_num"),
+//            inverseJoinColumns = @JoinColumn(name = "shipping_num")
+//    )
+//    private List<Shipping> shippings;
 
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "orders_shipping",
-            joinColumns = @JoinColumn(name = "order_num"),
-            inverseJoinColumns = @JoinColumn(name = "shipping_num")
-    )
+    @OneToMany
+    @JoinColumn(name="order_num",referencedColumnName = "order_num")
     private List<Shipping> shippings;
 
+    @OneToMany
+    @JoinColumn(name="order_num",referencedColumnName = "order_num")
+    private List<OrderItems> orderItemSet;
 }

@@ -5,6 +5,7 @@ import com.project.superfarm.entity.board.QuestionBoard;
 import com.project.superfarm.repository.boardRepository.QuestionAnswerRepository;
 import com.project.superfarm.repository.boardRepository.QuestionBoardRepository;
 import com.project.superfarm.util.ExceptionList.UrlNoLoginAndNotMyself;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +33,9 @@ public class QuestionBoardService {
                 questionBoardRepository
                         .findAllByProductBoardNumAndQuestionBoardDeleted(productBoardNum,"false",pageable);
         if(questionBoards.getTotalPages()==0){
-            return null;
+
+            throw new UrlNotFountException();
+
         }else{
             return questionBoards;
         }

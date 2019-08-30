@@ -55,11 +55,7 @@ public class ProductBoardService {
 
         List<ProductBoard> productBoards=
                 productBoardRepository.findAllByLowerCodeAndProductBoardDeleted(lowerCode,"false");
-        if(productBoards.size()==0){
-            return null;
-        }else{
             return productBoards;
-        }
 
     }
 

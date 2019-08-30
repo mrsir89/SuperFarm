@@ -3,10 +3,11 @@ package com.project.superfarm.model.payment;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class KakaoPayApprovalVO {
+public class KakaoPayApprovalVO implements Serializable {
     
     //response
     private String aid, tid, cid, sid;
