@@ -115,6 +115,7 @@ public class QuestionBoardService {
         return questionBoardRepository.save(questionBoard);
 
     }
+
     @Transactional
     public QuestionBoard deletedQuestionBoard(QuestionBoard questionBoard){
         int result =
