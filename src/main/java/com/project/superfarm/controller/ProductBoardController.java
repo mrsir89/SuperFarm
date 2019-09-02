@@ -17,12 +17,11 @@ import java.util.List;
 
 
 /**
- * @apiNote : 제품 등록 게시판
- * @Url /product : /all,  추가
- * @brief : /upper 상위 카테고리로 검색
- * : /lower 하위 카테고리로 검색
- * : /search  검색
- **/
+ * @apiNote ProductBoard 관련
+ * @deprecated /productBoard   상품리스트 return
+ * /create          productBoard 생성 생성
+ * /details         상품 보드의 상세 정보
+ */
 @RestController
 @RequestMapping("/productBoard")
 public class ProductBoardController {
@@ -125,7 +124,6 @@ public class ProductBoardController {
         System.out.println("===============  시작    ========");
 
         if (upper.equals("null") && lower.equals("null") && search.equals("null")) {
-
             return productBoardService.findByAllProductBoard();
 
         } else if (upper != null && lower.equals("null") && search.equals("null")) {
@@ -133,7 +131,6 @@ public class ProductBoardController {
             int intUpper = 0;
 
             if (isNumber.isStringInteger(upper)) {
-
                 intUpper = Integer.parseInt(upper);
             }
             return productBoardService.findByUpperProductBoard(intUpper);
@@ -142,7 +139,6 @@ public class ProductBoardController {
 
             System.out.println("=======Lower =============");
             int intLower = 0;
-
             if (isNumber.isStringInteger(lower)) {
                 intLower = Integer.parseInt(lower);
             }
@@ -169,11 +165,11 @@ public class ProductBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
-    public ProductBoard loadProductDetail(@RequestParam(name = "num")String num) {
+    public ProductBoard loadProductDetail(@RequestParam(name = "num") String num) {
         System.out.println("===== 시작 ==============");
-        Long longNum =0L;
+        Long longNum = 0L;
         if (num != null) {
-            if(isNumber.isStringLong(num))
+            if (isNumber.isStringLong(num))
                 longNum = Long.parseLong(num);
             return productBoardService.loadProductDetails(longNum);
 
@@ -188,17 +184,33 @@ public class ProductBoardController {
      * @apiNote 메인 화면 베스트 상품 리턴
      */
     @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
-    @RequestMapping(value = "/main",
+    @RequestMapping(value = "/best",
             method = RequestMethod.POST,
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductListModel> loadMainProduct() {
+            produces = {
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public List<ProductListModel> loadMainProduct(
+            @RequestParam(name="main",defaultValue = "true")String main,
+            @RequestParam(name="lower",defaultValue = "null")String lower) {
+
+        if(main != null && lower.equals(null)){
+            return productBoardService.loadMainProduct();
+
+        }else{
+
+        }
 
         return productBoardService.loadMainProduct();
 
     }
 
-
+    /**
+     * todo:삭제 후 위의 bestMain과 합쳐질 예정
+     * @apiNote  카테고리 화면의 best 상품 product_best의 항목이 0보다 큰것을 return
+     * @param lower, main
+     * @return
+     */
     @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(value = "/bestLower",
             method = RequestMethod.POST,
