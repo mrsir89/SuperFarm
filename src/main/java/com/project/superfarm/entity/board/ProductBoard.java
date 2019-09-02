@@ -1,8 +1,6 @@
 package com.project.superfarm.entity.board;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.superfarm.entity.product.Product;
-import com.project.superfarm.model.ProductListModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -71,10 +69,6 @@ public class ProductBoard implements Serializable {
     @Column(name = "product_board_deleted")
     private String productBoardDeleted;
 
-
-    @Column(name = "product_price")
-    private Double productPrice;
-
     @Transient
     private String productTypeName;
 
@@ -83,16 +77,16 @@ public class ProductBoard implements Serializable {
     @JoinColumn(name = "product_board_num", referencedColumnName = "product_board_num")
     private List<Product> productList;
 
-    @Transient
-    public ProductListModel getProductListModel() {
-
-        ProductListModel productListModel = new ProductListModel(
-                productBoardNum, productBoardTitle, upperCode, lowerCode,
-                productPrice, productBoardThumbnail, productBoardBest
-        );
-
-        return productListModel;
-
-    }
+//    @Transient
+//    public ProductListModel getProductListModel() {
+//
+//        ProductListModel productListModel = new ProductListModel(
+//                productBoardNum, productBoardTitle, upperCode, lowerCode,
+//                productPrice, productBoardThumbnail, productBoardBest
+//        );
+//
+//        return productListModel;
+//
+//    }
 
 }

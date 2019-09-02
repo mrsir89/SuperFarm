@@ -44,11 +44,10 @@ public class CartController {
      * @see : java : Cart.java
      * DB : cart
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(method = RequestMethod.POST,
             produces = {
-                    MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE
+                    MediaType.APPLICATION_JSON_UTF8_VALUE
             })
     public List<Cart> loadUserCart(@RequestParam(name = "userNum") Long userNum) {
         System.out.println("cart 실행 ");
@@ -78,12 +77,11 @@ public class CartController {
      * @see : java : Cart.java
      * DB : cart
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(path = "/add",
             method = RequestMethod.POST,
             produces = {
-                    MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE
+                    MediaType.APPLICATION_JSON_UTF8_VALUE
             })
     public Cart addCartProduct(@RequestBody Cart cart) {
 
@@ -109,12 +107,13 @@ public class CartController {
      * @see : java : Cart.java
      * DB : cart
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(path = "/delete",
-            method = RequestMethod.DELETE)
+            method = RequestMethod.DELETE
+        )
     public Cart deleteCartProduct(@RequestParam(name = "cartNum") Long cartNum) {
 
-        if (cartNum != null || cartNum > 0) {
+        if (cartNum != null) {
             return cartService.deleteCart(cartNum);
 
         } else
@@ -132,9 +131,10 @@ public class CartController {
      * @see : java : Cart.java
      * DB : cart
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(path = "/deleteAll",
-            method = RequestMethod.DELETE)
+            method = RequestMethod.DELETE
+        )
     public void deleteCartProductAll(@RequestParam(name = "userNum") Long userNum) {
 
         if (userNum != null) {
@@ -155,9 +155,11 @@ public class CartController {
      * @see : Java Cart.jva
      * DB: cart
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(path = "/edit",
-            method = RequestMethod.PATCH)
+            method = RequestMethod.PATCH,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE
+        )
     public List<Cart> cartProductEdit(@RequestBody Cart cart) {
 
         if (cart != null) {

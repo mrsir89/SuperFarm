@@ -26,40 +26,17 @@ public interface ProductBoardRepository extends JpaRepository<ProductBoard, Long
     @Query(value = "SELECT * FROM product_board WHERE product_board_best >0 AND product_board_deleted ='false' ORDER BY product_board_best ASC", nativeQuery = true)
     List<ProductBoard> findMainProduct();
 
-    @Query(value = "SELECT board.*, " +
-            "(SELECT MIN(product.product_price) FROM product_board board LEFT JOIN product USING(product_board_num)) product_price " +
-            "FROM product_board board " +
-            "LEFT JOIN product USING(product_board_num) " +
-            "WHERE board.lower_code = ?1 AND product_board_deleted = false " +
-            "GROUP BY product_board_num ", nativeQuery = true)
-    List<ProductBoard> findByLowerProductBoard(Integer lower);
 
 
-    @Query(value = "SELECT board.*, " +
-            "(SELECT MIN(product.product_price) FROM product_board board LEFT JOIN product USING(product_board_num)) product_price " +
-            "FROM product_board board " +
-            "LEFT JOIN product USING(product_board_num) " +
-            "WHERE board.upper_code = ?1 AND product_board_deleted = false " +
-            "GROUP BY product_board_num ", nativeQuery = true)
-    List<ProductBoard> findByUpperProductBoard(Integer upper);
 
-    @Query(value = "SELECT board.*, " +
-            "(SELECT MIN(product.product_price) FROM product_board board LEFT JOIN product USING(product_board_num)) product_price " +
-            "FROM product_board board " +
-            "LEFT JOIN product USING(product_board_num) " +
-            "WHERE product_board_deleted = false AND product_Board_title LIKE %:search% OR product_board_tag LIKE %:search% OR " +
-            "product.product_name LIKE %:search% " +
-            "GROUP BY product_board_num ", nativeQuery = true)
-    List<ProductBoard> findBySearchProductBoard(@Param("search") String search);
-
-
-    // 관리자용 전체 불러 오기
-    @Query(value = "SELECT board.*, " +
-            "(SELECT MIN(product.product_price) FROM product_board board LEFT JOIN product USING(product_board_num)) product_price " +
+    ///test
+    @Query(value = "SELECT board.*," +
+            "(SELECT MIN(product.product_price) FROM product_board innerboard LEFT JOIN product USING(product_board_num)  " +
+            "WHERE board.product_board_num = product.product_board_num ) product_price " +
             "FROM product_board board " +
             "LEFT JOIN product USING(product_board_num) " +
             "GROUP BY product_board_num ", nativeQuery = true)
-    List<ProductBoard> findByAllProductBoard();
+    List<ProductBoard> findByAllTest();
 
 
 }

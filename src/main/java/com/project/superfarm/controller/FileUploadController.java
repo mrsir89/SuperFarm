@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
 @RestController
 @RequestMapping("/storage")
 public class FileUploadController {
@@ -38,36 +37,39 @@ public class FileUploadController {
     private FileStorageService fileStorageService;
 
     @Transactional
-    @PostMapping(value = "/file", produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-                                                MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
+    @PostMapping(value = "/file", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE})
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,
-                                         @RequestParam("reviewBoardNum")Long reviewBoardNum,
+                                         @RequestParam("reviewBoardNum") Long reviewBoardNum,
                                          HttpServletRequest request, Principal principal) {
 
-        System.out.println("file 업로드 테스트 "+request.toString());
-        String replaceFileName = fileStorageService.storeFile(file, request, principal,reviewBoardNum);
+        System.out.println("file 업로드 테스트 " + request.toString());
+        String replaceFileName = fileStorageService.storeFile(file, request, principal, reviewBoardNum);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/storage/files/")
                 .path(replaceFileName)
                 .toUriString();
 
-        reviewBoardService.reviewBoardImgUpload(reviewBoardNum,fileDownloadUri);
+        reviewBoardService.reviewBoardImgUpload(reviewBoardNum, fileDownloadUri);
         // header에 accept : application/json 해줘야 함
         return new UploadFileResponse(file.getOriginalFilename(), replaceFileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
+
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @PostMapping(value = "/files")
     public List<UploadFileResponse> uploadFiles(@RequestParam("files") MultipartFile[] files,
-                                                @RequestParam("reviewBoardNum")Long reviewBoardNum,
+                                                @RequestParam("reviewBoardNum") Long reviewBoardNum,
                                                 HttpServletRequest request, Principal principal) {
         return Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file,reviewBoardNum, request, principal))
+                .map(file -> uploadFile(file, reviewBoardNum, request, principal))
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('GUEST,customer,PRODUCT_BUY')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @GetMapping("/files/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
@@ -82,7 +84,7 @@ public class FileUploadController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 

@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     // 테스트 용으로 ADMIN도 넣어 둠
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     @Transactional
     @RequestMapping(path = "/user",
             method = RequestMethod.POST,
@@ -47,6 +47,7 @@ public class OrderController {
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
     public Orders loadOrderList(@RequestParam(name = "num") Long num) {
+
         System.out.println("order List Num " + num);
 
         return orderService.loadOrderList(num);

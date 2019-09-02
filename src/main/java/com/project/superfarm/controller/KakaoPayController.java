@@ -19,7 +19,7 @@ public class KakaoPayController {
     private KaKaoPay kaKaopay;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @PostMapping(path = "/kakaoPay")
     public KaKaoPayReadyVO kakaoPay(@RequestBody OrderSend orderSend) {
         log.info("kakaoPay post ...............................");
@@ -28,7 +28,7 @@ public class KakaoPayController {
         return kaKaopay.kakaoPayReady(orderSend);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @PostMapping("/kakaoPaySuccess")
     public KakaoPayApprovalVO kakaoPaySuccess(@RequestBody KakaopayResult kakaopayResult) {
         log.info("kakaoPaySuccess get....................................");

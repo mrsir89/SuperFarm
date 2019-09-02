@@ -25,7 +25,7 @@ public class NoticeBoardController {
     @Autowired
     private NoticeBoardService noticeBoardService;
 
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(
             method= RequestMethod.POST,
             produces = {

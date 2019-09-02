@@ -29,7 +29,7 @@ public class FrequentlyAskedController {
      * @return ResultItems<FrequentlyAskedQuestionBoard>
      * @apiNote FAQ 보드 LOAD API
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(
             method = RequestMethod.POST,
             produces = {

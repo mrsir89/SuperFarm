@@ -22,7 +22,7 @@ import java.util.List;
                         : /name  제품명으로 검색
  **/
 @RestController
-@RequestMapping("/product/item")
+@RequestMapping("/product")
 public class ProductController {
 
 
@@ -64,7 +64,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('GUEST')")
     @RequestMapping(path="/all",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.GET,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
@@ -84,15 +84,16 @@ public class ProductController {
      * @return      : JSON
      *              : /all return과 같다
      */
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(path="/lower",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
     public List<Product> loadItemFromLowerCategory(@RequestParam(name="lower") Integer lower){
 
-        if(lower != null || lower >0) {
+        if(lower != null ) {
             return productItemService.fromLowerCategory(lower);
 
         }else
@@ -110,15 +111,16 @@ public class ProductController {
      *              : /all return 과 같다.
     */
 
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(path="/upper",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
     public List<Product> loadItemFromUpperCategory(@RequestParam(name="upper") Integer upper){
 
-        if(upper != null || upper >0) {
+        if(upper != null) {
             return productItemService.fromLowerCategory(upper);
 
         }else
@@ -137,12 +139,13 @@ public class ProductController {
      *              : /all return 과 같다.
      */
 
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(path="/name",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
     public List<Product> loadFindItemName(@RequestParam(name="name") String name){
 
         if(name != null) {

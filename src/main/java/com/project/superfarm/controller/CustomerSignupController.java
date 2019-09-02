@@ -66,7 +66,7 @@ public class CustomerSignupController {
      *
      *
     */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(
             method = RequestMethod.POST,
             produces = {
@@ -91,7 +91,7 @@ public class CustomerSignupController {
      * @param    : String email
      * @return   : Success( 200 ok ) / NotFoundException
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(value="/emailCheck",
             method = RequestMethod.POST,
             produces = {
@@ -116,7 +116,7 @@ public class CustomerSignupController {
      * @param    : string id
      * @return   : Success( 200 ok ) / NotFoundException
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(value="/idCheck",
             method = RequestMethod.POST,
             produces = {

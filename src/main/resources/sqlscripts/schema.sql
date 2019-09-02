@@ -1,9 +1,9 @@
 
-	#### Start Project Market ver 2.6  2019.08.26
+	#### Start Project Market ver 2.7  2019.09.02
 	### 데이터 베이스 생성 및 유저 생성
 
-    ##   2019.08.26
-    ## orders 테이블 변화 NOTICEBOARD FAQBOARD 테이블 추가
+    ##   2019.09.02
+    ## 통계를 위한 테이블 추가 product_inventory 수정 month_selling 추가
 
 -- 	DROP USER IF EXISTS `bitmaster`;
 
@@ -274,18 +274,18 @@ DROP TABLE IF EXISTS farmer;
 	;
 
 	INSERT INTO `roles` VALUE
-	  ('manager_master', 'ROLE_MANAGER', NULL)
-	, ('customer', 'ROLE_CUSTOMER', NULL)
-	, ('guest','ROLE_GUEST',NULL)
+	  ('ADMIN', 'ROLE_ADMIN', NULL)
+	, ('CUSTOMER', 'ROLE_CUSTOMER', NULL)
+	, ('GUEST','ROLE_GUEST',NULL)
     ;
 
 	INSERT INTO `role_privileges` VALUE
-	  ('manager_master', 'product_read')
-	, ('manager_master', 'product_buy')
-	, ('manager_master', 'manager_all')
-	, ('customer', 'product_read')
-	, ('customer', 'product_buy')
-	, ('guest', 'product_read')
+	  ('ADMIN', 'product_read')
+	, ('ADMIN', 'product_buy')
+	, ('ADMIN', 'manager_all')
+	, ('CUSTOMER', 'product_read')
+	, ('CUSTOMER', 'product_buy')
+	, ('GUEST', 'product_read')
 	;
 
 
@@ -445,11 +445,27 @@ ALTER TABLE product AUTO_INCREMENT = 100; -- 초기값 얼마?????????
 ## 제품의 재고 테이블
 	CREATE TABLE IF NOT EXISTS product_inventory(
     product_code 			BIGINT UNIQUE NOT NULL,
-    product_stock			INTEGER,
-    product_total_sales		INTEGER,
+    product_stock			INTEGER DEFAULT 0,
+    product_total_sales		INTEGER DEFAULT 0,
+    product_refund_count	INTEGER DEFAULT 0,
+    product_type_code		BIGINT,
 
-    FOREIGN KEY(product_code) REFERENCES product(product_code)
+
+    FOREIGN KEY(product_code) REFERENCES product(product_code),
+    FOREIGN KEY(product_type_code) REFERENCES product_type(product_type_code)
 )ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
+
+CREATE TABLE IF NOT EXISTS stock_log(
+product_code			BIGINT PRIMARY KEY,
+product_add_stock		BIGINT NOT NULL,
+product_add_date		DATETIME,
+product_type_code		BIGINT,
+
+
+FOREIGN KEY(product_code) REFERENCES product(product_code),
+FOREIGN KEY(product_type_code) REFERENCES product_type(product_type_code)
+)ENGINE='InnoDB' CHARACTER SET 'UTF8';
 
 
 ## 리뷰 게시판 테이블
@@ -506,6 +522,7 @@ order_sell_date				DATETIME,  -- 구매 날짜
 payment_method				VARCHAR(20) NOT NULL,
 order_total_price			DECIMAL(18,5) NOT NULL,
 order_memo					VARCHAR(1000), -- 주문에 대한 메모,
+order_payment_status		VARCHAR(10) DEFAULT '결제완료' CHECK(order_payment_Status IN('결제완료','결제취소')),
 
 FOREIGN KEY (user_num) REFERENCES users(user_num)
 )ENGINE ='InnoDB' CHARACTER SET 'UTF8';
@@ -527,7 +544,6 @@ FOREIGN KEY(order_num) REFERENCES orders(order_num),
 FOREIGN KEY(product_code) REFERENCES product(product_code)
 )ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
 
-
 ## 주문에 대한 배송 테이블
 CREATE TABLE IF NOT EXISTS shipping(
 shipping_num				BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -541,6 +557,7 @@ shipping_status				VARCHAR(10),
 shipping_arrivel_date		DATE,
 shipping_reciever			VARCHAR(20) NOT NULL,
 shipping_reciever_phone		VARCHAR(20) NOT NULL,
+shipping_reciever_phone2	VARCHAR(20) NOT NULL,
 shipping_memo				VARCHAR(100),
 
 FOREIGN KEY(order_num) REFERENCES orders(order_num)
@@ -606,7 +623,7 @@ notice_views         	BIGINT
 
 -- 날짜만 시간은 관리 용도로,
 CREATE TABLE IF NOT EXISTS faq_board(
-faq_board            	BIGINT PRIMARY KEY AUTO_INCREMENT,
+faq_board_num           BIGINT PRIMARY KEY AUTO_INCREMENT,
 faq_writer_num          BIGINT ,
 faq_question			VARCHAR(100),
 faq_answer				VARCHAR(2000),
@@ -617,7 +634,9 @@ faq_deleted          	CHAR(5) CHECK(faq_deleted IN('true','false'))
 
 )ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
 
-
-SELECT * FROM orders_shipping;
-
-
+CREATE TABLE IF NOT EXISTS month_selling(
+month_code				BIGINT PRIMARY KEY AUTO_INCREMENT,
+month_date				DATE,
+month_sales				INTEGER,
+month_refund			INTEGER
+) ENGINE = 'InnoDB' CHARACTER SET 'UTF8';

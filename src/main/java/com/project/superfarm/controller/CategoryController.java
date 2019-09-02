@@ -58,7 +58,7 @@ public class CategoryController {
      * },
      * `http://localhost:8080/product/lower?lower=${lower.num}`
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(
             method = RequestMethod.POST,
             produces = {

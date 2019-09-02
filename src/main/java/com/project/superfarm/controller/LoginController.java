@@ -53,7 +53,7 @@ public class LoginController {
      * @see : jave :  customer.java,Cart.java
      * DB   : Users , Customer, Cart
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(
             value = "/me",
             method = RequestMethod.POST,
@@ -75,9 +75,9 @@ public class LoginController {
      * @param   customerEdit
      * @return
      */
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     @RequestMapping(value = "/edit",
-            method = RequestMethod.POST,
+            method = RequestMethod.PATCH,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
