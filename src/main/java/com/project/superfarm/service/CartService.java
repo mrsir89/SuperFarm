@@ -54,7 +54,9 @@ public class CartService {
 
     public void deleteAllCart(Long userNum){
 
-//        cartRepository.deleteAllByUserNum(userNum);
+        cartRepository.delAllUserCart(userNum);
+
+//        System.out.println(result+" 삭제 유무 확인 ");
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package com.project.superfarm.controller;
 
-import com.project.superfarm.entity.board.ReviewBoard;
 import com.project.superfarm.service.FileStorageService;
 import com.project.superfarm.service.ReviewBoardService;
 import com.project.superfarm.util.file.UploadFileResponse;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.beans.Transient;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;

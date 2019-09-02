@@ -70,11 +70,12 @@ public class Orders implements Serializable {
 //    )
 //    private List<Shipping> shippings;
 
-
+    @Transient
     @OneToMany
     @JoinColumn(name="order_num",referencedColumnName = "order_num")
     private List<Shipping> shippings;
 
+    @Transient
     @OneToMany
     @JoinColumn(name="order_num",referencedColumnName = "order_num")
     private List<OrderItems> orderItemSet;

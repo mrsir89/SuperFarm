@@ -89,7 +89,7 @@ public class QuestionBoardController {
 
     @PreAuthorize("hasRole('GUEST')")
     @RequestMapping(path="/product",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = {RequestMethod.POST,RequestMethod.GET},
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
@@ -100,12 +100,15 @@ public class QuestionBoardController {
             @RequestParam (name="sort", defaultValue = "questionBoardNum",required = false)String sort){
         Pageable pageable = PageRequest.of(page-1,size,Sort.by(sort).descending());
         System.out.println("----------- page"+page);
-        if(productNum != null) {
+        System.out.println(" question board 실행 요~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"+productNum);
+//        if(productNum != null) {
+            if(true){
             Page<QuestionBoard> questionBoards=
                     questionBoardService.loadFromProductBoard(productNum,pageable);
 
             if(questionBoards==null){
-                throw new UrlNotFountException();
+
+                return new ResultItems<QuestionBoard>();
 
             }
             else{
@@ -115,7 +118,7 @@ public class QuestionBoardController {
                 return questionBoardResultItems;
             }
         }else
-            throw new UrlNotFountException();
+            return new ResultItems<QuestionBoard>();
     }
 
 

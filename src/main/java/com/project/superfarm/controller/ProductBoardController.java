@@ -1,6 +1,7 @@
 package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.board.ProductBoard;
+import com.project.superfarm.model.ProductListModel;
 import com.project.superfarm.service.ProductBoardService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ import java.util.List;
 
 
 /**
-             @apiNote      : 제품 등록 게시판
-             @Url /product : /all,  추가
-             @brief        : /upper 상위 카테고리로 검색
-                           : /lower 하위 카테고리로 검색
-                           : /search  검색
+ * @apiNote : 제품 등록 게시판
+ * @Url /product : /all,  추가
+ * @brief : /upper 상위 카테고리로 검색
+ * : /lower 하위 카테고리로 검색
+ * : /search  검색
  **/
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/productBoard")
 public class ProductBoardController {
 
     @Autowired
@@ -110,83 +111,40 @@ public class ProductBoardController {
      *     },
      *
      */
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
     @RequestMapping(value = "/all",
-                    method = {RequestMethod.POST,RequestMethod.GET},
-                    produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-                                 MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardAll(){
+            method = {RequestMethod.POST, RequestMethod.GET},
+            produces = {
+                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public List<ProductBoard> loadProductBoardAll(
+            @RequestParam(name ="upper",defaultValue = "null",required = false)Integer upper,
+            @RequestParam(name="lower",defaultValue = "null", required = false)Integer lower,
+            @RequestParam(name="search",defaultValue = "null",required = false)String search){
 
-        return productBoardService.loadProductBoardAll();
-    }
+        if(upper ==null && lower == null && search ==null){
 
-    /**
-     * @apiNote   : 상위 카테고리에 등록되어있는 모든 productBoard 리턴
-     * @Url       : /product/upper
-     * @See       : java : ProductBoard.java, QuestionBoard.java , QuestionAnswer.java, ReviewBoard.java\n
-     *              DB   : product_board, question_board, question_answer, review_bard
-     * @param     : int upper
-     * @return    : Json  /all 과 같은 타입
-     */
-    @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(path = "/upper",
-            method = {RequestMethod.POST,RequestMethod.GET},
-            produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardUpper(@RequestParam Integer upper){
+            return productBoardService.loadProductBoardAll();
 
-        if(upper != null || upper > 0) {
+        }else if(upper != null && lower == null && search == null){
+
             return productBoardService.loadProductBoardUpper(upper);
 
-        }else
-            throw new UrlNotFountException();
-    }
+        }else if(lower != null && upper == null && search == null){
 
-
-    /**
-     * @apiNote   : 하위 카테고리에 등록되어있는 모든 productBoard 리턴
-     * @Url       : /product/lower
-     * @See       : java : ProductBoard.java, QuestionBoard.java , QuestionAnswer.java, ReviewBoard.java\n
-     *              DB   : product_board, question_board, question_answer, review_bard
-     * @param     : int lower
-     * @return    : Json  /all 과 같은 타입
-     */
-    @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(path = "/lower",
-            method = {RequestMethod.POST,RequestMethod.GET},
-            produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardLower(@RequestParam(name="lower") Integer lower){
-
-        if(lower != null || lower > 0) {
             return productBoardService.loadProductBoardLower(lower);
 
-        }else
-            return null;
-    }
+        }else{
 
-    /**
-     * @apiNote   : title / tag / productName 안에 검색 하여 결과값을 리턴
-     * @Url       : /product/search
-     * @See       : java : ProductBoard.java, QuestionBoard.java , QuestionAnswer.java, ReviewBoard.java\n
-     *              DB   : product_board, question_board, question_answer, review_bard
-     * @param     : String search
-     * @return    : Json  /all 과 같은 타입
-     */
-    @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(value = "/search",
-            method = {RequestMethod.POST,RequestMethod.GET},
-            produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE})
-    public List<ProductBoard> loadProductBoardSearch(String search){
-
-        if(search != null) {
             return productBoardService.loadProductBoardSearch(search);
 
-        }else
-            throw new UrlNotFountException();
+        }
+
 
     }
+
+//
 
     /**
      * @apiNote productBoard의 상세 정보 단1개만 들어 있는 정보를 return
@@ -194,7 +152,7 @@ public class ProductBoardController {
      * @return
      * @throws ClassNotFoundException
      */
-    @PreAuthorize("hasRole('Guest')")
+    @PreAuthorize("hasAnyRole('Guest','customer')")
     @RequestMapping(value="/productDetail",
             method={RequestMethod.POST,RequestMethod.GET},
             produces={ MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -209,4 +167,115 @@ public class ProductBoardController {
 
     }
 
+    /**
+     * @apiNote 메인 화면 베스트 상품 리턴
+     * @param
+     * @return productBoard
+     *
+     */
+    @PreAuthorize("hasAnyRole('Guest','customer')")
+    @RequestMapping(value="/main",
+        method = RequestMethod.POST,
+        produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_ATOM_XML_VALUE})
+    public List<ProductBoard> loadMainProduct(){
+        return productBoardService.loadMainProduct();
+    }
+
+
+    @PreAuthorize("hasAnyRole('Guest','customer')")
+    @RequestMapping(value="/bestLower",
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_ATOM_XML_VALUE})
+    public ProductBoard loadLowerBestProduct(@RequestParam(name="lower")Long lower){
+        return productBoardService.loadLowerBestProduct(lower);
+    }
+
+    @PreAuthorize("hasAnyRole('Guest','customer')")
+    @RequestMapping(value="/test",
+            method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+                    MediaType.APPLICATION_ATOM_XML_VALUE})
+    public List<ProductListModel> loadProductBoard(@RequestParam(name="lower")Integer lower){
+        return productBoardService.findByLowerProductBoard(lower);
+    }
+
 }
+
+
+
+//
+//
+//    /**
+//     * @apiNote   : title / tag / productName 안에 검색 하여 결과값을 리턴
+//     * @Url       : /product/search
+//     * @See       : java : ProductBoard.java, QuestionBoard.java , QuestionAnswer.java, ReviewBoard.java\n
+//     *              DB   : product_board, question_board, question_answer, review_bard
+//     * @param     : String search
+//     * @return    : Json  /all 과 같은 타입
+//     */
+//    @PreAuthorize("hasAnyRole('Guest','customer')")
+//    @RequestMapping(value = "/search",
+//            method = {RequestMethod.POST,RequestMethod.GET},
+//            produces = {
+//                MediaType.APPLICATION_JSON_UTF8_VALUE,
+//                MediaType.APPLICATION_ATOM_XML_VALUE
+//    })
+//    public List<ProductBoard> loadProductBoardSearch(String search){
+//
+//        if(search != null) {
+//            return productBoardService.loadProductBoardSearch(search);
+//
+//        }else
+//            throw new UrlNotFountException();
+//
+//    }
+
+
+/**
+ //     * @apiNote   : 상위 카테고리에 등록되어있는 모든 productBoard 리턴
+ //     * @Url       : /product/upper
+ //     * @See       : java : ProductBoard.java, QuestionBoard.java , QuestionAnswer.java, ReviewBoard.java\n
+ //     *              DB   : product_board, question_board, question_answer, review_bard
+ //     * @param     : int upper
+ //     * @return    : Json  /all 과 같은 타입
+ //     */
+//    @PreAuthorize("hasAnyRole('Guest','customer')")
+//    @RequestMapping(path = "/upper",
+//            method = RequestMethod.POST,
+//            produces = {
+//                    MediaType.APPLICATION_JSON_UTF8_VALUE,
+//                    MediaType.APPLICATION_ATOM_XML_VALUE
+//            })
+//    public List<ProductBoard> loadProductBoardUpper(@RequestParam Integer upper) {
+//
+//        if(upper != null || upper > 0) {
+//            return productBoardService.loadProductBoardUpper(upper);
+//
+//        }else
+//            throw new UrlNotFountException();
+//    }
+//
+//
+//    /**
+//     * @apiNote   : 하위 카테고리에 등록되어있는 모든 productBoard 리턴
+//     * @Url       : /product/lower
+//     * @See       : java : ProductBoard.java, QuestionBoard.java , QuestionAnswer.java, ReviewBoard.java\n
+//     *              DB   : product_board, question_board, question_answer, review_bard
+//     * @param     : int lower
+//     * @return    : Json  /all 과 같은 타입
+//     */
+//    @PreAuthorize("hasAnyRole('Guest','customer')")
+//    @RequestMapping(path = "/lower",
+//            method = {RequestMethod.POST,RequestMethod.GET},
+//            produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+//                    MediaType.APPLICATION_ATOM_XML_VALUE})
+//    public List<ProductBoard> loadProductBoardLower(@RequestParam(name="lower") Integer lower){
+//
+//        if(lower != null || lower > 0) {
+//            return productBoardService.loadProductBoardLower(lower);
+//
+//        }else
+//            return null;
+//    }

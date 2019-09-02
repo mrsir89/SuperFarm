@@ -114,8 +114,8 @@ public class OrderService {
 
             Optional<Orders> resultOrder = ordersRepository.findById(ordersNum);
             if (resultOrder.isPresent()) {
-
-                return resultOrder.get();
+                Orders result = resultOrder.get();
+                return result;
             } else {
 
                 return null;

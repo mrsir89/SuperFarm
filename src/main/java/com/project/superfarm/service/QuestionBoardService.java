@@ -32,21 +32,9 @@ public class QuestionBoardService {
         Page<QuestionBoard> questionBoards =
                 questionBoardRepository
                         .findAllByProductBoardNumAndQuestionBoardDeleted(productBoardNum,"false",pageable);
-        if(questionBoards.getTotalPages()==0){
-
-            throw new UrlNotFountException();
-
-        }else{
             return questionBoards;
-        }
     }
-    public Page<QuestionBoard> testttt(Pageable pageable){
 
-       Page<QuestionBoard> qqq = questionBoardRepository
-               .findAllByProductBoardNumAndQuestionBoardDeletedAndQuestionAnswer_AnswerDeleted(
-                       5L,"false","false",pageable);
-       return qqq;
-    }
 
 
     // UserId으로 검색 하면서 deleted가 false인 것들만

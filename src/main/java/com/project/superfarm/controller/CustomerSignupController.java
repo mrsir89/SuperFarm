@@ -66,7 +66,7 @@ public class CustomerSignupController {
      *
      *
     */
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
     @RequestMapping(
             method = RequestMethod.POST,
             produces = {
@@ -91,12 +91,13 @@ public class CustomerSignupController {
      * @param    : String email
      * @return   : Success( 200 ok ) / NotFoundException
      */
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
     @RequestMapping(value="/emailCheck",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
     public String overlapEmail(@RequestParam(name="email") String email ){
 
         if(!ObjectUtils.isEmpty(email)) {
@@ -115,12 +116,13 @@ public class CustomerSignupController {
      * @param    : string id
      * @return   : Success( 200 ok ) / NotFoundException
      */
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
     @RequestMapping(value="/idCheck",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
     public String overlapId(@RequestParam(name="id") String id ){
 
         if(!ObjectUtils.isEmpty(id)) {
@@ -137,20 +139,6 @@ public class CustomerSignupController {
     public void fakeAsyncAction(){
 
     }
-
-
-
-//
-//    @PreAuthorize("hasRole('GUEST')")
-//    @RequestMapping(path="/phoneCheck",
-//            method = {RequestMethod.GET,RequestMethod.POST},
-//            produces = {
-//                    MediaType.APPLICATION_JSON_UTF8_VALUE,
-//                    MediaType.APPLICATION_ATOM_XML_VALUE })
-//    public boolean overlapPhoneNumber(@RequestParam String phoneNumber ){
-//
-//        return  signupService.overlapPhone(phoneNumber);
-//    }
 
 
 
