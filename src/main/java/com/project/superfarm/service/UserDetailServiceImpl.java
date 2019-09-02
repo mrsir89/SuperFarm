@@ -8,7 +8,7 @@ import com.project.superfarm.model.CustomerEdit;
 import com.project.superfarm.repository.userRepository.AdminsRepository;
 import com.project.superfarm.repository.userRepository.CustomerRepository;
 import com.project.superfarm.repository.userRepository.UsersRepository;
-import com.project.superfarm.util.UrlNotFountException;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

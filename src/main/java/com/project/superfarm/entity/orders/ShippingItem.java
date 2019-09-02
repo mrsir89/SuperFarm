@@ -4,11 +4,11 @@ package com.project.superfarm.entity.orders;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,11 +16,13 @@ import java.util.Date;
 @Table(name="shipping_item")
 @Setter
 @Getter
+@DynamicInsert
+@DynamicUpdate
 @ToString
 public class ShippingItem implements Serializable {
 
     @Id
-    @Column(name="shipping_num")
+    @Column(name="shipping_num",nullable = false,updatable = false)
     private Long shippingNum;
 
     @Column(name="product_code")
@@ -39,6 +41,12 @@ public class ShippingItem implements Serializable {
     private Double productPrice;
 
     @Column(name="order_sell_date")
+    @CreationTimestamp
     private Date orderSellDate;
+
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name="product_code",referencedColumnName = "product_code",
+//            insertable = false, updatable = false)
+//    private Product product;
 
 }

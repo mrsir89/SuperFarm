@@ -4,6 +4,8 @@ import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
 import com.project.superfarm.model.SignupCustomer;
 import com.project.superfarm.service.CustomerSignupService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,7 +66,7 @@ public class CustomerSignupController {
      *
      *
     */
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(
             method = RequestMethod.POST,
             produces = {
@@ -73,63 +75,70 @@ public class CustomerSignupController {
 
             })
     public Users<Customer> joinCreate(@RequestBody SignupCustomer signupCustomer) {
-        System.out.println("=============회원 가입 시작 ============");
+        System.out.println(signupCustomer.toString());
+        if(!ObjectUtils.isEmpty(signupCustomer)) {
+            return customerSignupService.singupCutomer(signupCustomer);
 
-        return customerSignupService.singupCutomer(signupCustomer);
+        }else
+            throw new UrlNotFountException();
     }
 
 
     /**
-     * Todo      : 프론트중복 처리 String ->  status 에러로 변경 하기
+     * Todo      : 프론트중복 처리 String ->  status 에러로 변경 하기 !완료!
      * @apiNote  : param으로 들어 오는 email 중복처리
      * @Url      : /signup/emailCheck
      * @param    : String email
-     * @return   : True / false
+     * @return   : Success( 200 ok ) / NotFoundException
      */
-    @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(path="/emailCheck",
-            method = {RequestMethod.GET,RequestMethod.POST},
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
+    @RequestMapping(value="/emailCheck",
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
-    public String overlapEmail(@RequestParam String email ){
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public String overlapEmail(@RequestParam(name="email") String email ){
 
-        return  customerSignupService.overlapEmail(email);
+        if(!ObjectUtils.isEmpty(email)) {
+            return customerSignupService.overlapEmail(email);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 
 
     /**
-     * Todo : 프론트중복 처리 String ->  status 에러로 변경 하기
+     * Todo : 프론트중복 처리 String ->  status 에러로 변경 하기 !완료!
      * @apiNote  : param으로 들어 오는 id 중복처리
      * @Url      : /signup/idCheck
      * @param    : string id
-     * @return   : True / false
+     * @return   : Success( 200 ok ) / NotFoundException
      */
-    @PreAuthorize("hasRole('GUEST')")
-    @RequestMapping(path="/idCheck",
-            method = {RequestMethod.GET,RequestMethod.POST},
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
+    @RequestMapping(value="/idCheck",
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
-    public String overlapId(@RequestParam String id ){
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public String overlapId(@RequestParam(name="id") String id ){
 
-        return  customerSignupService.overlapId(id);
+        if(!ObjectUtils.isEmpty(id)) {
+            return customerSignupService.overlapId(id);
+
+        }else
+            throw new UrlNotFountException();
     }
 
+    /**
+     * @apiNote FAKE API 리액트에서 비동기를 동기로 처리 하기 위해서 만듬
+     */
+    @PostMapping(value="/asyncAction")
+    public void fakeAsyncAction(){
 
-
-//
-//    @PreAuthorize("hasRole('GUEST')")
-//    @RequestMapping(path="/phoneCheck",
-//            method = {RequestMethod.GET,RequestMethod.POST},
-//            produces = {
-//                    MediaType.APPLICATION_JSON_UTF8_VALUE,
-//                    MediaType.APPLICATION_ATOM_XML_VALUE })
-//    public boolean overlapPhoneNumber(@RequestParam String phoneNumber ){
-//
-//        return  signupService.overlapPhone(phoneNumber);
-//    }
+    }
 
 
 

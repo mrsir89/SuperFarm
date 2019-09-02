@@ -4,13 +4,14 @@ import com.project.superfarm.entity.board.QuestionAnswer;
 import com.project.superfarm.entity.board.QuestionBoard;
 import com.project.superfarm.repository.boardRepository.QuestionAnswerRepository;
 import com.project.superfarm.repository.boardRepository.QuestionBoardRepository;
+import com.project.superfarm.util.ExceptionList.UrlNoLoginAndNotMyself;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -31,19 +32,9 @@ public class QuestionBoardService {
         Page<QuestionBoard> questionBoards =
                 questionBoardRepository
                         .findAllByProductBoardNumAndQuestionBoardDeleted(productBoardNum,"false",pageable);
-        if(questionBoards.getTotalPages()==0){
-            return null;
-        }else{
             return questionBoards;
-        }
     }
-    public Page<QuestionBoard> testttt(Pageable pageable){
 
-       Page<QuestionBoard> qqq = questionBoardRepository
-               .findAllByProductBoardNumAndQuestionBoardDeletedAndQuestionAnswer_AnswerDeleted(
-                       5L,"false","false",pageable);
-       return qqq;
-    }
 
 
     // UserId으로 검색 하면서 deleted가 false인 것들만
@@ -99,14 +90,35 @@ public class QuestionBoardService {
             return null;
         }
     }
+
+    /**
+     * @apiNote QnA 게시판 댓글을 softDelete
+     * @param questionAnswer
+     * @return QuestionBoard
+     * @throws ClassNotFoundException
+     */
     @Transactional
-    public QuestionBoard deletedAnswer(QuestionAnswer questionAnswer){
-        int result =
-                questionAnswerRepository.deleteAnswer(questionAnswer.getAnswerNum());
-        if(result==1){
-            return loadQuestionBoard(questionAnswer.getQuestionBoardNum());
-        }else
-            return null;
+    public QuestionBoard deletedAnswer(QuestionAnswer questionAnswer) {
+
+        String requestId = questionAnswer.getAnswerWriter();
+        Long requestBoardNum = questionAnswer.getAnswerNum();
+        System.out.println(questionAnswer.toString());
+        Optional<QuestionAnswer> check = questionAnswerRepository.findById(requestBoardNum);
+
+        String originUserId = check.get().getAnswerWriter();
+
+        if(requestId.equals(originUserId)) {
+            int result =
+                    questionAnswerRepository.deleteAnswer(requestBoardNum);
+            if (result == 1) {
+                return loadQuestionBoard(requestBoardNum);
+            } else
+                throw new UrlNoLoginAndNotMyself();
+        }else{
+            throw new UrlNoLoginAndNotMyself();
+        }
+
+
     }
 
     @Transactional
@@ -116,6 +128,10 @@ public class QuestionBoardService {
 
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b834c64079924526926ad4cccc1eb9dd900a562
     @Transactional
     public QuestionBoard deletedQuestionBoard(QuestionBoard questionBoard){
         int result =

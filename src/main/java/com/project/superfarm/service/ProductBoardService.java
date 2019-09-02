@@ -1,12 +1,17 @@
 package com.project.superfarm.service;
 
 import com.project.superfarm.entity.board.ProductBoard;
+import com.project.superfarm.entity.board.ProductBoardList;
 import com.project.superfarm.entity.product.Product;
+import com.project.superfarm.model.ProductListModel;
 import com.project.superfarm.repository.ProductRepository;
+import com.project.superfarm.repository.boardRepository.ProductBoardListRepository;
 import com.project.superfarm.repository.boardRepository.ProductBoardRepository;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,63 +22,121 @@ public class ProductBoardService {
     @Autowired
     private ProductBoardRepository productBoardRepository;
 
-
-    public List<ProductBoard> loadProductBoardAll() {
-
-        List<ProductBoard> productBoards = productBoardRepository.findAll();
-
-        if(productBoards==null){
-            return null;
-        }
-        return productBoards;
-    }
-
-    public List<ProductBoard> loadProductBoardSearch(String name) {
-
-        List<ProductBoard> productBoards =
-                productBoardRepository.loadSearchKeyword(name);
-        if(productBoards.size()==0){
-            return null;
-        }else{
-            return productBoards;
-        }
-    }
-
-    public List<ProductBoard> loadProductBoardUpper(int upperCode) {
-
-        List<ProductBoard> productBoards =
-                productBoardRepository.findAllByUpperCodeAndProductBoardDeleted(upperCode,"false");
-        if(productBoards.size()==0){
-            return null;
-        }else{
-            return productBoards;
-        }
-    }
-
-    public List<ProductBoard> loadProductBoardLower(int lowerCode){
-
-        List<ProductBoard> productBoards=
-                productBoardRepository.findAllByLowerCodeAndProductBoardDeleted(lowerCode,"false");
-        if(productBoards.size()==0){
-            return null;
-        }else{
-            return productBoards;
-        }
-
-    }
+    @Autowired
+    private ProductBoardListRepository productBoardListRepository;
 
 
-    public ProductBoard loadProductDetails(Long num) throws ClassNotFoundException {
+    /**
+     * @deprecated  프로덕트 보드의 상세 정보 product_board_num(pk) 기준으로 리턴
+     * @param num
+     * @return ProductBoard
+     */
+    public ProductBoard loadProductDetails(Long num) {
 
-        Optional<ProductBoard> productBoard ;
+        Optional<ProductBoard> productBoard;
         productBoard = productBoardRepository.findById(num);
 
-        if(productBoard.isPresent()){
+        if (productBoard.isPresent()) {
             productBoard.get().setProductTypeName(
                     productBoard.get().getProductList().get(0).getProductType().getProductTypeName());
             return productBoard.get();
-        }else{
-            throw new ClassNotFoundException();
+
+        } else {
+            throw new UrlNotFountException();
         }
     }
+
+
+    /**
+     * 메인화면에 뜨는 product_board 리스트
+     * product_best의 1~3까지만 나오게 되어있음
+     * @return List<ProductBoardModel>
+     */
+    public List<ProductListModel> loadMainProduct() {
+
+        List<ProductBoardList> productBoardList
+                = productBoardListRepository.findByBestProduct();
+
+        return returnModel(productBoardList);
+    }
+
+    public ProductBoard loadLowerBestProduct(Long lower) {
+        return null;
+    }
+
+
+    /**
+     * lower 기준으로 product_board return
+     * @param lower
+     * @return product_board
+     */
+    public List<ProductListModel> findByLowerProductBoard(Integer lower) {
+
+        List<ProductBoardList> productBoardList
+                = productBoardListRepository.findByLowerProductBoard(lower);
+
+        return returnModel(productBoardList);
+    }
+
+
+    /**
+     * upper 기준으로 product_board return
+     * @param upper
+     * @return List<ProductListModel>
+     */
+    public List<ProductListModel> findByUpperProductBoard(Integer upper) {
+
+        List<ProductBoardList> productBoardList
+                = productBoardListRepository.findByUpperProductBoard(upper);
+
+        return returnModel(productBoardList);
+    }
+
+
+    /**
+     * 검색어 기준으로 product_board return
+     * @param search
+     * @return List<ProductListModel>
+     */
+    public List<ProductListModel> findBySearchProductBoard(String search) {
+
+        List<ProductBoardList> productBoardList
+                = productBoardListRepository.findBySearchProductBoard(search);
+
+        return returnModel(productBoardList);
+    }
+
+    /**
+     * 전체 product_board return
+     * @return List<ProductListModel>
+     */
+    public List<ProductListModel> findByAllProductBoard() {
+
+        List<ProductBoardList> productBoardList
+                = productBoardListRepository.findByAllProductBoard();
+
+        return returnModel(productBoardList);
+    }
+
+
+    /**
+     * @deprecated List<productBoard>에서 ProductModel 객체로 set List에 넣어서 다시 return
+     *              위의 메소드들 List<ProductListModel> 로 return 하는 method 공용 사용
+     * @param productBoardList
+     * @return List<ProductListModel>
+     */
+    private List<ProductListModel> returnModel(List<ProductBoardList> productBoardList) {
+
+        List<ProductListModel> productListModelList = new ArrayList<>();
+
+        for (ProductBoardList p : productBoardList) {
+            productListModelList.add(p.getProductListModel());
+        }
+
+        return productListModelList;
+
+    }
+
+
+
 }

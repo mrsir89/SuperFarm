@@ -3,6 +3,7 @@ package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.product.Product;
 import com.project.superfarm.service.ProductItemService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +22,7 @@ import java.util.List;
                         : /name  제품명으로 검색
  **/
 @RestController
-@RequestMapping("/product/item")
+@RequestMapping("/product")
 public class ProductController {
 
 
@@ -63,7 +64,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('GUEST')")
     @RequestMapping(path="/all",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.GET,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE })
@@ -83,17 +84,20 @@ public class ProductController {
      * @return      : JSON
      *              : /all return과 같다
      */
-
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(path="/lower",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
-    public List<Product> loadItemFromLowerCategory(@RequestParam(name="lower") int lower){
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public List<Product> loadItemFromLowerCategory(@RequestParam(name="lower") Integer lower){
 
-        return productItemService.fromLowerCategory(lower);
+        if(lower != null ) {
+            return productItemService.fromLowerCategory(lower);
 
+        }else
+            throw new UrlNotFountException();
     }
 
 
@@ -107,15 +111,20 @@ public class ProductController {
      *              : /all return 과 같다.
     */
 
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(path="/upper",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
-    public List<Product> loadItemFromUpperCategory(@RequestParam(name="upper") int upper){
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
+    public List<Product> loadItemFromUpperCategory(@RequestParam(name="upper") Integer upper){
 
-        return productItemService.fromLowerCategory(upper);
+        if(upper != null) {
+            return productItemService.fromLowerCategory(upper);
+
+        }else
+            throw new UrlNotFountException();
 
     }
 
@@ -130,15 +139,20 @@ public class ProductController {
      *              : /all return 과 같다.
      */
 
-    @PreAuthorize("hasRole('GUEST')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(path="/name",
-            method = {RequestMethod.GET,RequestMethod.POST},
+            method = RequestMethod.POST,
             produces = {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
-                    MediaType.APPLICATION_ATOM_XML_VALUE })
+                    MediaType.APPLICATION_ATOM_XML_VALUE
+            })
     public List<Product> loadFindItemName(@RequestParam(name="name") String name){
 
-        return productItemService.loadFindItemName(name);
+        if(name != null) {
+            return productItemService.loadFindItemName(name);
+
+        }else
+            throw new UrlNotFountException();
     }
 
 

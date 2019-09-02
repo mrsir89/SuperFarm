@@ -3,11 +3,13 @@ package com.project.superfarm.service;
 
 import com.project.superfarm.entity.product.Cart;
 import com.project.superfarm.repository.CartRepository;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -39,27 +41,41 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteCart(Long cartProductNum){
+    public Cart deleteCart(Long cartProductNum){
 
         cartRepository.deleteById(cartProductNum);
+        Optional<Cart> cartOptional = cartRepository.findById(cartProductNum);
+        if(cartOptional.isPresent()){
+            throw new UrlNotFountException();
+        }else
+            return cartOptional.get();
 
     }
 
     public void deleteAllCart(Long userNum){
 
-//        cartRepository.deleteAllByUserNum(userNum);
+        cartRepository.delAllUserCart(userNum);
+
+//        System.out.println(result+" 삭제 유무 확인 ");
     }
 
     @Transactional
-    public Cart productCountUpdate(Long cartProductNum, int count){
+    public List<Cart> productCountUpdate(Cart cart){
 
-        int result = cartRepository
-                .cartProductCountUpdate(count, cartProductNum);
-        if(result ==1){
-            return cartRepository.findById(cartProductNum).get();
-        }
-        else{
-            return null;
+        if(cart.getCartNum()!=null  && cart.getCartProductCount() !=0) {
+            Long cartProductNum = cart.getCartNum();
+            Long userNum = cart.getUserNum();
+            int count = cart.getCartProductCount();
+
+            int result = cartRepository
+                    .cartProductCountUpdate(count, cartProductNum);
+            if (result == 1) {
+                return cartRepository.findAllByUserNum(userNum);
+            } else {
+                return null;
+            }
+        }else{
+            throw new UrlNotFountException();
         }
     }
 

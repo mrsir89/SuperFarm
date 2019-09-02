@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class ReviewBoardService {
@@ -57,6 +58,15 @@ public class ReviewBoardService {
         }else{
             return "Fail";
         }
+    }
+
+    public void reviewBoardImgUpload(Long reviewBoarNum, String replaceImgUrl){
+
+        System.out.println("reveiwBoard에 img 넣기 시작 ");
+        Optional<ReviewBoard> reviewBoard = reviewBoardRepository.findById(reviewBoarNum);
+        reviewBoard.get().setReviewBoardImg(replaceImgUrl);
+        reviewBoardRepository.save(reviewBoard.get());
+
     }
 
 }

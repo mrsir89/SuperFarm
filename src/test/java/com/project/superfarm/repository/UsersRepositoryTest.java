@@ -2,9 +2,12 @@ package com.project.superfarm.repository;
 
 
 import com.project.superfarm.entity.board.ProductBoard;
+import com.project.superfarm.entity.board.ProductBoardList;
 import com.project.superfarm.entity.product.Product;
 import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
+import com.project.superfarm.model.ProductListModel;
+import com.project.superfarm.repository.boardRepository.ProductBoardListRepository;
 import com.project.superfarm.repository.boardRepository.ProductBoardRepository;
 import com.project.superfarm.repository.boardRepository.QuestionBoardRepository;
 import com.project.superfarm.repository.userRepository.CustomerRepository;
@@ -18,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +54,32 @@ public class UsersRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductBoardListRepository productBoardListRepository;
+
+
+
+    // 바뀐 productBoard
+    @Test
+    public void newProductBoardTest(){
+
+        List<ProductBoardList> productBoardList=productBoardListRepository.findByAllTest();
+
+        System.out.println(productBoardList.toString());
+
+
+//        List<ProductListModel> productListModelList = new ArrayList<>();
+//        for (ProductBoardList p : productBoardList
+//        ) {
+//            productListModelList.add(p.getProductListModel());
+//        }
+//        for (ProductListModel a :productListModelList
+//             ) {
+//            System.out.println(a.toString());;
+//        }
+
+    }
     @Test
     public void productBoardTeset(){
         List<ProductBoard> productBoardList = productBoardRepository.findAll();

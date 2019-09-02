@@ -16,8 +16,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
+<<<<<<< HEAD
                 .antMatchers("/asdfawg")
+=======
+                .antMatchers("/2313123**")
+>>>>>>> 9b834c64079924526926ad4cccc1eb9dd900a562
                 .authenticated()
+
+
         ;
     }
 

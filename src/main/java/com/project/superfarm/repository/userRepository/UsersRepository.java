@@ -16,10 +16,10 @@ public interface UsersRepository extends JpaRepository<Users,Long> {
     Optional<Users> findByUserId(String id);
 
     @Query(value="SELECT user_email FROM users WHERE user_email = ?1",nativeQuery = true)
-    String overlapEmail(String email);
+    Optional<String> overlapEmail(String email);
 
     @Query(value="SELECT user_id FROM users WHERE user_id =?1",nativeQuery = true)
-    String overlapId(String id);
+    Optional<String> overlapId(String id);
 
     @Modifying
     @Query(value="UPDATE users set user_last_connect = NOW() WHERE user_id=?1",nativeQuery = true)

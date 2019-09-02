@@ -9,10 +9,13 @@ import com.project.superfarm.model.SignupCustomer;
 import com.project.superfarm.repository.userRepository.CustomerRepository;
 import com.project.superfarm.repository.userRepository.RolesRepository;
 import com.project.superfarm.repository.userRepository.UsersRepository;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,21 +76,26 @@ public class CustomerSignupService {
  */
     public String overlapEmail(String email) {
 
-        String overlapEmail = usersRepository.overlapEmail(email);
-
-        return columnCheck(email);
+        Optional<String> overlapEmail = usersRepository.overlapEmail(email);
+        if(overlapEmail.isPresent()){
+            throw new UrlNotFountException();
+        }else{
+            return "Success";
+        }
     }
 
     public String overlapId(String id){
 
-        String overlapId = usersRepository.overlapId(id);
-
-        return columnCheck(id);
+        Optional<String> overlapId = usersRepository.overlapId(id);
+        if(overlapId.isPresent()){
+            throw new UrlNotFountException();
+        }else
+            return "Success";
     }
     private String columnCheck(String checkColumn){
 
-        if(checkColumn ==null){
-            return "Fail";
+        if(ObjectUtils.isEmpty(checkColumn)){
+            throw new UrlNotFountException();
         }else
             return "Successs";
     }

@@ -32,7 +32,7 @@ public class Users<T extends Object> implements Serializable , UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userNum;
 
-    @Column(name = "user_id",updatable = false)
+    @Column(name = "user_id",updatable = false,nullable = false)
     private String userId;
 
     @Column(name ="user_password",nullable = false)
