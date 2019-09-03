@@ -6,12 +6,14 @@ import com.project.superfarm.entity.board.ProductBoardList;
 import com.project.superfarm.entity.product.Product;
 import com.project.superfarm.entity.user.Customer;
 import com.project.superfarm.entity.user.Users;
+import com.project.superfarm.model.ProductBoardCreateModel;
 import com.project.superfarm.model.ProductListModel;
 import com.project.superfarm.repository.boardRepository.ProductBoardListRepository;
 import com.project.superfarm.repository.boardRepository.ProductBoardRepository;
 import com.project.superfarm.repository.boardRepository.QuestionBoardRepository;
 import com.project.superfarm.repository.userRepository.CustomerRepository;
 import com.project.superfarm.repository.userRepository.UsersRepository;
+import com.project.superfarm.service.ProductBoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +81,22 @@ public class UsersRepositoryTest {
 //            System.out.println(a.toString());;
 //        }
 
+    }
+
+    @Test
+    public void productCreateTest(){
+        ProductBoard productBoard = new ProductBoard();
+
+        productBoard.setProductBoardTitle("임시 저장 테스트");
+        productBoard.setLowerCode(0);
+        productBoard.setUpperCode(0);
+        // 임시저장 lower 와 uppder 코드가 0이면 임시 저장
+        productBoard.setUpperCode(0);
+        // 임시저장 lower 와 uppder 코드가 0이면 임시 저장
+        productBoard.setLowerCode(0);
+
+        ProductBoard test = productBoardRepository.save(productBoard);
+        System.out.println(test.toString());
     }
     @Test
     public void productBoardTeset(){

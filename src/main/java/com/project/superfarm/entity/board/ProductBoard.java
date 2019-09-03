@@ -77,16 +77,5 @@ public class ProductBoard implements Serializable {
     @JoinColumn(name = "product_board_num", referencedColumnName = "product_board_num")
     private List<Product> productList;
 
-//    @Transient
-//    public ProductListModel getProductListModel() {
-//
-//        ProductListModel productListModel = new ProductListModel(
-//                productBoardNum, productBoardTitle, upperCode, lowerCode,
-//                productPrice, productBoardThumbnail, productBoardBest
-//        );
-//
-//        return productListModel;
-//
-//    }
 
 }

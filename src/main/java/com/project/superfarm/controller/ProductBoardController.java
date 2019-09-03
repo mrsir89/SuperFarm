@@ -1,6 +1,7 @@
 package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.board.ProductBoard;
+import com.project.superfarm.model.ProductBoardCreateModel;
 import com.project.superfarm.model.ProductListModel;
 import com.project.superfarm.service.ProductBoardService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
@@ -8,10 +9,7 @@ import com.project.superfarm.util.isNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -237,6 +235,32 @@ public class ProductBoardController {
 
     }
 
+    /**
+     * @apiNote ProductBoard 생성  model안에 넘어 오는 status 상태가 short이면 임시 저장
+     * @param productBoardCreateModel
+     * @return productBoard
+     *
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/create",
+            method = RequestMethod.POST,
+            produces = {
+                    MediaType.APPLICATION_JSON_UTF8_VALUE
+            })
+    public ProductBoard createProductBoard(@RequestBody ProductBoardCreateModel productBoardCreateModel) {
+
+        if (productBoardCreateModel != null) {
+            if (productBoardCreateModel.getStatus().equals("short")) {
+                return productBoardService.createProduct(productBoardCreateModel);
+            } else {
+
+                throw new UrlNotFountException();
+            }
+
+        } else {
+            throw new UrlNotFountException();
+        }
+    }
 
 }
 
