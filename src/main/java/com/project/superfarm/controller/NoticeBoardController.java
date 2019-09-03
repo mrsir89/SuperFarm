@@ -35,7 +35,7 @@ public class NoticeBoardController {
     public ResultItems<NoticeBoard> loadAllNotice(
             @RequestParam(name="page",defaultValue ="1", required = false)Integer page,
             @RequestParam(name="size",defaultValue = "10", required =false)Integer size,
-            @RequestParam(name = "sort", defaultValue = "faqBoardNum", required = false) String sort){
+            @RequestParam(name = "sort", defaultValue = "noticeNum", required = false) String sort){
         Pageable pageable = PageRequest.of(page-1,size, Sort.by(sort).descending());
 
         Page<NoticeBoard> noticeBoards = noticeBoardService.loadAllNoticeBoard(pageable);

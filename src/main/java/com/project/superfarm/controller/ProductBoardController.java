@@ -193,6 +193,7 @@ public class ProductBoardController {
             @RequestParam(name="lower",defaultValue = "null")String lower) {
 
         if(main != null && lower.equals(null)){
+
             return productBoardService.loadMainProduct();
 
         }else{
