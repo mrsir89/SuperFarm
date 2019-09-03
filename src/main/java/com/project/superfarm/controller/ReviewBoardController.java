@@ -5,6 +5,7 @@ import com.project.superfarm.entity.board.ReviewBoard;
 import com.project.superfarm.model.ResultItems;
 import com.project.superfarm.service.ReviewBoardService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.isNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,7 +61,7 @@ public class ReviewBoardController {
      * @See : java : ReviewBoard.java, \n
      * DB   : review_board,
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(path = "/all",
             method = RequestMethod.POST,
             produces = {
@@ -94,7 +95,7 @@ public class ReviewBoardController {
      * @See : java : ReviewBoard.java, \n
      * DB   : review_board,
      */
-    @PreAuthorize("hasAnyRole('ROLE_GUEST','ROLE_CUSTOMER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(path = "/product",
             method = RequestMethod.POST,
             produces = {
@@ -102,25 +103,29 @@ public class ReviewBoardController {
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
     public ResultItems<ReviewBoard> loadFromProductBoard(
-            @RequestParam(name = "productBoardNum", required = false) Long productBoardNum,
-            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-            @RequestParam(name = "page", defaultValue = "1", required = false) int page,
+            @RequestParam(name = "productBoardNum", required = false) String productBoardNum,
+            @RequestParam(name = "size", defaultValue = "10", required = false) Integer size,
+            @RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
             @RequestParam(name = "sort", defaultValue = "reviewBoardNum", required = false) String sort) {
 
-        if (productBoardNum != null ) {
-            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
-            Page<ReviewBoard> reviewBoard =
-                    reviewBoardService.loadFromProductBoard(productBoardNum, pageable);
+        if (productBoardNum != null) {
+            if (isNumber.isStringLong(productBoardNum)) {
+                Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
+                Page<ReviewBoard> reviewBoard =
+                        reviewBoardService.loadFromProductBoard(Long.parseLong(productBoardNum), pageable);
 
-            if (reviewBoard == null) {
+                if (reviewBoard == null) {
+                    throw new UrlNotFountException();
+
+                } else {
+                    ResultItems<ReviewBoard> reviewBoardResultItems
+                            = new ResultItems<ReviewBoard>(reviewBoard.getContent(), page, size, reviewBoard.getTotalElements(),
+                                                           reviewBoard.getTotalPages(), reviewBoard.hasNext());
+                    reviewBoardResultItems.setBoardNum(Long.parseLong(productBoardNum));
+                    return reviewBoardResultItems;
+                }
+            } else
                 throw new UrlNotFountException();
-
-            } else {
-                return new ResultItems<ReviewBoard>(reviewBoard.getContent(), page,
-                        size, reviewBoard.getTotalElements(),
-                        reviewBoard.getTotalPages(), reviewBoard.hasNext());
-            }
-
         } else
             throw new UrlNotFountException();
     }

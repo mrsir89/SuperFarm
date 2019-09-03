@@ -6,6 +6,7 @@ import com.project.superfarm.entity.board.QuestionBoard;
 import com.project.superfarm.model.ResultItems;
 import com.project.superfarm.service.QuestionBoardService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.isNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +40,11 @@ public class QuestionBoardController {
     // TODO 질문 사항  Stream으로 컬렉션을 넣을때는 정렬이 안되고  getContent List로 넣을때는 정렬이 된다.
 
 
-    /** todo : 못받는 error 수정중 2019.09.02
+
+
+    /**
+     *  : 못받는 error 수정중 2019.09.02 완료
+     *
      * @param : long productNum,
      *          int page,
      *          int size,
@@ -90,29 +95,36 @@ public class QuestionBoardController {
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
     public ResultItems<QuestionBoard> loadFromProductBoard(
-            @RequestParam(name = "productNum", required = false) Long productNum,
-            @RequestParam(name = "page", defaultValue = "1", required = false) int page,
-            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            @RequestParam(name = "productBoardNum", required = false) String productBoardNum,
+            @RequestParam(name = "size", defaultValue = "10", required = false) Integer size,
+            @RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
             @RequestParam(name = "sort", defaultValue = "questionBoardNum", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
-        System.out.println("----------- page" + page);
-//        if(productNum != null) {
-        if (true) {
-            Page<QuestionBoard> questionBoards =
-                    questionBoardService.loadFromProductBoard(productNum, pageable);
 
-            if (questionBoards == null) {
+        System.out.println("--------productNum"+productBoardNum);
+        System.out.println("----------- page" + page+"-------------- size "+size);
 
-                return new ResultItems<QuestionBoard>();
+        if (productBoardNum != null) {
+            if(isNumber.isStringLong(productBoardNum)) {
 
-            } else {
-                ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page, size,
-                        questionBoards.getTotalElements(), questionBoards.getTotalPages(), questionBoards.hasNext());
-                questionBoardResultItems.setBoardNum(productNum);
-                return questionBoardResultItems;
+                Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
+                Page<QuestionBoard> questionBoards =
+                        questionBoardService.loadFromProductBoard(Long.parseLong(productBoardNum), pageable);
+
+                if (questionBoards == null) {
+
+                    throw new UrlNotFountException();
+
+                } else {
+                    ResultItems<QuestionBoard> questionBoardResultItems = new ResultItems<>(questionBoards.getContent(), page, size,
+                            questionBoards.getTotalElements(), questionBoards.getTotalPages(), questionBoards.hasNext());
+                    questionBoardResultItems.setBoardNum(Long.parseLong(productBoardNum));
+                    return questionBoardResultItems;
+                }
+            }else{
+                throw new UrlNotFountException();
             }
         } else
-            return new ResultItems<QuestionBoard>();
+            throw new UrlNotFountException();
     }
 
 
