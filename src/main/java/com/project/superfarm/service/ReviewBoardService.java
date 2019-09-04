@@ -4,6 +4,7 @@ package com.project.superfarm.service;
 import com.project.superfarm.entity.board.ReviewBoard;
 
 import com.project.superfarm.repository.boardRepository.ReviewBoardRepository;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,9 +55,9 @@ public class ReviewBoardService {
         int result = reviewBoardRepository.deleted(reviewBoardNum);
 
         if(result==1){
-            return "Suceess";
+            return String.valueOf(reviewBoardNum);
         }else{
-            return "Fail";
+            throw new UrlNotFountException();
         }
     }
 

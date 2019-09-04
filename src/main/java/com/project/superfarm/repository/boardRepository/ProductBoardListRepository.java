@@ -65,6 +65,16 @@ public interface ProductBoardListRepository extends JpaRepository<ProductBoardLi
             "GROUP BY product_board_num ", nativeQuery = true)
     List<ProductBoardList> findByBestProduct();
 
+
+    @Query(value = "SELECT board.product_board_num, board.product_board_title,board.upper_code,board.lower_code,board.product_board_thumbnail,board.product_board_best ," +
+            "(SELECT MIN(product.product_price) FROM product_board innerboard LEFT JOIN product USING(product_board_num)  " +
+            "WHERE board.product_board_num = product.product_board_num ) product_price " +
+            "FROM product_board board " +
+            "LEFT JOIN product USING(product_board_num) " +
+            "WHERE product_board_best >0 AND board.lower_code=?1 AND product_board_deleted ='false' "+
+            "GROUP BY product_board_num ", nativeQuery = true)
+    List<ProductBoardList> findByLowerBestProduct(Integer lower);
+
     ///테스트용
     @Query(value = "SELECT board.product_board_num, board.product_board_title,board.upper_code,board.lower_code,board.product_board_thumbnail,board.product_board_best ," +
             "(SELECT MIN(product.product_price) FROM product_board innerboard LEFT JOIN product USING(product_board_num)  " +

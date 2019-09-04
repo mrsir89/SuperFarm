@@ -62,8 +62,13 @@ public class ProductBoardService {
         return returnModel(productBoardList);
     }
 
-    public ProductBoard loadLowerBestProduct(Long lower) {
-        return null;
+    public List<ProductListModel>  loadLowerBestProduct(Integer lower) {
+
+
+
+        List<ProductBoardList> productBoardLists
+                =productBoardListRepository.findByLowerBestProduct(lower);
+        return returnModel(productBoardLists);
     }
 
 

@@ -3,6 +3,7 @@ package com.project.superfarm.controller;
 
 import com.project.superfarm.entity.board.ReviewBoard;
 import com.project.superfarm.model.ResultItems;
+import com.project.superfarm.model.ReturnModel;
 import com.project.superfarm.service.ReviewBoardService;
 import com.project.superfarm.util.ExceptionList.UrlNotFountException;
 import com.project.superfarm.util.isNumber;
@@ -180,10 +181,11 @@ public class ReviewBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
-    public String deleteReviewBoard(@RequestParam Long reviewBoardNum) {
+    public ReturnModel deleteReviewBoard(@RequestParam Long reviewBoardNum) {
 
         if (reviewBoardNum != null) {
-            return reviewBoardService.deleteReviewBoard(reviewBoardNum);
+
+            return new ReturnModel(reviewBoardService.deleteReviewBoard(reviewBoardNum));
 
         } else
             throw new UrlNotFountException();

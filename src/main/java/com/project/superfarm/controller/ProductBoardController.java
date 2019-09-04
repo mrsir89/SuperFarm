@@ -144,6 +144,7 @@ public class ProductBoardController {
 
         } else {
 
+            System.out.println("======= Search 실행 ==========");
             return productBoardService.findBySearchProductBoard(search);
         }
     }
@@ -188,27 +189,17 @@ public class ProductBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
-    public List<ProductListModel> loadMainProduct(
-            @RequestParam(name="main",defaultValue = "true")String main,
-            @RequestParam(name="lower",defaultValue = "null")String lower) {
-
-        if(main != null && lower.equals(null)){
+    public List<ProductListModel> loadMainProduct() {
 
             return productBoardService.loadMainProduct();
-
-        }else{
-
-        }
-
-        return productBoardService.loadMainProduct();
-
     }
 
     /**
      * todo:삭제 후 위의 bestMain과 합쳐질 예정
-     * @apiNote  카테고리 화면의 best 상품 product_best의 항목이 0보다 큰것을 return
+     *
      * @param lower, main
      * @return
+     * @apiNote 카테고리 화면의 best 상품 product_best의 항목이 0보다 큰것을 return
      */
     @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(value = "/bestLower",
@@ -217,12 +208,18 @@ public class ProductBoardController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
-    public ProductBoard loadLowerBestProduct(@RequestParam(name = "lower") Long lower) {
+    public List<ProductListModel>  loadLowerBestProduct(@RequestParam(name = "lower") Integer lower) {
 
+        System.out.println(" BestProduct List 실행 ");
         return productBoardService.loadLowerBestProduct(lower);
 
     }
 
+    /**
+     * Test용 API
+     * @param lower
+     * @return
+     */
     @PreAuthorize("hasAnyRole('GUEST','CUSTOMER','ADMIN')")
     @RequestMapping(value = "/test",
             method = RequestMethod.POST,
@@ -237,10 +234,9 @@ public class ProductBoardController {
     }
 
     /**
-     * @apiNote ProductBoard 생성  model안에 넘어 오는 status 상태가 short이면 임시 저장
      * @param productBoardCreateModel
      * @return productBoard
-     *
+     * @apiNote ProductBoard 생성  model안에 넘어 오는 status 상태가 short이면 임시 저장
      */
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/create",
@@ -253,8 +249,8 @@ public class ProductBoardController {
         if (productBoardCreateModel != null) {
             if (productBoardCreateModel.getStatus().equals("short")) {
                 return productBoardService.createProduct(productBoardCreateModel);
-            } else {
 
+            } else {
                 throw new UrlNotFountException();
             }
 
