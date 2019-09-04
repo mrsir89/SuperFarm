@@ -1,9 +1,9 @@
 
-	#### Start Project Market ver 2.7  2019.09.02
+	#### Start Project Market ver 2.6  2019.08.26
 	### 데이터 베이스 생성 및 유저 생성
 
-    ##   2019.09.02
-    ## 통계를 위한 테이블 추가 product_inventory 수정 month_selling 추가
+    ##   2019.08.26
+    ## orders 테이블 변화 NOTICEBOARD FAQBOARD 테이블 추가
 
 -- 	DROP USER IF EXISTS `bitmaster`;
 

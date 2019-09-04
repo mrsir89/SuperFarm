@@ -111,9 +111,10 @@ public class CartController {
     @RequestMapping(path = "/delete",
             method = RequestMethod.DELETE
         )
-    public Cart deleteCartProduct(@RequestParam(name = "cartNum") Long cartNum) {
-
+    public String deleteCartProduct(@RequestParam(name = "cartNum") Long cartNum) {
+        System.out.println(" cart delete 시작 ");
         if (cartNum != null) {
+
             return cartService.deleteCart(cartNum);
 
         } else

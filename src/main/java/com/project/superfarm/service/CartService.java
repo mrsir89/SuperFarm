@@ -41,21 +41,26 @@ public class CartService {
     }
 
     @Transactional
-    public Cart deleteCart(Long cartProductNum){
+    public String deleteCart(Long cartProductNum){
 
         cartRepository.deleteById(cartProductNum);
-        Optional<Cart> cartOptional = cartRepository.findById(cartProductNum);
-        if(cartOptional.isPresent()){
-            throw new UrlNotFountException();
-        }else
-            return cartOptional.get();
 
+        return "success";
+//        Optional<Cart> cartOptional = cartRepository.findById(cartProductNum);
+//
+//
+//        if(!cartOptional.isPresent()){
+//            throw new UrlNotFountException();
+//        }else
+//            return cartOptional.get();
+////        return null;
     }
 
     public void deleteAllCart(Long userNum){
 
         cartRepository.delAllUserCart(userNum);
 
+        return;
 //        System.out.println(result+" 삭제 유무 확인 ");
     }
 
