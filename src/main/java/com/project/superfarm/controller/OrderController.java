@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -37,6 +38,7 @@ public class OrderController {
 
     }
 
+
     // 테스트 용으로 ADMIN도 넣어 둠
     @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     @Transactional
@@ -46,7 +48,8 @@ public class OrderController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
-    public Orders loadOrderList(@RequestParam(name = "num") Long num) {
+    public List<Orders> loadOrderList(@RequestParam(name = "num") Long num) {
+
 
         System.out.println("order List Num " + num);
 

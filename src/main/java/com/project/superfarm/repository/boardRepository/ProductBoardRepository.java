@@ -38,5 +38,6 @@ public interface ProductBoardRepository extends JpaRepository<ProductBoard, Long
             "GROUP BY product_board_num ", nativeQuery = true)
     List<ProductBoard> findByAllTest();
 
-
+    @Query(value="SELECT product_board_thumbnail FROM product_board WHERE product_board_num=?1 ")
+    String loadThumbnail(Long productBoardNum);
 }

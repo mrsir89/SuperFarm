@@ -19,7 +19,6 @@ import java.util.Optional;
 public class QuestionBoardService {
 
 
-
     @Autowired
     private QuestionBoardRepository questionBoardRepository;
 
@@ -27,38 +26,37 @@ public class QuestionBoardService {
     private QuestionAnswerRepository questionAnswerRepository;
 
 
-    public Page<QuestionBoard> loadFromProductBoard(Long productBoardNum, Pageable pageable){
+    public Page<QuestionBoard> loadFromProductBoard(Long productBoardNum, Pageable pageable) {
 
         Page<QuestionBoard> questionBoards =
                 questionBoardRepository
-                        .findAllByProductBoardNumAndQuestionBoardDeleted(productBoardNum,"false",pageable);
-            return questionBoards;
+                        .findAllByProductBoardNumAndQuestionBoardDeleted(productBoardNum, "false", pageable);
+        return questionBoards;
     }
 
 
-
     // UserId으로 검색 하면서 deleted가 false인 것들만
-    public Page<QuestionBoard> loadFromUserId(String userId,Pageable pageable) {
+    public Page<QuestionBoard> loadFromUserId(String userId, Pageable pageable) {
 
         Page<QuestionBoard> questionBoards =
-                questionBoardRepository.findAllByUserIdAndQuestionBoardDeleted(userId,"false",pageable);
+                questionBoardRepository.findAllByUserIdAndQuestionBoardDeleted(userId, "false", pageable);
 
-        if(questionBoards.isEmpty()){
+        if (questionBoards.isEmpty()) {
             System.out.println("null 이거 is empty 실행 확인");
             return null;
 
-        }else {
+        } else {
             return questionBoards;
         }
     }
 
-    private QuestionBoard loadQuestionBoard(Long questionBoardNum){
+    private QuestionBoard loadQuestionBoard(Long questionBoardNum) {
 
         Optional<QuestionBoard> questionBoard =
                 questionBoardRepository.findById(questionBoardNum);
-        if(questionBoard.isPresent()){
+        if (questionBoard.isPresent()) {
             return questionBoard.get();
-        }else{
+        } else {
             return new QuestionBoard();
         }
     }
@@ -67,35 +65,45 @@ public class QuestionBoardService {
     @Transactional
     public QuestionBoard writeQuestionBoard(QuestionBoard questionBoard) {
 
-          return questionBoardRepository.save(questionBoard);
+        return questionBoardRepository.save(questionBoard);
     }
 
     // 댓글 작성
     @Transactional
     public QuestionAnswer writeAnswerBoard(QuestionAnswer questionAnswer) {
 
-        return questionAnswerRepository.save(questionAnswer);
+        QuestionAnswer returnQuestionAnswer = questionAnswerRepository.save(questionAnswer);
+        if (returnQuestionAnswer != null) {
+
+            Long questionBoardNum = returnQuestionAnswer.getQuestionBoardNum();
+            int result = questionBoardRepository.updateQuestionBoardStatus(questionBoardNum);
+            return returnQuestionAnswer;
+
+        } else {
+            throw new UrlNotFountException();
+        }
+
 
     }
 
     @Transactional
-    public QuestionBoard updateAnswer(QuestionAnswer questionAnswer){
+    public QuestionBoard updateAnswer(QuestionAnswer questionAnswer) {
 
         int result =
-                questionAnswerRepository.updateAnswer(questionAnswer.getAnswerContent(),questionAnswer.getAnswerNum());
+                questionAnswerRepository.updateAnswer(questionAnswer.getAnswerContent(), questionAnswer.getAnswerNum());
 
-        if(result ==1){
+        if (result == 1) {
             return loadQuestionBoard(questionAnswer.getQuestionBoardNum());
-        }else{
+        } else {
             return null;
         }
     }
 
     /**
-     * @apiNote QnA 게시판 댓글을 softDelete
      * @param questionAnswer
      * @return QuestionBoard
      * @throws ClassNotFoundException
+     * @apiNote QnA 게시판 댓글을 softDelete
      */
     @Transactional
     public QuestionBoard deletedAnswer(QuestionAnswer questionAnswer) {
@@ -107,14 +115,14 @@ public class QuestionBoardService {
 
         String originUserId = check.get().getAnswerWriter();
 
-        if(requestId.equals(originUserId)) {
+        if (requestId.equals(originUserId)) {
             int result =
                     questionAnswerRepository.deleteAnswer(requestBoardNum);
             if (result == 1) {
                 return loadQuestionBoard(requestBoardNum);
             } else
                 throw new UrlNoLoginAndNotMyself();
-        }else{
+        } else {
             throw new UrlNoLoginAndNotMyself();
         }
 
@@ -130,12 +138,12 @@ public class QuestionBoardService {
 
 
     @Transactional
-    public QuestionBoard deletedQuestionBoard(QuestionBoard questionBoard){
+    public QuestionBoard deletedQuestionBoard(QuestionBoard questionBoard) {
         int result =
                 questionBoardRepository.deleteQuestionBoard(questionBoard.getQuestionBoardNum());
-        if(result==1){
+        if (result == 1) {
             return loadQuestionBoard(questionBoard.getQuestionBoardNum());
-        }else
+        } else
             return null;
     }
 

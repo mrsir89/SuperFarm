@@ -127,15 +127,7 @@ public class OrderService {
 
     }
 
-    public Orders loadOrderList(Long num) {
 
-        Optional<Orders> ordersList = ordersRepository.findById(num);
-        if (ordersList.isPresent()) {
-            return ordersList.get();
-        } else {
-            return null;
-        }
-    }
 
     private ShippingItem shippingItemSet(OrderItems orderItems,Long shippingNum) {
 
@@ -159,4 +151,9 @@ public class OrderService {
     }
 
 
+    public List<Orders> loadOrderList(Long num) {
+
+        List<Orders> ordersList = ordersRepository.findAllByUserNum(num);
+        return ordersList;
+    }
 }

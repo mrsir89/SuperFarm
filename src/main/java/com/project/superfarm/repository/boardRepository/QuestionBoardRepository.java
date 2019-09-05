@@ -33,5 +33,7 @@ public interface QuestionBoardRepository extends JpaRepository<QuestionBoard,Lon
     Page<QuestionBoard> findAllByProductBoardNumAndQuestionBoardDeletedAndQuestionAnswer_AnswerDeleted(
             Long productNum,String questionDeleted,String answerDeleted,Pageable pageable);
 
-
+    @Modifying
+    @Query(value="UPDATE question_board SET question_board_status ='true' WHERE question_board_num=?1 ",nativeQuery = true)
+    int updateQuestionBoardStatus(Long questionBoardNum);
 }

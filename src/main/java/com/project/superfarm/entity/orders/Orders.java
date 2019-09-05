@@ -47,36 +47,34 @@ public class Orders implements Serializable {
     private Date orderSellDate;
 
     @Column(name="order_total_price")
-    private double OrderTotalPrice;
+    private double orderTotalPrice;
 
     @Column(name="order_memo")
     private String orderMemo;
 
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "orders_shipping",
-//            joinColumns = @JoinColumn(name = "order_num"),
-//            inverseJoinColumns = @JoinColumn(name = "order_item_num")
-//    )
-//    private List<OrderItems> orderItemSet;
-//
-//
-//
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "orders_shipping",
-//            joinColumns = @JoinColumn(name = "order_num"),
-//            inverseJoinColumns = @JoinColumn(name = "shipping_num")
-//    )
-//    private List<Shipping> shippings;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "orders_shipping",
+            joinColumns = @JoinColumn(name = "order_num"),
+            inverseJoinColumns = @JoinColumn(name = "order_item_num")
+    )
+    private List<OrderItems> orderItemSet;
 
-    @Transient
-    @OneToMany
-    @JoinColumn(name="order_num",referencedColumnName = "order_num")
+
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "orders_shipping",
+            joinColumns = @JoinColumn(name = "order_num"),
+            inverseJoinColumns = @JoinColumn(name = "shipping_num")
+    )
     private List<Shipping> shippings;
 
-    @Transient
-    @OneToMany
-    @JoinColumn(name="order_num",referencedColumnName = "order_num")
-    private List<OrderItems> orderItemSet;
+//    @OneToMany
+//    @JoinColumn(name="order_num")
+//    private List<Shipping> shipping;
+//
+//    @OneToMany
+//    @JoinColumn(name="order_num")
+//    private List<OrderItems> orderItemSet;
 }
