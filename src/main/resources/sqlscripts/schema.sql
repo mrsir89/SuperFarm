@@ -640,3 +640,4 @@ month_date				DATE,
 month_sales				INTEGER,
 month_refund			INTEGER
 ) ENGINE = 'InnoDB' CHARACTER SET 'UTF8';
+
