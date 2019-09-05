@@ -154,6 +154,7 @@ public class OrderService {
     public List<Orders> loadOrderList(Long num) {
 
         List<Orders> ordersList = ordersRepository.findAllByUserNum(num);
+
         return ordersList;
     }
 }

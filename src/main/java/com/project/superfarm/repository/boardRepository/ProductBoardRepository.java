@@ -19,14 +19,14 @@ public interface ProductBoardRepository extends JpaRepository<ProductBoard, Long
             "product.product_name LIKE %:name% ", nativeQuery = true)
     List<ProductBoard> loadSearchKeyword(@Param("name") String name);
 
+
     List<ProductBoard> findAllByUpperCodeAndProductBoardDeleted(int upperCode, String deleted);
+
 
     List<ProductBoard> findAllByLowerCodeAndProductBoardDeleted(int lowerCode, String deleted);
 
     @Query(value = "SELECT * FROM product_board WHERE product_board_best >0 AND product_board_deleted ='false' ORDER BY product_board_best ASC", nativeQuery = true)
     List<ProductBoard> findMainProduct();
-
-
 
 
     ///test
@@ -38,6 +38,6 @@ public interface ProductBoardRepository extends JpaRepository<ProductBoard, Long
             "GROUP BY product_board_num ", nativeQuery = true)
     List<ProductBoard> findByAllTest();
 
-    @Query(value="SELECT product_board_thumbnail FROM product_board WHERE product_board_num=?1 ")
+    @Query(value="SELECT product_board_thumbnail FROM product_board WHERE product_board_num=?1 ",nativeQuery = true)
     String loadThumbnail(Long productBoardNum);
 }

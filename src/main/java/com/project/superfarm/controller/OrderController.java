@@ -3,6 +3,8 @@ package com.project.superfarm.controller;
 import com.project.superfarm.entity.orders.Orders;
 import com.project.superfarm.model.OrderModel;
 import com.project.superfarm.service.OrderService;
+import com.project.superfarm.util.ExceptionList.UrlNotFountException;
+import com.project.superfarm.util.isNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,11 +50,15 @@ public class OrderController {
                     MediaType.APPLICATION_JSON_UTF8_VALUE,
                     MediaType.APPLICATION_ATOM_XML_VALUE
             })
-    public List<Orders> loadOrderList(@RequestParam(name = "num") Long num) {
+    public List<Orders> loadOrderList(@RequestParam(name = "num") String strNum) {
 
+        if (isNumber.isStringLong(strNum)) {
+            Long num = Long.parseLong(strNum);
+            System.out.println("order List Num " + num);
+            return orderService.loadOrderList(num);
 
-        System.out.println("order List Num " + num);
-
-        return orderService.loadOrderList(num);
+        } else {
+            throw new UrlNotFountException();
+        }
     }
 }
