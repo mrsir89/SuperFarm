@@ -40,10 +40,8 @@ public class QuestionBoardController {
     // TODO 질문 사항  Stream으로 컬렉션을 넣을때는 정렬이 안되고  getContent List로 넣을때는 정렬이 된다.
 
 
-
-
     /**
-     *  : 못받는 error 수정중 2019.09.02 완료
+     * : 못받는 error 수정중 2019.09.02 완료
      *
      * @param : long productNum,
      *          int page,
@@ -100,11 +98,11 @@ public class QuestionBoardController {
             @RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
             @RequestParam(name = "sort", defaultValue = "questionBoardNum", required = false) String sort) {
 
-        System.out.println("--------productNum"+productBoardNum);
-        System.out.println("----------- page" + page+"-------------- size "+size);
+        System.out.println("--------productNum" + productBoardNum);
+        System.out.println("----------- page" + page + "-------------- size " + size);
 
         if (productBoardNum != null) {
-            if(isNumber.isStringLong(productBoardNum)) {
+            if (isNumber.isStringLong(productBoardNum)) {
 
                 Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
                 Page<QuestionBoard> questionBoards =
@@ -120,7 +118,7 @@ public class QuestionBoardController {
                     questionBoardResultItems.setBoardNum(Long.parseLong(productBoardNum));
                     return questionBoardResultItems;
                 }
-            }else{
+            } else {
                 throw new UrlNotFountException();
             }
         } else

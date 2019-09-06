@@ -71,9 +71,9 @@ public class LoginController {
 
 
     /**
-     * @apiNote  회원정보 수정
-     * @param   customerEdit
+     * @param customerEdit
      * @return
+     * @apiNote 회원정보 수정
      */
     @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     @RequestMapping(value = "/edit",
